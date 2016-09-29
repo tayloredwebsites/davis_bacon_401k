@@ -1,0 +1,89 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+1:
+  id: 1
+  emp_id: 5
+  last_name: Pekoske
+  first_name: James
+  ssn: 123456789
+  deactivated: 0
+
+2:
+  id: 2
+  emp_id: 12
+  last_name: Kluk
+  first_name: Brian
+  ssn: 234567890
+  deactivated: 1
+
+13:
+  id: 13
+  emp_id: 13
+  last_name: O'Connell
+  first_name: Thomas
+  ssn: 987654321
+  deactivated: 1
+
+14:
+  id: 14
+  emp_id: 14
+  last_name: lastd
+  first_name: firstd
+  ssn: '000000014'
+  deactivated: 0
+
+15:
+  id: 15
+  emp_id: 15
+  last_name: laste
+  first_name: firste
+  ssn: '000000015'
+  deactivated: 0
+
+16:
+  id: 16
+  emp_id: 16
+  last_name: lastf
+  first_name: firstf
+  ssn: '000000016'
+  deactivated: 0
+
+17:
+  id: 17
+  emp_id: 17
+  last_name: lastg
+  first_name: firstg
+  ssn: '000000017'
+  deactivated: 0
+
+18:
+  id: 18
+  emp_id: 18
+  last_name: lasth
+  first_name: firsth
+  ssn: '000000018'
+  deactivated: 0
+
+19:
+  id: 19
+  emp_id: 19
+  last_name: lasti
+  first_name: firsti
+  ssn: '000000019'
+  deactivated: 0
+
+20:
+  id: 20
+  emp_id: 20
+  last_name: lastj
+  first_name: firstj
+  ssn: '000000020'
+  deactivated: 1
+
+21:
+  id: 21
+  emp_id: 21
+  last_name: lastk
+  first_name: firstk
+  ssn: '000000021'
+  deactivated: 0
+

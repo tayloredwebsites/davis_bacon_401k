@@ -1,0 +1,19 @@
+<%= error_messages_for 'name_value' %>
+
+<!--[form:name_value]-->
+<table>
+
+	<tr>
+		<td><label for="name_value_val_name">Name</label></td>
+		<td><%= text_field 'name_value', 'val_name', 'maxsize' => 40  %></td>
+	</tr>
+
+	<tr>
+		<td><label for="name_value_val_value">Value</label></td>
+		<td><%= text_field 'name_value', 'val_value', 'maxsize' => 255  %></td>
+	</tr>
+
+</table>
+
+<!--[eoform:name_value]-->
+

@@ -1,0 +1,45 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+bob:
+  id: 1000001
+  login: bob
+  password: 965e7c3bd4106311cca4d72163427c3ce9b2591f # bobs_secure_password / salt=tayloredbenefits
+  supervisor: 0
+  deactivated: 0
+
+existingbob:
+  id: 1000002
+  login: existingbob
+  password: 965e7c3bd4106311cca4d72163427c3ce9b2591f # bobs_secure_password / salt=tayloredbenefits
+  supervisor: 0
+  deactivated: 0
+
+longbob:
+  id: 1000003
+  login: longbob
+  password: 8e9b1a9a38e66ca572a5e8fdac8e256848842dfa # longtest
+  supervisor: 0
+  deactivated: 0
+
+bobareebop:
+  id: 1000004
+  login: bobareebop
+  password: 6fb6c9dc043cfaf88fd4f888295f242bd89ab9e3 # test / salt=tayloredbenefits
+  supervisor: 0
+  deactivated: 0
+
+bobout:
+  id: 1000005
+  login: bobout
+  password: 6fb6c9dc043cfaf88fd4f888295f242bd89ab9e3 # test / salt=tayloredbenefits
+  supervisor: 0
+  deactivated: 1
+
+bobsuper:
+  id: 1000006
+  login: bobsuper
+  password: 965e7c3bd4106311cca4d72163427c3ce9b2591f # bobs_secure_password / salt=tayloredbenefits
+  supervisor: 1
+  deactivated: 0
+
+

@@ -1,0 +1,64 @@
+<br><h2>Generate Deposit Reconciliation Report</h2>
+
+<% form_tag(:action => 'deposit_recon_report') do %>
+
+<%= error_messages_for 'report' %>
+
+<%
+	@deposits_selector = [ ['Select Deposit', ''] ]
+	for dep in @all_deposits
+		if dep.deposited_at != nil
+			@time_str = dep.deposited_at.strftime("%Y-%m-%d %H:%M:%S")
+			@deposits_selector.push( [@time_str, @time_str])
+		end
+	end
+	
+	if params[:select_start_deposit]
+		@select_start_deposit = params[:select_start_deposit]
+	end
+	if params[:select_end_deposit]
+		@select_end_deposit = params[:select_end_deposit]
+	end
+
+%>
+
+<!--[form:report]-->
+<table>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="select_start_deposit">Start Deposit</label></td>
+		<td>
+			<select id='select_start_deposit' name='select_start_deposit'>
+				<%= options_for_select(@deposits_selector, @select_start_deposit) %>
+			</select>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="select_end_deposit">Ending Deposit</label></td>
+		<td>
+			<select id='select_end_deposit' name='select_end_deposit'>
+				<%= options_for_select(@deposits_selector, @select_end_deposit) %>
+			</select>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td>
+			<%= submit_tag "Generate Report" %>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+</table>
+
+<%= hidden_field(:employee_benefit, :employee_id || @employee.id) %>
+
+<!--[eoform:employee_benefit]-->
+
+<% end %>

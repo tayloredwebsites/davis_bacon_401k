@@ -1,0 +1,53 @@
+<br><h2>Employee Maintenance Listing</h2>
+
+<table border="2">
+	<thead>
+	  <tr>
+			<th>Emp<br/>ID</th>
+			<th>Last<br/>Name</th>
+			<th>First<br/>Name</th>
+			<th>MI</th>
+			<th>SSN</th>
+			<th>Deact-<br/>ivated</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+<%
+	  @blank_shown = false;
+		for emp in @employees
+  		if emp["deactivated"].to_s != '0' && ! @blank_shown
+  			@blank_shown = true
+  			%><tr><td colspan="8">Deactivated:</td></tr><%
+    	end
+    %>
+	  <tr>
+	    <td><%=h emp["emp_id"] %></td>
+	    <td><%=h emp["last_name"] %></td>
+	    <td><%=h emp["first_name"] %></td>
+	    <td><%=h emp["mi"] %>&nbsp;</td>
+	    <td><%=h emp["ssn"] %></td>
+	    <td><%= show_true_false ( emp["deactivated"]) %></td>
+	    <!-- <td><%= link_to 'Display', :action => 'show', :id => emp %></td> -->
+	    <td><%= link_to 'Edit', :action => 'edit', :id => emp %></td>
+	    <td>
+	    	<%=
+	    		if emp["deactivated"].to_s != '0'
+		    		link_to 'Reactivate', { :action => 'reactivate', :id => emp }, :confirm => 'Are you sure you want to reactivate this employee?'
+		    	else
+		    		link_to 'Deactivate', { :action => 'deactivate', :id => emp }, :confirm => 'Are you sure you want to deactivate this employee?'
+		    	end
+		    %>
+	    </td>
+	  </tr>
+<% end %>
+	</tbody>
+</table>
+	    	<%=
+	    		will_paginate @employees
+		    %>
+
+<br />
+
+<%= link_to 'New Employee', :action => 'new' %>

@@ -1,0 +1,289 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+1:
+  id: 1
+  employee_id: 1
+  hourly_wage: 21.5
+  monthly_medical: 811.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+2:
+  id: 2
+  employee_id: 2
+  hourly_wage: 27.6
+  monthly_medical: 460.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 1
+
+3:
+  id: 3
+  employee_id: 2
+  hourly_wage: 37.6
+  monthly_medical: 560.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 5
+  eff_year: 2006
+  deactivated: 0
+
+4:
+  id: 4
+  employee_id: 13
+  hourly_wage: 47.6
+  monthly_medical: 660.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+5:
+  id: 5
+  employee_id: 13
+  hourly_wage: 57.6
+  monthly_medical: 760.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 4
+  eff_year: 2006
+  deactivated: 0
+
+6:
+  id: 6
+  employee_id: 14
+  hourly_wage: 67.6
+  monthly_medical: 860.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+7:
+  id: 7
+  employee_id: 14
+  hourly_wage: 77.6
+  monthly_medical: 960.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 5
+  eff_year: 2006
+  deactivated: 0
+
+8:
+  id: 8
+  employee_id: 15
+  hourly_wage: 87.6
+  monthly_medical: 1060.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 4
+  eff_year: 2006
+  deactivated: 0
+
+9:
+  id: 9
+  employee_id: 15
+  hourly_wage: 97.6
+  monthly_medical: 1160.1
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 5
+  eff_year: 2006
+  deactivated: 0
+
+
+10:
+  id: 10
+  employee_id: 16
+  hourly_wage: 31.5
+  monthly_medical: 911.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+11:
+  id: 11
+  employee_id: 16
+  hourly_wage: 41.5
+  monthly_medical: 1011.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 3
+  eff_year: 2006
+  deactivated: 1
+
+12:
+  id: 12
+  employee_id: 17
+  hourly_wage: 51.5
+  monthly_medical: 1111.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+13:
+  id: 13
+  employee_id: 17
+  hourly_wage: 61.5
+  monthly_medical: 1211.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 4
+  eff_year: 2006
+  deactivated: 1
+
+14:
+  id: 14
+  employee_id: 18
+  hourly_wage: 71.5
+  monthly_medical: 1311.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+15:
+  id: 15
+  employee_id: 18
+  hourly_wage: 81.5
+  monthly_medical: 1411.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 2
+  eff_year: 2006
+  deactivated: 0
+
+16:
+  id: 16
+  employee_id: 19
+  hourly_wage: 91.5
+  monthly_medical: 1511.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 1
+
+17:
+  id: 17
+  employee_id: 19
+  hourly_wage: 101.5
+  monthly_medical: 1611.26
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 5
+  eff_year: 2006
+  deactivated: 0
+
+18:
+  id: 18
+  employee_id: 21
+  hourly_wage: 11.25
+  monthly_medical: 101.28
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 1
+  eff_year: 2006
+  deactivated: 0
+
+19:
+  id: 19
+  employee_id: 21
+  hourly_wage: 13.25
+  monthly_medical: 101.23
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 3
+  eff_year: 2006
+  deactivated: 0
+
+20:
+  id: 20
+  employee_id: 21
+  hourly_wage: 14.25
+  monthly_medical: 104.23
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 4
+  eff_year: 2006
+  deactivated: 1
+
+21:
+  id: 21
+  employee_id: 21
+  hourly_wage: 15.25
+  monthly_medical: 105.23
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 5
+  eff_year: 2006
+  deactivated: 0
+
+22:
+  id: 22
+  employee_id: 21
+  hourly_wage: 17.25
+  monthly_medical: 107.23
+  annual_sick: 40
+  annual_holiday: 64
+  annual_vacation: 80
+  annual_personal: 40
+  eff_month: 7
+  eff_year: 2006
+  deactivated: 0
+

@@ -1,0 +1,15 @@
+<h2 align="center" style="color: red;">Change Current Month</h2>
+<p align="left">
+	The Controlled Air Employee Benefits System keeps track of the current month for you.
+	When you are done with a month's work, or you need to go back to a prior month, or reset back to the current month,
+	you will need to come to the <%= link_to 'Change Accounting Month', {:controller => 'name_value', :action => 'accounting_month'}, { :target => 'benefits' }%>
+	(note: you must be logged in for this link to work properly) when you get to that page, you should see a page like the following screenshot:
+</p>
+<p align="center">
+	<img border="2" src="/images/ca_screen_shots/ca_change_current_month.jpg" alt="login"/>
+</p>
+<p align="left">
+	You will be able to change the year to any year from the system start year to the current year.
+	Once you change the year and month, click on the "Save" button, and the page should come back
+	with an updated <strong>Current Accounting Month:</strong> display.
+</p>

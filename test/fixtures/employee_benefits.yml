@@ -1,0 +1,49 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+1:
+  id: 1
+  employee_id: 1
+  reg_hours: 12.5
+  ot_hours: 12.5
+  monthly_benefit: 99.95
+  deposit: 77.72
+  eff_month: 1
+  eff_year: 2006
+  dep_eff_month: 4
+  dep_eff_year: 2006
+
+2:
+  id: 2
+  employee_id: 2
+  employee_package_id: 3
+  reg_hours: 12.5
+  ot_hours: 12.5
+  monthly_benefit: 88.84
+  eff_month: 1
+  eff_year: 2006
+  deposit: 88.84
+  deposited_at: "2006-04-27 16:00:00"
+
+3:
+  id: 3
+  employee_id: 21
+  employee_package_id: 20
+  reg_hours: 12.5
+  ot_hours: 12.5
+  monthly_benefit: 88.84
+  eff_month: 4
+  eff_year: 2006
+  deposit: 88.84
+  deposited_at: "2006-04-27 16:00:00"
+
+4:
+  id: 4
+  employee_id: 21
+  employee_package_id: 20
+  reg_hours: 12.5
+  ot_hours: 12.5
+  monthly_benefit: 88.84
+  eff_month: 4
+  eff_year: 2006
+  deposit: 88.84
+  deposited_at: ""
+  

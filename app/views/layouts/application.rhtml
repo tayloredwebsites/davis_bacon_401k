@@ -1,0 +1,108 @@
+<html>
+<head>
+  <title>Controlled Air Benefits: <%= controller.action_name %></title>
+	<meta name="description" content="Controlled Air Benefits Application" />
+	<meta name="keywords" content="Taylored Web Sites,tayloredwebsites,tayloredwebsites.com,tailoredwebsites,tailoredwebsites.com,Magnolia,Content Management,CMS,${pageProperties.metaKeywords}" />
+  <%= stylesheet_link_tag 'benefits' %>
+	<script language="JavaScript" type="text/javascript" xml:space="preserve" src="/javascripts/benefits.js"></script>
+</head>
+<body bgcolor="#eeeeee">
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<div id="top_frame">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"><!-- top pseudo frame -->
+					<tr>
+						<td width="200"><img src="/images/logo_clear.gif" /></td>
+						<td align="center" valign="middle"><h2>Davis Bacon Pension System</h2></td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="200" valign="top">
+						<div id="left_frame">
+							<table width="200" border="0" cellpadding="0" cellspacing="0" class="left_frame"><!-- left pseudo frame -->
+<%
+  @cur_user = session[:user]
+  if !( @cur_user.nil? )
+%>
+								<!-- User Logged in -->
+								<tr>
+									<td><a href="/name_value/accounting_month">Change Current Month</a></td>
+								</tr>
+								<tr>
+									<td><a href="/employee/list">Maintain Employees</a></td>
+								</tr>
+								<tr>
+									<td><a href="/employee/benefits_list">Maintain Monthly Benefits</a></td>
+								</tr>
+								<tr>
+									<td><a href="/employee/report_list">Reports</a></td>
+								</tr>
+<%
+    if (@cur_user.supervisor).to_s != '0'
+%>
+								<!-- Supervisor -->
+								<tr>
+									<td><a href="/users/list">Maintain System Users</a></td>
+								</tr>
+<%
+		else
+%>
+								<!-- Not Supervisor -->
+<%
+    end
+%>
+								<!-- More Logged In -->
+								<tr>
+									<td><a href="/account/logout">Logout from Benefits System</a></td>
+								</tr>
+<%
+  else
+%>
+								<!-- User not Logged In -->
+								<tr>
+									<td><a href="/account/login">Login to Benefits System</a></td>
+								</tr>
+<%
+  end
+%>
+								<!-- Always Shown -->
+								<tr>
+									<td><a href="/help/help" target="help">Help</a></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+					<td>&nbsp;&nbsp;</td>
+					<td valign="top">
+						<div id="body_frame">
+							<table width="100%" border="0" cellpadding="0" cellspacing="0"><!-- body pseudo frame -->
+								<tr>
+									<td width="100%" style="color: red; font-size: larger;"><%= flash[:notice] %></td>
+								</tr>
+								<tr>
+									<td><%= @content_for_layout %></td>
+								</tr>
+								<tr>
+									<td style="color: red; font-size: larger;"><%= flash[:notice] %></td>
+								</tr>
+							</table>
+						</body>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+
+</body>
+</html>

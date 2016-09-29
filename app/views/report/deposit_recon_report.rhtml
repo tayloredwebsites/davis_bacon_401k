@@ -1,0 +1,73 @@
+<br><h2>Deposit Reconciliation for:
+<br><br><%= h @select_start_deposit %> -> <%= h @select_end_deposit %></h2>
+
+<table border="2">
+	<thead>
+	  <tr>
+			<th>Emp<br/>ID</th>
+			<th>Last<br/>Name</th>
+			<th>First<br/>Name</th>
+			<!-- <th>MI</th> -->
+			<th>Effective<br/>Month</th>
+			<th>Deposit<br/>Month</th>
+			<th>Current<br/>Benefit</th>
+			<th>Required<br/>Benefit</th>
+			<th>Deposit<br/>Amount</th>
+			<th>Deposited<br/>At</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+<%
+	totBene = nil
+	for bene in @employee_benefits
+		if bene.deposited_at == nil
+			totBene = bene
+		elsif bene.emp_id == nil
+%>
+	  <tr>
+	    <td colspan='7' align='right'>Deposit (<%=h bene.deposited_at.strftime("%Y-%m-%d %H:%M:%S") %>) Total : </td>
+	    <td align='right'><%=h round_money_s(bene["deposit"]) %></td>
+	    <td align='center'></td>
+	  </tr>
+<%
+		else
+			if (bene.deposited_at == nil) then
+				deposited_at = "&nbsp;"
+			else
+				deposited_at = h( bene.deposited_at.strftime("%Y-%m-%d %H:%M:%S") )
+			end
+%>
+	  <tr>
+	    <td align='center'><%=h bene["emp_id"] %></td>
+	    <td align='center'><%=h bene["last_name"] %></td>
+	    <td align='center'><%=h bene["first_name"] %></td>
+	    <!-- <td align='center'><%=h bene["mi"] %> </td> -->
+	    <td align='center'><%=h bene["eff_month"] %> / <%=h bene["eff_year"] %></td>
+	    <td align='center'><%=h bene["dep_eff_month"] %> / <%=h bene["dep_eff_year"] %></td>
+	    <td align='center'><%=h round_money_s( (bene.reg_hours + bene.ot_hours) * bene.hourly_benefit ) %></td>
+	    <td align='center'><%=h round_money_s(bene["monthly_benefit"]) %></td>
+	    <td align='right'><%=h round_money_s(bene["deposit"]) %></td>
+	    <td align='center'><%=deposited_at %></td>
+	  </tr>
+<%
+		end #if
+	end	# for
+%>
+	  <tr>
+	    <td colspan='7' align='right'>Grand Total : </td>
+	    <%
+	    	if totBene == nil
+	    		@gtot = "<font color='red'>nil rollup</font>"
+	    	else
+	    		@gtot = h(round_money_s(totBene["deposit"]))
+	    	end
+	    %>
+	    <td align='center'><%=@gtot %></td>
+	    <td align='center'></td>
+	  </tr>
+	</tbody>
+</table>
+
+<br />

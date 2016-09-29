@@ -1,0 +1,17 @@
+
+<table border="2">
+
+	<tr>
+		<td><label for="name_value_val_name">Name</label></td>
+		<td><%= h @name_value["val_name"] %></td>
+	</tr>
+
+	<tr>
+		<td><label for="name_value_val_value">Value</label></td>
+		<td><%= h @name_value["val_value"] %></td>
+	</tr>
+
+</table>
+
+<%= link_to 'Edit', :action => 'edit', :id => @name_value %> |
+<%= link_to 'List', :action => 'list' %>

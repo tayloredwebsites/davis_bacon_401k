@@ -1,0 +1,296 @@
+<%= error_messages_for 'employee_benefit' %>
+
+<%
+	@year_options = get_year_options
+	@month_options = get_month_options
+	if params[:eff_year]
+		@select_month = params[:eff_year]
+	end
+	if params[:eff_month]
+		@select_month = params[:eff_month]
+	end
+
+	@allow_edit = true
+	if ( defined?(@employee_benefit.deposited_at) && @employee_benefit.deposited_at != nil) ||
+			@employee_benefit.eff_month.to_s != NameValue.get_val("accounting_month") ||
+			@employee_benefit.eff_year.to_s != NameValue.get_val("accounting_year")
+		# already deposited, or not this month, thus only display fields
+		@allow_edit = false
+	end
+	@dep_at_str = ''
+	if @employee_benefit.deposited_at != nil
+		@dep_at_str = dep.deposited_at.strftime("%Y-%m-%d %H:%M:%S")
+	end
+%>
+
+<!--[form:employee_benefit]-->
+<table>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="employee_name">Employee</label></td>
+		<td>
+			<span id="employee_name">
+				<%= @employee.emp_id %> - <%= @employee.first_name %> <%= @employee.last_name %>
+			</span>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="effective_month">Effective Month</label></td>
+		<td>
+			<span id="effective_month">
+				<%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %>
+			</span>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="employee_benefit_reg_hours">Regular Hours</label></td>
+		<td>
+			<%= if @allow_edit
+				text_field('employee_benefit', 'reg_hours')
+			else
+				h(@employee_benefit["reg_hours"])
+			end -%>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">+</div></td>
+		<td><label for="employee_benefit_ot_hours">Overtime Hours</label></td>
+		<td>
+			<%= if @allow_edit
+				text_field('employee_benefit', 'ot_hours')
+			else
+				h(@employee_benefit["ot_hours"])
+			end -%>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">=</div></td>
+		<td><label for="employee_benefit_calc_tot_hours">Total Hours</label></td>
+		<td><%= h @employee_benefit.calc_tot_hours %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">*</div></td>
+		<td><label for="employee_package_calc_hourly_benefit">Hourly Benefit</label></td>
+		<td>
+			<%= h round_places_s(@employee_package.calc_hourly_shvp,4) %> +
+			<%= h round_places_s(@employee_package.calc_sh_pct_amt,4) %> +
+			<%= h round_places_s(@employee_package.calc_hourly_medical,4) %> =
+			<%= h round_places_s(@employee_package.calc_hourly_benefit,4) %>
+		</td>
+		<td>
+			Rate effective <%= h @employee_package.eff_month %> / <%= h @employee_package.eff_year %>
+		</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">=</div></td>
+		<td><label for="employee_benefit_deposit">Current Benefit</label></td>
+		<td>
+			<%= h round_money_s(@employee_benefit.tot_current_benefit) %>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="employee_benefit_monthly_benefit">Required Total Benefit</label></td>
+		<td>
+			<%= if @allow_edit
+				text_field('employee_benefit', 'monthly_benefit')
+			else
+				h(@employee_benefit.monthly_benefit)
+			end -%>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">-</div></td>
+		<td><label for="employee_benefit_deposit">Current Benefit</label></td>
+		<td>
+			<%= h round_money_s(@employee_benefit.tot_current_benefit) %>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">-</div></td>
+		<td><label for="employee_benefit_tot_deposits_made"><%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %> Previous Deposits</label></td>
+		<td><%= h @employee_benefit.tot_deposits_made %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">=</div></td>
+		<td><label for="employee_benefit_deposit">Current Deposit</label></td>
+		<td>
+			<%
+				#@dep_amt = @employee_benefit["deposit"]
+				#if @allow_edit
+				# 	@dep_amt = round_money(@employee_benefit.monthly_benefit) - round_money(@employee_benefit.tot_current_benefit) - round_money(@employee_benefit.tot_deposits_made.to_f)
+				# 	if @dep_amt < 0.005
+				# 		@dep_amt = 0.00
+				# 	end
+				# 	@employee_benefit["deposit"] = @dep_amt
+				#end
+			%>
+			<%= hidden_field('employee_benefit', 'deposit', :value => @dep_amt) %>
+			<%= h round_money_s(@employee_benefit["deposit"]) %>
+		</td>
+		<td>
+	    	<%
+	    		@show_oob_footnote = false
+	    		#@bene_bal = ( @employee_benefit.monthly_benefit.to_f -
+	    		#		@employee_benefit.tot_current_benefit.to_f -
+	    		#		@employee_benefit.tot_deposits_made.to_f -
+	    		#		@employee_benefit.deposit.to_f
+	    		#	)
+	    		#if @bene_bal > 0.005 || @bene_bal < -0.005
+	    		if @employee_benefit.is_deposit_out_of_bal
+	    			%><div class='error'>out of balance - update to adjust</div><%
+	    			@show_oob_footnote = true
+	    		end
+	    	%>
+		</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="pending_deposits_header">Pending Deposits :</label></td>
+		<td><span id="pending_deposits_header">&nbsp;</span></td>
+		<td>Apply?</td>
+	</tr>
+
+<%
+	# print and sum total pending deposits selected for current month
+	tot_pend_to_deposit = 0
+	@bene_dep_flags = Hash.new
+	@p_deps = @employee_benefit.get_pending_deposits
+	for bene_dep in @p_deps
+#breakpoint
+		@bene_dep_id = bene_dep.id
+
+		bene_pkg = EmployeePackage.new :employee_id => @employee_benefit.employee_id
+
+		#if bene_dep["dep_eff_month"] == @employee_benefit["eff_month"] &&
+		#		bene_dep["dep_eff_year"] == @employee_benefit["eff_year"]
+		#	tot_pend_to_deposit += bene_dep["deposit"]
+		if bene_dep.is_pending
+			if bene_dep.is_pending_selected
+				@bene_dep_flags[@bene_dep_id] = true
+			else
+				@bene_dep_flags[@bene_dep_id] = false
+			end
+			if bene_dep.current_package
+				bene_pkg = bene_dep.current_package
+			end
+		else
+			@bene_dep_flags[@bene_dep_id] = false
+		end
+%>
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="employee_benefit_monthly_benefit">Pending Deposit for <%= h bene_dep["eff_month"] %> / <%= h bene_dep["eff_month"] %> </label></td>
+		<td><%= h bene_dep["deposit"] %></td>
+		<td>
+			<%
+	    	if bene_dep.is_deposit_out_of_bal
+			 %>
+				<span class="error">Warning - Benefit Calculation Error <%= bene_dep["monthly_benefit"] %>, <%= bene_pkg["calc_hourly_benefit"] %>, <%= bene_dep["calc_tot_hours"] %></span>
+			<% end %>
+			<%= #check_box('bene_dep_flags', @bene_dep_id.to_s)
+			 %>
+			<input type='checkbox'
+					id=<%= 'dep_flag'+@bene_dep_id.to_s %>
+					name=<%= 'dep_flag'+@bene_dep_id.to_s %>
+					value='true'
+				<%
+				if bene_dep.is_pending_selected
+				%>
+					checked='checked'
+				<%
+				end
+				%>
+			/>
+			<input type='hidden'
+				id=<%= 'dep_flag'+@bene_dep_id.to_s %>
+				name=<%= 'dep_flag'+@bene_dep_id.to_s %>
+				value='false'
+			/>
+		</td>
+	</tr>
+<%
+	end
+	logger.debug("Totals")
+		if (@employee_benefit['monthly_benefit'] != nil) then
+			logger.debug("@employee_benefit['monthly_benefit'] = "+@employee_benefit['monthly_benefit'].to_s)
+			employee_benefit_total_deposit = @employee_benefit["monthly_benefit"] + tot_pend_to_deposit
+		else
+			logger.debug("@employee_benefit['monthly_benefit'] = nil ")
+			employee_benefit_total_deposit = tot_pend_to_deposit
+		end
+	employee_benefit_pending_applied = @employee_benefit.tot_pending_deposits(@dep_at_str)
+%>
+
+	<tr>
+		<td><div align="center">-</div></td>
+		<td><label for="tot_pend_to_deposit">Pending Deposits Applied</label></td>
+		<td><%= h round_money_s(employee_benefit_pending_applied) %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><div align="center">=</div></td>
+		<td><label for="employee_benefit_total_deposit">Total Deposit Amount</label></td>
+		<td><%= h round_money_s(@employee_benefit["deposit"].to_f +
+			employee_benefit_pending_applied.to_f) %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+
+	<tr>
+		<td><div align="center">&nbsp;</div></td>
+		<td><label for="employee_benefit_deposited_at">Deposit Date</label></td>
+		<td>
+<% if @employee_benefit["deposited_at"] %>
+			<%= h @employee_benefit["deposited_at"].strftime("%d-%b-%Y") %>
+<% else %>
+			Not Deposited
+<% end %>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan='3'>
+			<%
+				if @employee_benefit.id == nil
+					#if @employee_benefit["deposit"] > 0.005 || @employee_benefit["deposit"] < -0.005
+						%><%= submit_tag "Update (new)" %><%
+					#end
+				else
+					%><%= submit_tag "Update (current)" %><%
+				end
+			%>
+		</td>
+	</tr>
+
+</table>
+
+<%= hidden_field(:employee_benefit, :employee_id || @employee.id) %>
+<%= hidden_field(:employee_benefit, "hourly_benefit", :value=> @employee_package.calc_hourly_benefit) %>
+
+<!--[eoform:employee_benefit]-->
+

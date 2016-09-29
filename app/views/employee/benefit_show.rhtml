@@ -1,0 +1,55 @@
+
+<table border="2">
+
+	<tr>
+		<td colspan="3">
+			Employee Benefits:
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="3">
+			<%= @employee.emp_id %> - <%= @employee.first_name %> <%= @employee.last_name %>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="3">
+			Effective Month: <%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %>
+		</td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_benefit_reg_hours">&nbsp;&nbsp;&nbsp;Regular Hours</label></td>
+		<td><%= h @employee_benefit["reg_hours"] %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_benefit_ot_hours">&nbsp;+&nbsp;Overtime Hours</label></td>
+		<td><%= h @employee_benefit["ot_hours"] %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_benefit_tot_hours">&nbsp;=&nbsp;Total Hours</label></td>
+		<td><%= h ( @employee_benefit["calc_tot_hours"] ) %></td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_benefit_current_package_calc_hourly_benefit">&nbsp;*&nbsp;Hourly Benefit</label></td>
+		<td><%= h @employee_benefit["current_package.calc_hourly_benefit"] %></td>
+		<td>
+			<% if @employee_benefit["current_package.id"] != @employee_benefit["latest_package.id"] %>
+				<span class="error">Warning - Benefit package has changed</span>
+			<% end %>
+		</td>
+	</tr>
+
+
+</table>
+
+<%= link_to 'Edit', :action => 'edit', :id => @employee %> |
+<%= link_to 'List', :action => 'list' %> |
+<%= link_to 'New Employee', :action => 'new' %>

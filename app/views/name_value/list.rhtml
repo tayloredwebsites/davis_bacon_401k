@@ -1,0 +1,29 @@
+<br><h2>Listing Name Value Pairs</h2>
+
+<table border="2">
+	<thead>
+	  <tr>
+			<th>Name</th>
+			<th>Values</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+<% for val in @name_values %>
+	  <tr>
+	    <td><%=h val["val_name"] %></td>
+	    <td><%=h val["val_value"] %></td>
+	    <td><%= link_to 'Display', :action => 'show', :id => val %></td>
+	    <td><%= link_to 'Edit', :action => 'edit', :id => val %></td>
+	  </tr>
+<% end %>
+	</tbody>
+</table>
+
+<%= link_to 'Previous page', { :page => @name_value_pages.current.previous } if @name_value_pages.current.previous %>
+<%= link_to 'Next page', { :page => @name_value_pages.current.next } if @name_value_pages.current.next %>
+
+<br />
+
+<%= link_to 'New Name Value Pair', :action => 'new' %>

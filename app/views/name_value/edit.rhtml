@@ -1,0 +1,9 @@
+<br><h2>Editing name_value</h2>
+
+<%= form_tag(:action => 'update', :id => @name_value) do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Save' %>
+<% end %>
+
+<%= link_to 'Display', :action => 'show', :id => @name_value %> |
+<%= link_to 'List', :action => 'list' %>

@@ -1,0 +1,41 @@
+<br><h2>Data Entry Reconciliation for:
+<br><br><%= h @select_start_month %>/<%= h @select_start_year %> through <%= h @select_end_month %>/<%= h @select_end_year %></h2>
+
+<table border="2">
+	<thead>
+	  <tr>
+			<th>Emp<br/>ID</th>
+			<th>Last<br/>Name</th>
+			<th>First<br/>Name</th>
+			<th>MI</th>
+			<th>Effective<br/>Month</th>
+			<th>Deposit<br/>Month</th>
+			<th>Regular<br/>Hours</th>
+			<th>Overtime<br/>Hours</th>
+			<th>Total<br/>Hours</th>
+			<th>Monthly<br/>Benefit</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+<%
+	for bene in @employee_benefits
+%>
+	  <tr>
+	    <td align='center'><%=h bene["emp_id"] %></td>
+	    <td align='center'><%=h bene["last_name"] %></td>
+	    <td align='center'><%=h bene["first_name"] %></td>
+	    <td align='center'><%=h bene["mi"] %>&nbsp;</td>
+	    <td align='center'><%=h bene["eff_month"] %> / <%=h bene["eff_year"] %></td>
+	    <td align='center'><%=h bene["dep_eff_month"] %> / <%=h bene["dep_eff_year"] %></td>
+	    <td align='center'><%=h round_money_s(bene["reg_hours"]) %></td>
+	    <td align='center'><%=h round_money_s(bene["ot_hours"]) %></td>
+	    <td align='center'><%=h round_money_s(bene["reg_hours"] + bene["ot_hours"]) %></td>
+	    <td align='center'><%=h round_money_s(bene["monthly_benefit"]) %></td>
+	  </tr>
+<% end	# for emp in @employees %>
+	</tbody>
+</table>
+
+<br />

@@ -1,0 +1,81 @@
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h2>Benefits Packages</h2>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table border='2' class="datadisplay">
+  			<thead>
+  				<tr>
+	  				<th>Effective</th>
+	  				<th>Hourly<br>Wage</th>
+	  				<th>Monthly<br>Medical</th>
+	  				<th>Annual<br>Sick</th>
+	  				<th>Annual<br>Holiday</th>
+	  				<th>Annual<br>Vacation</th>
+	  				<th>Annual<br>Personal</th>
+	  				<th>HourlyBenefit<br>(shvp + sh%+ medical)</th>
+	  				<td colspan='2'><%= link_to 'New', :controller => 'employee_package', :action => 'new', :employee_id => @employee.id %></td>
+  				</tr>
+  			</thead>
+  			<tbody>
+				<%
+					for pkg in @employee.emp_pkgs
+						if pkg.deactivated != 0
+							x_start = "<div style='text-decoration: line-through;'>"
+							x_end = "</div>"
+						else
+							x_start = ''
+							x_end = ''
+						end
+			  %>
+	  			<tr>
+			  			<td><%= x_start %><%= h pkg.eff_month %> / <%= pkg.eff_year %><%= x_end %></td>
+			  			<td><%= x_start %><%= h pkg.hourly_wage %><%= x_end %></td>
+			  			<td><%= x_start %><%= h pkg.monthly_medical %><%= x_end %></td>
+			  			<td><%= x_start %><%= h pkg.annual_sick %><%= x_end %></td>
+			  			<td><%= x_start %><%= h pkg.annual_holiday %><%= x_end %></td>
+			  			<td><%= x_start %><%= h pkg.annual_vacation %><%= x_end %></td>
+			  			<td><%= x_start %><%= h pkg.annual_personal %><%= x_end %></td>
+			  			<td>
+			  				<%= x_start %>
+					  			<%= h round_money_s(pkg.calc_hourly_shvp) %> +
+					  			<%= h round_money_s(pkg.calc_sh_pct_amt) %> +
+					  			<%= h round_money_s(pkg.calc_hourly_medical) %> =
+					  			<%= h round_money_s(pkg.calc_hourly_benefit) %>
+				  			<%= x_end %>
+			  			</td>
+		    			<td><%= link_to 'Edit', :controller => 'employee_package', :action => 'edit', :id => pkg %></td>
+		    			<td>
+								<%
+									if pkg.deactivated == 0
+							  %>
+		    					<%= link_to 'Delete', :controller => 'employee_package', :action => 'destroy', :id => pkg.id %>
+								<%
+									else
+							  %>
+		    					<%= link_to 'Reactivate', :controller => 'employee_package', :action => 'reactivate', :id => pkg.id %>
+								<%
+									end
+							  %>
+		    			</td>
+	 			<% if pkg.deactivated != 0 %>
+	 					</div>
+	 			<% end %>
+	  			</tr>
+			  	<%
+			  	end
+					%>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+					<%
+					#error_messages_for 'employee_package'
+					%>

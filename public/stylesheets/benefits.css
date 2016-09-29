@@ -1,0 +1,90 @@
+a:link {
+	color: #555555;
+}
+a:visited {
+	color: #555555;
+}
+a:hover {
+	color: #ff0000;
+	background-color: #dddddd;
+}
+
+div#top_frame td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   22px;
+  font-weight: bold;
+  color: #777777;
+}
+
+div#left_frame td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   14px;
+  line-height: 18px;
+  font-weight: bold;
+	color: #555555;
+	padding: 5px 0px 5px 0px;
+}
+
+div#left_frame a {
+  display: block;
+  margin:0;
+  text-decoration: none;
+}
+
+div#body_menu td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   14px;
+  line-height: 18px;
+  font-weight: bold;
+	color: #555555;
+	padding: 5px 0px 5px 0px;
+}
+
+div#body_menu a {
+  display: block;
+  margin:0;
+  text-decoration: none;
+}
+
+div#body_frame td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   12px;
+  line-height: 16px;
+	color: #000000;
+}
+
+# not working ???
+div#body_frame td.datadisplay {
+	background-color: #ffffff;
+}
+
+# not working ???
+div#body_frame .datadisplay {
+	background-color: #ffffff;
+}
+
+div#body_frame th {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   12px;
+  line-height: 16px;
+  font-weight: bold;
+	color: #000000;
+}
+
+label {
+  font-size:   12px;
+  line-height: 16px;
+  font-weight: bold;
+	color: #000000;
+}
+
+# not working ???
+.datadisplay {
+	background-color: #ffffff;
+}
+
+.error {
+	font-size: 14px;
+	font-weight: bold;
+	color: #ff0000;
+}

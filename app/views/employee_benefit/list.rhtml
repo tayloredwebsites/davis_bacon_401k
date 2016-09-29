@@ -1,0 +1,51 @@
+<br>
+<h2>
+	Employee Compensation Packages Listing for
+	<%= @employee.last_name + ", " + @employee.first_name + " " + @employee.mi %>
+</h2>
+
+<table border="2">
+	<thead>
+	  <tr>
+			<th>Effective<br/>Date</th>
+			<th>Hourly<br/>Wage</th>
+			<th>Monthly<br/>Medical</th>
+			<th>Sick<br/>Hours</th>
+			<th>Holiday<br/>Hours</th>
+			<th>Vacation<br/>Hours</th>
+			<th>Personal<br/>Hours</th>
+			<th>Hourly<br/>Benefit</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+<%
+if (@employee_benefits != nil) then 
+	for pkg in @employee_benefits %>
+	  <tr>
+	    <td><%=h pkg["eff_month"] %>/<%=h pkg["eff_year"] %></td>
+	    <td><%=h pkg["hourly_wage"] %></td>
+	    <td><%=h pkg["monthly_medical"] %></td>
+	    <td><%=h pkg["annual_sick"] %></td>
+	    <td><%=h pkg["annual_holiday"] %></td>
+	    <td><%=h pkg["annual_vacation"] %></td>
+	    <td><%=h pkg["annual_personal"] %></td>
+	    <td><%=h pkg["calc_hourly_benefit"] %></td>
+	    <td><%= link_to 'Display', :action => 'show', :id => pkg %></td>
+	    <td><%= link_to 'Edit', :action => 'edit', :id => pkg %></td>
+	  </tr>
+<%
+	end
+end
+%>
+	</tbody>
+</table>
+
+	    	<%=
+	    		will_paginate @employee_benefits
+		    %>
+
+<br />
+
+<%= link_to 'New Employee Package', :action => 'new' %>

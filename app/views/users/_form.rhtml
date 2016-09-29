@@ -1,0 +1,57 @@
+<%= error_messages_for 'user' %>
+
+<!--[form:user]-->
+<table>
+	<tr>
+		<td><label for="user_login">Login</label></td>
+		<td><%= text_field 'user', 'login'  %></td>
+	</tr>
+
+	<tr>
+		<td><label for="user_password">Password</label></td>
+		<td><%= password_field 'user', 'password'  %></td>
+	</tr>
+
+	<tr>
+		<td><label for="user_password">Password Confirmation</label></td>
+		<td><%= password_field 'user', 'password_confirmation'  %></td>
+	</tr>
+
+	<tr>
+		<td><label for="user_supervisor">Supervisor</label></td>
+		<td><%= select( :user, :supervisor, [ ['true', 1], ['false', 0] ] ) %></td>
+	</tr>
+
+	<tr>
+		<td><label for="user_deactivated">Deactivated</label></td>
+		<td><%= select( :user, :deactivated, [ ['true', 1], ['false', 0] ] ) %></td>
+	</tr>
+
+	<tr>
+		<td><label for="user_created_at">Created at</label></td>
+		<%
+			if !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+				@create = @employee["created_at"]
+			else
+				@create = ""
+			end
+		%>
+		<td><%= @create %></td>
+	</tr>
+
+	<tr>
+		<td><label for="user_updated_at">Updated at</label></td>
+		<%
+			if !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+				@updated = @employee["updated_at"]
+			else
+				@updated = ""
+			end
+		%>
+		<td><%= @updated %></td>
+	</tr>
+
+</table>
+
+<!--[eoform:user]-->
+

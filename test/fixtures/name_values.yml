@@ -1,0 +1,16 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+accounting_month:
+  id: 1000001
+  val_name: 'accounting_month'
+  val_value: '4'
+
+accounting_year:
+  id: 1000002
+  val_name: 'accounting_year'
+  val_value: '2006'
+
+start_year:
+  id: 1000003
+  val_name: 'start_year'
+  val_value: '2005'
+

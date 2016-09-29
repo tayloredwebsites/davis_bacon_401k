@@ -1,0 +1,16 @@
+<br><h2>Editing employee</h2>
+
+<% form_tag(:action => 'update', :id => @employee) do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Save' %>
+<% end %>
+
+<!--
+<%= link_to 'Display', :action => 'show', :id => @employee %> |
+<%= link_to 'List', :action => 'list' %> |
+<%= link_to 'New Employee', :action => 'new' %>
+-->
+
+<table>
+  <%= render :partial => 'emp_pkgs' %>
+</table>

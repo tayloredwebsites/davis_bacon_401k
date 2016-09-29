@@ -1,0 +1,105 @@
+<h2 align="center" style="color: red;">Maintain Employees</h2>
+<p align="left">
+	When first navigating to the "Maintain Employees" you will be displayed a listing of employees,
+	that will display 10 employees per page.  See screenshot below:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_employees_listing.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	From this page, you may choose to navigate to the next and/or previous 10 employees.
+	When you have located the employee you wish to maintain, you will have the choice of editing
+	the employee, and the choice of deactivating or reactivating the employee (depending upon activation status).
+</p>
+<h3 align="center" style="color: red;">Employees - Deactivate</h3>
+<p align="left">
+	When the "Deactivate" button is pressed, you will receive the following notification:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_emp_deactivated.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	Note that all deactivated employees will be automatically listed after all active employees,
+	and will thus be found on the last page(s) of the employee listing:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_emp_deactivated_2.jpg" alt="Edit Employee"/>
+</p>
+<h3 align="center" style="color: red;">Employees - Edit</h3>
+<p align="left">
+	When you click on the "Edit" button, you will receive a page similar to the folowing screenshot:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_employees_edit.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	This page displays the personal information about the employee, the deactivated flag,
+	and a historical listing of benefits packages.  If you have updated
+	any personal information or the deactivation flag, then hit the save button to update.
+</p>
+<p align="left">
+	<h3 align="center" style="color: red;">Employee Benefits Packages</h3>
+</p>
+<p align="left">
+	The "Benefits Packages" section is a listing of the history of benefit packages for that
+	employee, with the latest package listed first.  It is important that an accurate history
+	of the benefit packages for an employee is maintained.  The benefits system is designed so
+	that if a benefit package is modified the system will calculate
+	the adjustment amounts for each month required and will create a series of pending
+	deposits for each relevant month.
+</p>
+<p align="left">
+	When an employee gets a pay raise, or benefits increase
+	that is not retroactive, then a new benefits package must be created (do not edit the latest
+	one, as that will cause a retroactive adjustment).
+</p>
+<p align="left">
+	In the screen listing above, you will
+	notice that one of the entries is deactivated (displayed with slashes through it). If a deposit
+	has been made using figures from a particular benefits package, the system will automatically
+	create a new benefits package, leaving the original benefits package unmodified.  This is an
+	important mechanism to ensure that deposit figures are accurate, as well as maintain
+	an audit trail of deposits and changes.  For the same reason, a benefits package will not be
+	allowed to be deleted if there are deposits existing for it.
+</p>
+<h3 align="center" style="color: red;">Employee Packages - Edit</h3>
+<p align="left">
+	When you click on the "Edit" button for a particular benefits package, you will receive a page similar to the folowing screenshot:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_package_edit.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	After making any changes for an employee package, click the "Save" button to update your changes.
+</p>
+<h3 align="center" style="color: red;">Employee Packages - Warnings and Errors</h3>
+<p align="left">
+	If you attempt to create a record that has the same "Current Month" and "Current Year", you will
+	not be able to update the record, and will be returned the following error message:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_pkg_update_error_exists.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	When editing an employee package that has benefits already deposited, it will look like any other package
+	in the employee edit package listing as in the following screen shot:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_pkg_update_1.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	If any changes are made to a package that has deposits applied against it, you will now see two records for
+	the particular month, after saving changes to the package.  The first entry listed for the particular month is the new package for the employee.
+	The next entry listed for the month is the original employee package, which has remained unchanged and deactivated.
+	The packages for the month will look similar to the following screen shot:
+</p>
+<p align="left">
+	<img border="2" src="/images/ca_screen_shots/ca_pkg_update_2.jpg" alt="Edit Employee"/>
+</p>
+<p align="left">
+	Note: Retroactive changes to an employee's Benefit Package will cause some monthly benefit entries to be out of balance
+	(see "Help Maintain Monthly Benefits").  To properly correct the out of balance conditions, each of the benefit entries
+	effected will need to be reviewed and updated.  This is required because
+	the system is designed so that no dollar amounts will be automatically entered without user involvement.
+</p>
+

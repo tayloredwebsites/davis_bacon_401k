@@ -1,0 +1,51 @@
+
+<table border="2">
+
+	<tr>
+		<td><label for="employee_emp_id">Employee ID</label></td>
+		<td><%= h @employee["emp_id"] %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_last_name">Last Name</label></td>
+		<td><%= h @employee["last_name"] %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_first_name">First Name</label></td>
+		<td><%= h @employee["first_name"] %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_mi">Middle Initial</label></td>
+		<td><%= h @employee["mi"] %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_ssn">SSN</label></td>
+		<td><%= h @employee["ssn"] %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_deactivated">Deactivated?</label></td>
+		<td><%= show_true_false ( @employee["deactivated"]) %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_created_at">Created at</label></td>
+		<td><%= @employee["created_at"].strftime("%I:%M %p %d-%b-%Y") %></td>
+	</tr>
+
+	<tr>
+		<td><label for="employee_updated_at">Updated at</label></td>
+		<td><%= @employee["updated_at"].strftime("%I:%M %p %d-%b-%Y") %></td>
+	</tr>
+</table>
+
+<%= link_to 'Edit', :action => 'edit', :id => @employee %> |
+<%= link_to 'List', :action => 'list' %> |
+<%= link_to 'New Employee', :action => 'new' %>
+
+<table>
+  <%= render :partial => 'emp_pkgs' %>
+</table>

@@ -1,0 +1,81 @@
+<html>
+<head>
+  <title>Controlled Air Benefits: <%= controller.action_name %></title>
+	<meta name="description" content="Controlled Air Benefits Help Pages" />
+	<meta name="keywords" content="Taylored Web Sites,tayloredwebsites,tayloredwebsites.com,tailoredwebsites,tailoredwebsites.com,Magnolia,Content Management,CMS,${pageProperties.metaKeywords}" />
+  <%= stylesheet_link_tag 'benefits' %>
+	<script language="JavaScript" type="text/javascript" xml:space="preserve" src="/javascripts/benefits.js"></script>
+</head>
+<body bgcolor="#eeeeee">
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<div id="top_frame">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"><!-- top pseudo frame -->
+					<tr>
+						<td width="200"><img src="/images/logo_clear.gif" /></td>
+						<td align="center" valign="middle"><h2>Benefits Help Pages</h2></td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="200" valign="top">
+						<div id="left_frame">
+							<table width="200" border="0" cellpadding="0" cellspacing="0" class="left_frame"><!-- left pseudo frame -->
+								<!-- Always show items -->
+								<tr>
+									<td><a href="/help/current_month">Help Change Current Month</a></td>
+								</tr>
+								<tr>
+									<td><a href="/help/employees">Help Maintain Employees</a></td>
+								</tr>
+								<tr>
+									<td><a href="/help/benefits">Help Maintain Monthly Benefits</a></td>
+								</tr>
+								<tr>
+									<td><a href="/help/reports">Reports Help</a></td>
+								</tr>
+								<tr>
+									<td><a href="/help/users">Help Maintain System Users</a></td>
+								</tr>
+								<tr>
+									<td><a href="/help/login">Help Login</a></td>
+								</tr>
+								<tr>
+									<td><a href="/help/help">Help Tutorial</a></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+					<td>&nbsp;&nbsp;</td>
+					<td valign="top">
+						<div id="body_frame">
+							<table width="100%" border="0" cellpadding="0" cellspacing="0"><!-- body pseudo frame -->
+								<tr>
+									<td width="100%" style="color: red; font-size: larger;"><%= flash[:notice] %></td>
+								</tr>
+								<tr>
+									<td><%= @content_for_layout %></td>
+								</tr>
+								<tr>
+									<td style="color: red; font-size: larger;"><%= flash[:notice] %></td>
+								</tr>
+							</table>
+						</body>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+
+</body>
+</html>
