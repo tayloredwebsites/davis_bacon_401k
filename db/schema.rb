@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20101119163023) do
     t.datetime "created_at",                                                                   :null => false
     t.datetime "updated_at",                                                                   :null => false
     t.integer  "lock_version",                                               :default => 0
-    t.float    "safe_harbor_pct",                                            :default => 0.0
+    t.float    "safe_harbor_pct", :limit => 5,                               :default => 0.0
   end
 
   create_table "employees", :force => true do |t|
