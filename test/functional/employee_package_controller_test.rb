@@ -13,25 +13,20 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  def test_create_1
-    num_employee_packages = EmployeePackage.count
-
-    get :create, :employee_package => {}
-
-    assert_not_equal flash[:notice], ''
-    assert_response :redirect
-    assert_redirected_to :action => 'new'
-
-    assert_equal num_employee_packages, EmployeePackage.count
-  end
+  # duplicate of test_create_2
+  # def test_create_1
+  #   num_employee_packages = EmployeePackage.count
+  #   get :create, :employee_package => {}
+  #   assert_equal flash[:notice], 'Error - need employee id to create employee package'
+  #   assert_response :redirect
+  #   assert_redirected_to :action => 'list'
+  #   assert_equal num_employee_packages, EmployeePackage.count
+  # end
 
   def test_create_2
     num_employee_packages = EmployeePackage.count
-
     post :create, :employee_package => {}
-
     assert_equal flash[:notice], 'Error - need employee id to create employee package'
-    #assert_template 'new'
     assert_response :redirect
     assert_redirected_to :controller => 'employee', :action => 'list'
     assert_equal num_employee_packages, EmployeePackage.count
@@ -39,23 +34,18 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
 
   def test_create_3
     num_employee_packages = EmployeePackage.count
-
     post :create, :employee_package => {:employee_id => "1", :eff_month => "12", :eff_year => "2005"}
-
     assert_equal flash[:notice], 'EmployeePackage was successfully created.'
     assert_response :redirect
     assert_redirected_to :controller => 'employee', :action => 'edit'
-
     assert_equal num_employee_packages + 1, EmployeePackage.count
   end
 
   def test_edit
     get :edit, :id => 1
-
     assert_response :success
     assert_template 'edit'
-
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_not_nil assigns(:employee_package)
     assert_equal assigns(:employee_package).employee_id, 1
     #assert assigns(:employee_package).valid?
@@ -63,44 +53,38 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
 
   def test_index
     get :index
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_response :success
     assert_template 'list'
   end
 
   def test_list
     get :list
-
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_response :success
     assert_template 'list'
-
     assert_not_nil assigns(:employee_packages)
   end
 
   def test_new_1
     get :new
-
     assert_not_equal flash[:notice], ''
     assert_response :redirect
     assert_redirected_to :controller => 'employee', :action=> 'list'
-
   end
 
   def test_new_2
     get :new, :employee_id => 1
-
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_response :success
     assert_template 'new'
-
     assert_not_nil assigns(:employee_package)
   end
 
   def test_show
     get :show, :id => 1
 
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_response :success
     assert_template 'show'
 
@@ -111,27 +95,22 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
 
   def test_update_1
     num_employee_packages = EmployeePackage.count
-
     get :update, :employee_package => {}
-
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_response :redirect
     assert_redirected_to :action => 'list'
-
     assert_equal num_employee_packages, EmployeePackage.count
   end
 
   def test_update_2
     get :edit, :id => 1
-
     assert_response :success
     assert_template 'edit'
-
-    assert_not_equal flash[:notice], ''
+    assert_equal flash[:notice], ''
     assert_not_nil assigns(:employee_package)
     assert_equal assigns(:employee_package).employee_id, 1
-    #assert assigns(:employee_package).valid?
-    assert_equal assigns(:employee_package).monthly_medical, 911.26
+    assert assigns(:employee_package).valid?
+    assert_equal assigns(:employee_package).monthly_medical, 811.26
 
     @emp_package = EmployeePackage.find(:first, :conditions => "id = '2'")
     post :update,
@@ -149,7 +128,7 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
 	    	#:eff_month => @emp_package.eff_month,
 	    	#:eff_year => @emp_package.eff_year
 	    }
-    assert_equal flash[:notice], nil
+    assert_equal flash[:notice], ''
     assert_response :redirect
     assert_redirected_to :controller => 'employee', :action => 'view', :id => 2
     #assert_template 'show'

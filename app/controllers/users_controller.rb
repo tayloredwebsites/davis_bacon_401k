@@ -60,7 +60,11 @@ class UsersController < ApplicationController
   end
 
   def list
-    @user_pages, @users = paginate(:users, :per_page => 10, :order_by => 'deactivated, login')
+    @users = @user_pages = User.
+      find(:all,
+        :order => 'deactivated, login'
+      ).
+      paginate(:page => params[:page], :per_page => 10)
   end
 
   def new

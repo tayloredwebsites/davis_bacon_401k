@@ -1,12 +1,5 @@
 class ReportController < ApplicationController
 
-	# ensure logged in before using, except in test mode
-	logger.debug("ReportController beginning")
-	if ENV['RAILS_ENV'] != 'test'
-		logger.debug("ReportController beginning not test")
-		before_filter :login_required
-	end
-
 
 	layout  'report'
 

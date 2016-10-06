@@ -30,7 +30,7 @@
 	<tr>
 		<td><label for="user_created_at">Created at</label></td>
 		<%
-			if !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+			if @employee.present? && !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
 				@create = @employee["created_at"]
 			else
 				@create = ""
@@ -42,7 +42,7 @@
 	<tr>
 		<td><label for="user_updated_at">Updated at</label></td>
 		<%
-			if !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+			if @employee.present? && !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
 				@updated = @employee["updated_at"]
 			else
 				@updated = ""

@@ -18,12 +18,16 @@ class EmployeeBenefit < ActiveRecord::Base
 
   before_save :prep_for_save
 
+  # Ensure that deposit amount balances!
   def prep_for_save
   	# what about when doing the set deposited flag ????
 		#		if @allow_edit
 		#		 	@employee_benefit["deposit"] = round_money(@employee_benefit["monthly_benefit"] - tot_current_benefit)
 		#		end
-	 	self.deposit = self.monthly_benefit.to_f - self.tot_current_benefit.to_f - self.tot_deposits_made.to_f
+	 	self.deposit = # Deposit to make
+      self.monthly_benefit.to_f - # Required Total Benefit
+      self.tot_current_benefit.to_f - # Current Benefit without DBP (Employee Hourly Benefit (rate) * Total Hours (of Benefit record)
+      self.tot_deposits_made.to_f # Previous Deposits (sum of all Employee Benefits for this month that have already been deposited)
 		if self && !self.reg_hours
 			self.reg_hours = 0.0
 		end
@@ -35,7 +39,7 @@ class EmployeeBenefit < ActiveRecord::Base
 
 	public	## following methods will be public
 
-  # to prevent destroys to records that have been deposited.
+  # To prevent destroys to records that have been deposited.
   def destroy
   	#if self.employee_deposited_at
   	if self.deposited_at
@@ -47,7 +51,7 @@ class EmployeeBenefit < ActiveRecord::Base
   end
 
 
-  # to prevent updates to records that have been deposited.
+  # To prevent updates to records that have been deposited.
   def save
   	@is_ok = true
 
@@ -56,7 +60,7 @@ class EmployeeBenefit < ActiveRecord::Base
   		errors.add(:deposited_at, "Error - cannot update benefit that has been already deposited.")
   		@is_ok = false
   	end
-  	
+
   	@is_there = 0
   	if self.employee_id != nil
   	   @is_there = Employee.count( :all, :conditions => ["id = ? and deactivated = 0", self.employee_id] )
@@ -157,6 +161,7 @@ class EmployeeBenefit < ActiveRecord::Base
 		tot_hours
 	end
 
+  # Current Benefit (without DBP) = Employee Hourly Benefit (rate) * Total Hours (of Benefit record)
 	def tot_current_benefit
 		if self != nil && self.current_package != nil && self.current_package.calc_hourly_benefit != nil
 			(self.calc_tot_hours * self.current_package.calc_hourly_benefit * 100.0).round / 100.0
@@ -242,7 +247,7 @@ class EmployeeBenefit < ActiveRecord::Base
   			:order => 'eff_year DESC, eff_month DESC, id DESC')
 
 	end
-	
+
   def get_deposits_made
     # is this used?
   	@deposits_made = EmployeeBenefit.find(:all, :conditions => ["employee_id = ? and id <> ? and eff_month = ? and eff_year = ? and deposited_at IS NOT NULL",
@@ -250,6 +255,7 @@ class EmployeeBenefit < ActiveRecord::Base
   	)
   end
 
+  # Previous Deposits (tot_deposits_made) = sum of all Employee Benefits for this month that have already been deposited
   def tot_deposits_made
 		filter1 = ""
 #  	if self != nil && self.id != nil
@@ -297,7 +303,7 @@ class EmployeeBenefit < ActiveRecord::Base
   	)
   	@tot = 0.00
   	if dep_pending[0] and dep_pending[0].tot_deposit
-  		@tot = eval(dep_pending[0].tot_deposit)
+      @tot = dep_pending[0].tot_deposit
   	end
 #breakpoint
   	if @tot == nil
@@ -373,6 +379,7 @@ class EmployeeBenefit < ActiveRecord::Base
 	end
   end
 
+  # todo - depricated?
   def is_benefit_out_of_cur_bal
      @latest_pkg = self.get_latest_effective_package
 		#@cur_pkg = self.current_package
@@ -417,6 +424,7 @@ class EmployeeBenefit < ActiveRecord::Base
 	end
   end
 
+  # todo - this is only used in tests.  Should this be for testing after deposits are made?
   def is_benefit_out_of_bal
      @cur_pkg = self.get_latest_effective_package
 		#@cur_pkg = self.current_package
@@ -430,7 +438,6 @@ class EmployeeBenefit < ActiveRecord::Base
 			@bene_bal = 0.0000
 		end
 		if @bene_bal > 0.0005 || @bene_bal < -0.0005
-			logger.debug("****** benefit_out_of_bal - @bene_bal = "+@bene_bal.to_s)
 			true
 		else
 			false

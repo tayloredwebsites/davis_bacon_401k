@@ -50,7 +50,7 @@ class EmployeeController < ApplicationController
   	else
 	    @employee = Employee.find(params[:id])
 	    if (@employee.deactivated).to_s == '1'
-	    	@emp_name = @employee.last_name + ", " + @employee.first_name + " " + @employee.mi + ", "
+        @emp_name = "#{@employee.last_name}, #{@employee.first_name} #{@employee.mi}, "
 		    @employee.destroy
 	    	flash[:notice] = 'user ' + @emp_name + ' deleted'
 	    else
@@ -83,7 +83,7 @@ class EmployeeController < ApplicationController
     )
     @select_deposit = params[:select_deposit]
   end
-  
+
   def report_list
   end
 

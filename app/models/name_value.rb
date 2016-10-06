@@ -1,8 +1,8 @@
 
-    if ! defined? @@saved_values 
+    if ! defined? @@saved_values
       @@saved_values = Hash.new
     end
-    if ! defined? @@default_values 
+    if ! defined? @@default_values
       @@default_values = { "accounting_month" => "1", "accounting_year" => "2001", "start_year" => "2005" }
     end
 
@@ -22,7 +22,7 @@ class NameValue < ActiveRecord::Base
 #	if @@default_values == nil
 #	   @@default_values = { "accounting_month" => "1", "accounting_year" => "2001", "start_year" => "2005" }
 #    end
-    
+
 	#attr_accessor :val_name, :val_value
 
 	attr_accessor :cur_year, :cur_month
@@ -71,16 +71,11 @@ class NameValue < ActiveRecord::Base
 
 	# set the current accounting month for the application, requires records to exist in database
 	def self.set_accounting_month(cur_year=nil, cur_month=nil)
-		logger.debug("cur_year="+cur_year)
-		logger.debug("cur_month="+cur_month)
-		@name_value = self.new :cur_year => cur_year, :cur_month => cur_month
 		@done = ''
-
-		logger.debug("now cur_year="+cur_year)
-		logger.debug("now cur_month="+cur_month)
 		if cur_month == nil || cur_year == nil
 			@done = 'nil month or year'
 		else
+			@name_value = self.new :cur_year => cur_year, :cur_month => cur_month
 			# start with current values, then attempt update within transaction
 	    val_month_work = self.find(:first, :conditions => ["val_name = 'accounting_month'"])
 	    val_year_work = self.find(:first, :conditions => ["val_name = 'accounting_year'"])

@@ -158,7 +158,7 @@ public	## following methods will be public
   validates_presence_of :emp_id
   validates_length_of :last_name, :within => 1..40
   validates_length_of :first_name, :within => 1..40
-  validates_length_of :mi, :within => 0..1
+  validates_length_of :mi, :maximum => 1, :allow_blank => true
   validates_length_of :ssn, :is => 9
 
 end

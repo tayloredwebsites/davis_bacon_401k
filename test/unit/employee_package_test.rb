@@ -113,14 +113,14 @@ class EmployeePackageTest < Test::Unit::TestCase
     #assert @emp_pkg.errors.invalid?('employee_id')
   	#assert_equal "Error - invalid employee id.", @emp_pkg.errors.on(:employee_id)
 
-    @recs = EmployeePackage.count("employee_id = 2")
+    @recs = EmployeePackage.count(:conditions => "employee_id = 2")
     assert @dup = 1
 
   end
 
 	def test_create
 	    @emp_pkg = EmployeePackage.new
-	
+
 	    @emp_pkg.employee_id = 2
 	    @emp_pkg.eff_year = 2001
 	    @emp_pkg.eff_month = 12
@@ -133,7 +133,7 @@ class EmployeePackageTest < Test::Unit::TestCase
 	  	#@emp_pkg.update
 	  	@emp_pkg.reload
 	  	assert_equal @emp_pkg.eff_month, 12
-	  	@rec_count = EmployeePackage.count("employee_id = 2")
+	  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 2")
 	  	assert_equal @rec_count, 3
 	end
 
@@ -162,13 +162,13 @@ class EmployeePackageTest < Test::Unit::TestCase
     assert !@emp_pkg.errors.invalid?('employee_id')
   	@emp_pkg.reload
   	assert_equal @emp_pkg.eff_month, 12
-  	@rec_count = EmployeePackage.count("employee_id = 1")
+  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 1")
   	assert_equal @rec_count, 2
 
     num_employee_packages = EmployeePackage.count
   	@emp_pkg = EmployeePackage.find(:first, :conditions => 'employee_id = 1', :order => 'eff_year DESC, eff_month DESC')
   	assert @emp_pkg.destroy
-  	@rec_count = EmployeePackage.count("employee_id = 1")
+  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 1")
   	assert_equal @rec_count, 1
   end
 
@@ -185,19 +185,19 @@ class EmployeePackageTest < Test::Unit::TestCase
     assert !@emp_pkg.errors.invalid?('employee_id')
   	@emp_pkg.reload
   	assert_equal @emp_pkg.eff_month, 12
-  	@rec_count = EmployeePackage.count("employee_id = 1")
+  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 1")
   	assert_equal @rec_count, 2
 
-    num_employee_packages = EmployeePackage.count("employee_id = 1")
+    num_employee_packages = EmployeePackage.count(:conditions => "employee_id = 1")
   	assert_equal num_employee_packages, 2
   	@emp_pkg = EmployeePackage.find(1)
   	assert_equal @emp_pkg.deactivated, 0
   	assert @emp_pkg.destroy
   	assert_equal @emp_pkg.errors.count, 0
   	#assert_equal 'Error - cannot delete last package record.', @emp_pkg.errors.on(:employee_id)
-  	@rec_count = EmployeePackage.count("employee_id = 1")
+  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 1")
   	assert_equal @rec_count, num_employee_packages - 1
-    num_employee_packages = EmployeePackage.count("employee_id = 1")
+    num_employee_packages = EmployeePackage.count(:conditions => "employee_id = 1")
   	assert_equal num_employee_packages, 1	# confirm actually destroyed, not deactivated
   end
 
@@ -214,18 +214,18 @@ class EmployeePackageTest < Test::Unit::TestCase
     assert !@emp_pkg.errors.invalid?('employee_id')
   	@emp_pkg.reload
   	assert_equal @emp_pkg.eff_month, 12
-  	@rec_count = EmployeePackage.count("employee_id = 2")
+  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 2")
   	assert_equal @rec_count, 3
 
-    num_employee_packages = EmployeePackage.count("employee_id = 2")
+    num_employee_packages = EmployeePackage.count(:conditions => "employee_id = 2")
   	@emp_pkg = EmployeePackage.find(3)
   	assert_equal @emp_pkg.deactivated, 0
-  	@dep_count = EmployeeBenefit.count(["employee_package_id = 3 AND deposited_at IS NOT NULL "])
+  	@dep_count = EmployeeBenefit.count(:conditions => "employee_package_id = 3 AND deposited_at IS NOT NULL ")
   	assert_equal @dep_count, 1
   	assert @emp_pkg.destroy
   	assert_equal @emp_pkg.errors.count, 0
   	#assert_equal 'Error - cannot delete last package record.', @emp_pkg.errors.on(:employee_id)
-  	@rec_count = EmployeePackage.count("employee_id = 2")
+  	@rec_count = EmployeePackage.count(:conditions => "employee_id = 2")
   	assert_equal @rec_count, num_employee_packages
   	@emp_pkg = EmployeePackage.find(:first, :conditions => 'employee_id = 2')
   	assert_equal @emp_pkg.deactivated, 1

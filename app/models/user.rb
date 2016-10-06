@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   #   @user = User.authenticate('bob', 'bobpass')
   #
   def self.authenticate(login, pass)
-    find(:first, ["login = ? AND password = ?", login, sha1(pass)])
+    find(:first,  :conditions => ["login = ? AND password = ?", login, sha1(pass)])
   end
 
 
@@ -71,15 +71,15 @@ class User < ActiveRecord::Base
 
   # make sure password length is good for all creates
   def validate_on_create
-  	if  self.password.length < 5 || self.password.length > 40
+  	if read_attribute(:password).blank? || read_attribute(:password).length < 5 || read_attribute(:password).length > 40
   		errors.add(:password, "password length must be between 5 and 40 characters")
   	end
   end
 
   # make sure password length is good for updates only when password is changed
   def validate_on_update
-  	if self.password.length != 0
-	  	if  self.password.length < 5 || self.password.length > 40
+  	if read_attribute(:password).present?
+	  	if  read_attribute(:password).length < 5 || read_attribute(:password).length > 40
 	  		errors.add(:password, "password length must be between 5 and 40 characters")
 	  	end
 	  end
@@ -129,7 +129,7 @@ public	## following methods will be public
 
   validates_uniqueness_of :login, :on => :create
 
-  validates_confirmation_of :password, :on => :create     
+  validates_confirmation_of :password, :on => :create
   #?validates_confirmation_of :password
   validates_length_of :login, :within => 3..40
   #validates_length_of :password, :within => 5..40

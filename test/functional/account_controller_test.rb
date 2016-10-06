@@ -20,111 +20,96 @@ class AccountControllerTest < Test::Unit::TestCase
 
   def test_auth_bob
     @request.session[:return_to] = "/bogus/location"
-
     post :login, :user_login => "bob", :user_password => "bobs_secure_password"
     assert_not_nil :user
-    assert_session_has :user
-
-		@test_bob = @response.session[:user]
-    assert_not_nil @test_bob
-    assert_equal 'bob', @test_bob.login
-
-    # assert_redirect_url "/bogus/location"
+    assert_equal 'bob', @request.session[:user].login
+    assert_equal 'bob', @response.session[:user].login
   end
 
   def test_unauth_bob
     @request.session[:return_to] = "/bogus/location"
-
     post :login, :user_login => "bob", :user_password => "test"
-    #assert_nil :user
-    assert_session_has_no :user
-    #assert_redirected_to :action => 'welcome'
-
+    assert_equal nil, @request.session[:user]
+    assert_equal nil, @response.session[:user]
+    assert_response :success
+    assert_equal flash.now['notice'], "Login unsuccessful"
   end
 
   def test_signup
-
-  	for @u in @all_users
-  		@u.deactivate
-  		@u.destroy
-	  	#assert @u.errors.count == 0
+    User.all.each do |u|
+      u.deactivate if u.deactivated == 0
+  		u.destroy
   	end
-
-  	assert User.count == 0
-
-    #@request.session[:return_to] = "/bogus/location"
-
+    # signup only allowed if no current users !!!
+  	assert_equal User.count, 0
+    @request.session[:return_to] = "/bogus/location"
     post :signup, :user => { :login => "newbob", :password => "newpassword", :password_confirmation => "newpassword" }
-    assert_session_has :user
-
-    #assert_redirect_url "/bogus/location"
+    # assert_session_has :user
+    assert_not_equal nil, @request.session[:user]
+    assert_not_equal nil, @response.session[:user]
     assert_redirected_to :action => 'welcome'
+    assert_equal User.count, 1
+
   end
 
   def test_bad_signup
-
-  	for @u in @all_users
-  		@u.deactivate
-  		@u.destroy
-	  	#assert @u.errors.count == 0
-  	end
-
-  	assert User.count == 0
-
+  	assert_equal User.count, 6
     @request.session[:return_to] = "/bogus/location"
-
     post :signup, :user => { :login => "newbob", :password => "newpassword", :password_confirmation => "newpassword" }
-    assert_session_has :user
-    @newbob = @request.session[:user]
-    assert_not_nil @newbob
-    assert_equal @newbob.login, 'newbob'
-    #assert_redirect_url "/bogus/location"
-    assert_redirected_to :action => 'welcome'
-
+    assert_equal false, @request.session[:user].present?
+    assert_equal nil, assigns(:user)
+    assert_redirected_to :action => 'login'
     @request.session[:return_to] = "/bogus/location"
-
     post :signup, :user => { :login => "newbob", :password => "newpassword", :password_confirmation => "wrong" }
-    assert_invalid_column_on_record "user", :password
+    assert_equal false, @request.session[:user].present?
+    assert_equal nil, assigns(:user)
     assert_response :redirect
     assert_redirected_to :action => 'login'
     #assert_success
 
     post :signup, :user => { :login => "yo", :password => "newpassword", :password_confirmation => "newpassword" }
-    assert_invalid_column_on_record "user", :login
+    assert_equal false, @request.session[:user].present?
+    assert_equal nil, assigns(:user)
     assert_response :redirect
     assert_redirected_to :action => 'login'
-    #assert_success
-
   end
 
   def test_signup_with_users
-
   	assert User.count > 0
-
     @request.session[:return_to] = "/bogus/location"
-
     post :signup, :user => { :login => "newbob", :password => "newpassword", :password_confirmation => "newpassword" }
-    assert_session_has_no :user
-    assert_nil @request.session[:user]
-
+    # assert_session_has_no :user
+    # assert_nil @request.session[:user]
+    assert_equal nil, @request.session[:user]
+    assert_equal nil, @response.session[:user]
+    assert_response :redirect
     assert_redirected_to :action => 'login'
   end
 
   def test_invalid_login
     post :login, :user_login => "bob", :user_password => "not_correct"
-
-    assert_session_has_no :user
-
-    assert_template_has "login"
+    # assert_session_has_no :user
+    assert_equal nil, @request.session[:user]
+    assert_equal nil, @response.session[:user]
+    assert_response :success
+    assert_equal flash.now['notice'], "Login unsuccessful"
   end
 
   def test_login_logoff
 
     post :login, :user_login => "bob", :user_password => "bobs_secure_password"
-    assert_session_has :user
+    # assert_session_has :user
+    assert_equal 'bob', @request.session[:user].login
+    assert_equal 'bob', @response.session[:user].login
+    assert_response :redirect
+    assert_redirected_to :action => 'welcome'
+    assert_equal flash.now['notice'], "Login successful"
 
     get :logout
-    assert_session_has_no :user
+    # assert_session_has_no :user
+    assert_equal nil, @request.session[:user]
+    assert_equal nil, @response.session[:user]
+    assert_response :success
 
   end
 

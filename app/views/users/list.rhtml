@@ -43,8 +43,9 @@
 	</tbody>
 </table>
 
-<%= link_to 'Previous page', { :page => @user_pages.current.previous } if @user_pages.current.previous %>
-<%= link_to 'Next page', { :page => @user_pages.current.next } if @user_pages.current.next %>
+<%=
+	will_paginate @user_pages
+%>
 
 <br />
 

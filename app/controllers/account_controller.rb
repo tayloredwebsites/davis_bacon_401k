@@ -3,9 +3,6 @@
 class AccountController < ApplicationController
 	before_filter :login_required, :only => [ :welcome ]
 
-  #layout  'scaffold'
-
-
   def initialize
     #@@log = Log4r::Logger.new('App::AccountController')
   end

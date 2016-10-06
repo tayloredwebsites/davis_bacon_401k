@@ -100,13 +100,22 @@ class EmployeePackageController < ApplicationController
   end
 
   def list
-  	flash[:notice] = ''
-    @employee_package_pages,
-    	@employee_packages = paginate(:employee_packages,
-    		:per_page => 10,
-    		:order_by => 'eff_year DESC, eff_month DESC',
-    		:conditions => ["eff_year >= ?", NameValue.get_val('start_year').to_i]
-    	)
+    # note this is not used, as it is a listing of all packages without selecting or showing employee
+    flash[:notice] = ''
+    @employee_package_pages = @employee_packages = EmployeePackage.
+      paginate(
+        :conditions => ["eff_year >= ?", NameValue.get_val('start_year').to_i],
+        :page => params[:page],
+        :per_page => 10,
+        :order => 'eff_year DESC, eff_month DESC'
+      )
+    # # alternate approach
+    # @employee_packages = @employee_package_pages = EmployeePackage.
+    #   find(:all,
+    #     :conditions => ["eff_year >= ?", NameValue.get_val('start_year').to_i],
+    #     :order => 'eff_year DESC, eff_month DESC'
+    #   ).
+    #   paginate(:page => params[:page], :per_page => 10)
   end
 
   def new

@@ -17,3 +17,16 @@ config.action_controller.perform_caching             = false
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
+
+# Disable request forgery protection in test environment
+config.action_controller.allow_forgery_protection = false
+
+# print logging statements out during tests
+#log4r
+require "log4r"
+config.log_level = :debug
+Log4r::Logger.root.level = Log4r::DEBUG
+formatter = Log4r::PatternFormatter.new(:pattern => "[%5l] %d %30C - %m")
+Log4r::StderrOutputter.new('console', :formatter => formatter)
+Log4r::Logger.new('App').add('console')
+RAILS_DEFAULT_LOGGER = Log4r::Logger.new('App::Rails')

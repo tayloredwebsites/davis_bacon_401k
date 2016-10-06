@@ -91,7 +91,7 @@ class NameValueTest < Test::Unit::TestCase
   def test_get_val_2
     @val = NameValue.get_val('accounting_mon')
     #assert @val.errors.invalid?('get_val')
-    assert_equal @val, ''
+    assert_equal @val.blank?, true
   end
 
 

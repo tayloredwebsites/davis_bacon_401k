@@ -201,7 +201,7 @@ class EmployeeTest < Test::Unit::TestCase
   	@employee = Employee.find(1)
   	assert_equal @employee.deactivated, 0	# active
   	@employee.deactivate
-  	@employee.update
+  	@employee.save
   	@employee.reload
   	assert_equal @employee.deactivated, 1	# deactivated
   end
@@ -210,7 +210,7 @@ class EmployeeTest < Test::Unit::TestCase
   	@employee = Employee.find(2)
   	assert_equal @employee.deactivated, 1	# deactivated
   	@employee.reactivate
-  	@employee.update
+  	@employee.save
   	@employee.reload
   	assert_equal @employee.deactivated, 0	# reactivated
   end

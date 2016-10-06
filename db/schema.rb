@@ -30,20 +30,20 @@ ActiveRecord::Schema.define(:version => 20101119163023) do
   end
 
   create_table "employee_packages", :force => true do |t|
-    t.integer  "employee_id",                                                                  :null => false
-    t.decimal  "hourly_wage",                  :precision => 8, :scale => 2
-    t.decimal  "monthly_medical",              :precision => 8, :scale => 2
-    t.decimal  "annual_sick",                  :precision => 8, :scale => 2
-    t.decimal  "annual_holiday",               :precision => 8, :scale => 2
-    t.decimal  "annual_vacation",              :precision => 8, :scale => 2
-    t.decimal  "annual_personal",              :precision => 8, :scale => 2
-    t.integer  "eff_month",                                                  :default => 1
-    t.integer  "eff_year",                                                   :default => 2001
+    t.integer  "employee_id",                                    :null => false
+    t.decimal  "hourly_wage"
+    t.decimal  "monthly_medical"
+    t.decimal  "annual_sick"
+    t.decimal  "annual_holiday"
+    t.decimal  "annual_vacation"
+    t.decimal  "annual_personal"
+    t.integer  "eff_month",                    :default => 1
+    t.integer  "eff_year",                     :default => 2001
     t.integer  "deactivated",     :limit => 2
-    t.datetime "created_at",                                                                   :null => false
-    t.datetime "updated_at",                                                                   :null => false
-    t.integer  "lock_version",                                               :default => 0
-    t.float    "safe_harbor_pct", :limit => 5,                               :default => 0.0
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.integer  "lock_version",                 :default => 0
+    t.float    "safe_harbor_pct", :limit => 5, :default => 0.0
   end
 
   create_table "employees", :force => true do |t|

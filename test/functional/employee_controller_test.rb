@@ -15,24 +15,18 @@ class EmployeeControllerTest < Test::Unit::TestCase
 
   def test_create_1
     num_employees = Employee.count
-
     get :create, :employee => {}
-
     assert_response :redirect
     assert_redirected_to :action => 'new'
-
     assert_equal num_employees, Employee.count
   end
 
   def test_create_2
     num_employees = Employee.count
-
     post :create, :employee => {}
-
     assert_not_equal flash[:notice], ''
     assert_response :success
     assert_template 'new'
-
     assert_equal num_employees, Employee.count
   end
 
@@ -40,12 +34,12 @@ class EmployeeControllerTest < Test::Unit::TestCase
     num_employees = Employee.count
 
     post :create, 'id' => '3', :employee => {
-    		:id => '3',
-    		:emp_id => '23',
-    		:last_name => "something",
-    		:first_name => "something",
-    		:ssn => "123456777",
-    	}
+  		:id => '3',
+  		:emp_id => '23',
+  		:last_name => "something",
+  		:first_name => "something",
+  		:ssn => "123456777",
+  	}
 
     assert_equal flash[:notice], 'Employee was successfully created.'
     assert_response :redirect
@@ -98,7 +92,7 @@ class EmployeeControllerTest < Test::Unit::TestCase
     assert_equal @test_emp.deactivated,1
 
     post :destroy, :id => 13
-    assert_equal flash[:notice], "user O'Connell, Thomas  ,  deleted"
+    assert_equal flash[:notice], "user O'Connell, Thomas ,  deleted"
     assert_response :redirect
     assert_redirected_to :action => 'list'
 
@@ -110,11 +104,9 @@ class EmployeeControllerTest < Test::Unit::TestCase
 
   def test_edit
     get :edit, :id => 1
-
     assert_equal flash[:notice], nil
     assert_response :success
     assert_template 'edit'
-
     assert_not_nil assigns(:employee)
     assert assigns(:employee).valid?
   end

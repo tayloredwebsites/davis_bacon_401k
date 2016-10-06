@@ -1,16 +1,27 @@
 class EmployeePackage < ActiveRecord::Base
 
+  before_create :create_timestamp
+  before_destroy :validate_on_destroy
+
+  validates_presence_of :employee_id
+  validates_inclusion_of :eff_month, :in => 1..12, :message => 'invalid effective month'
+  validates_inclusion_of :eff_year, :in => 2001...2999, :message => 'invalid effective year'
+
+  def validate
+    super
+    @is_there = Employee.count( :all, :conditions => ["id = ?", self.employee_id])
+    if @is_there < 1
+      errors.add(:employee_id, "Error - invalid employee id.")
+    end
+  end
+
 
   protected	## following methods will be protected
-
-  before_create :create_timestamp
 
   # Properly set the current date and time in the created_at field on creation
   def create_timestamp
   	self.created_at = Time.now
   end
-
-  before_destroy :validate_on_destroy
 
   def validate_on_destroy
     #coding is placed in destroy method
@@ -277,17 +288,5 @@ public	## following methods will be public
   		false
   	end
   end
-
-  def validate
-  	super
-  	@is_there = Employee.count( :all, :conditions => ["id = ?", self.employee_id])
-  	if @is_there < 1
-  		errors.add(:employee_id, "Error - invalid employee id.")
-  	end
-  end
-
-	validates_presence_of :employee_id
-	validates_inclusion_of :eff_month, :in => 1..12, :message => 'invalid effective month'
-	validates_inclusion_of :eff_year, :in => 2001...2999, :message => 'invalid effective year'
 
 end

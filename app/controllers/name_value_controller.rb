@@ -72,7 +72,12 @@ class NameValueController < ApplicationController
   end
 
   def list
-    @name_value_pages, @name_values = paginate(:name_values, :per_page => 10, :order_by => 'val_name')
+    @name_value_pages = @name_values = NameValue.
+      paginate(:all,
+        :page => params[:page],
+        :per_page => 10,
+        :order => 'val_name'
+      )
   end
 
   def new

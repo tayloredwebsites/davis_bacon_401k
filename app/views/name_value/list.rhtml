@@ -21,8 +21,9 @@
 	</tbody>
 </table>
 
-<%= link_to 'Previous page', { :page => @name_value_pages.current.previous } if @name_value_pages.current.previous %>
-<%= link_to 'Next page', { :page => @name_value_pages.current.next } if @name_value_pages.current.next %>
+<%=
+	will_paginate @name_values
+%>
 
 <br />
 

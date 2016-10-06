@@ -12,9 +12,9 @@ class UserTest < Test::Unit::TestCase
     @test_bob = User.authenticate("bob", "bobs_secure_password")
     assert_not_nil @test_bob
     assert_equal @test_bob.login, 'bob'
-    # assert_equal  @bob, User.authenticate("bob", "bobs_secure_password")	# modified_at difference?
-    assert  User.authenticate("nonbob", "test") == nil
-    assert_nil    User.authenticate("nonbob", "bobs_secure_password")
+    assert_equal  User.authenticate("nonbob", "test"), nil
+    assert_equal    User.authenticate("nonbob", "bobs_secure_password"), nil
+    assert_not_equal    User.authenticate("bob", "bobs_secure_password"), nil
 
   end
 
@@ -121,7 +121,7 @@ class UserTest < Test::Unit::TestCase
   	@user = User.find_by_login("bobareebop")
   	assert_equal @user.deactivated, 0	# activate
   	@user.deactivate
-  	@user.update
+  	@user.save
   	@user.reload
   	assert_equal @user.deactivated, 1	# deactivated
 
@@ -136,7 +136,7 @@ class UserTest < Test::Unit::TestCase
   	@user = User.find_by_login("bobout")
   	assert_equal @user.deactivated, 1	# deactivated
   	@user.reactivate
-  	@user.update
+  	@user.save
   	@user.reload
   	assert_equal @user.deactivated, 0	# reactivated
 

@@ -35,8 +35,9 @@
 	</tbody>
 </table>
 
-<%= link_to 'Previous page', { :page => @employee_package_pages.current.previous } if @employee_package_pages.current.previous %>
-<%= link_to 'Next page', { :page => @employee_package_pages.current.next } if @employee_package_pages.current.next %>
+<%=
+	will_paginate @employee_packages
+%>
 
 <br />
 
