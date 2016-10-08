@@ -10,13 +10,13 @@ development:
   database: ca_benefits_development
   username: root
   password:
-  socket: /path/to/your/mysql.sock
-
+  host: localhost
+  # default port is 3306
+  #port: 3306
   # Connect on a TCP socket.  If omitted, the adapter will connect on the
   # domain socket given by socket instead.
-  #host: localhost
-  #port: 3306
-  
+  #socket: /path/to/your/mysql.sock
+
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
 # Do not set this db to the same as development or production.
@@ -25,44 +25,62 @@ test:
   database: ca_benefits_test
   username: root
   password:
-  socket: /path/to/your/mysql.sock
+  host: localhost
+  # default port is 3306
+  #port: 3306
+  # Connect on a TCP socket.  If omitted, the adapter will connect on the
+  # domain socket given by socket instead.
+  #socket: /path/to/your/mysql.sock
 
 production:
   adapter: mysql
   database: ca_benefits_production
   username: root
-  password: 
-  socket: /path/to/your/mysql.sock
+  password:
+  host: localhost
+  # default port is 3306
+  #port: 3306
+  # Connect on a TCP socket.  If omitted, the adapter will connect on the
+  # domain socket given by socket instead.
+  #socket: /path/to/your/mysql.sock
 
 
-# PostgreSQL versions 7.4 - 8.1
-#
+# PostgreSQL
 # Get the C bindings:
 #   gem install postgres
 # or use the pure-Ruby bindings on Windows:
 #   gem install postgres-pr
 postgresql_example:
   adapter: postgresql
-  database: ca_benefits_development
-  username: ca_benefits
+  database: app_development
+  username: root
   password:
-
   # Connect on a TCP socket.  Omitted by default since the client uses a
   # domain socket that doesn't need configuration.
   #host: remote-database
+  host: localhost
+  # default port is 5432
   #port: 5432
-
   # Schema search path.  The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public
-
   # Character set encoding.  The server defaults to sql_ascii.
-  #encoding: UTF8
-
+  encoding: UTF8
   # Minimum log levels, in increasing order:
   #   debug5, debug4, debug3, debug2, debug1,
   #   info, notice, warning, error, log, fatal, or panic
   # The server defaults to notice.
   #min_messages: warning
+
+# MS SQL Server
+sql_server_example:
+  adapter: sqlserver
+  database: app_production
+  # using active perl DBI ADO database provider
+  #host: DBI:ADO:Provider=SQLOLEDB;Data Source=localhost;Initial Catalog=ca_benefits_production;User Id=sa;Password=sa;
+  % using DSN
+  host: SBSDC01\ESTIMATION
+  username: sa
+  password:
 
 
 # SQLite version 2.x

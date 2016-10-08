@@ -10,8 +10,6 @@ class AccountController < ApplicationController
   def login
     #flash.now['login test']
     if !request.get?
-    #case @request.method
-    #  when :post
       if session[:user] = User.authenticate(params['user_login'], params['user_password'])
 
         flash['notice']  = "Login successful"
@@ -24,6 +22,8 @@ class AccountController < ApplicationController
         @login = params[:user_login]
 		    @message  = "Login unsuccessful"
       end
+    else
+      render "login", layout: 'application'
     end
   end
 

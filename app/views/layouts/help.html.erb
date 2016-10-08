@@ -3,8 +3,8 @@
   <title>Controlled Air Benefits: <%= controller.action_name %></title>
 	<meta name="description" content="Controlled Air Benefits Help Pages" />
 	<meta name="keywords" content="Taylored Web Sites,tayloredwebsites,tayloredwebsites.com,tailoredwebsites,tailoredwebsites.com,Magnolia,Content Management,CMS,${pageProperties.metaKeywords}" />
-  <%= stylesheet_link_tag 'benefits' %>
-	<script language="JavaScript" type="text/javascript" xml:space="preserve" src="/javascripts/benefits.js"></script>
+	<%= stylesheet_link_tag "application", media: "all" %>
+	<%= javascript_include_tag "application" %>
 </head>
 <body bgcolor="#eeeeee">
 
@@ -14,7 +14,7 @@
 			<div id="top_frame">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"><!-- top pseudo frame -->
 					<tr>
-						<td width="200"><img src="/images/logo_clear.gif" /></td>
+						<td width="200"><%= image_tag('logo_clear.gif') %></td>
 						<td align="center" valign="middle"><h2>Benefits Help Pages</h2></td>
 					</tr>
 				</table>
