@@ -31,16 +31,16 @@ class EmployeeController < ApplicationController
 	  #  flash[:notice] = 'Error - cannot use get to deactivate'
     #redirect_to :action => 'list'
   	#else
-	    @employee = Employee.find(params[:id])
-	    if @employee.update_attributes(:deactivated => 1)
-	      flash[:notice] = 'Employee was successfully deactivated.'
-	      redirect_to :action => 'list'
-	    else
-		    if !@employee.errors.empty?
-		    	flash[:notice] = 'Error - Deactivate error, ' + @employee.errors.full_messages.join("; ")
-		    end
-	      redirect_to :action => 'show', :id => @employee
+    @employee = Employee.find(params[:id])
+    if @employee.update_attributes(:deactivated => 1)
+      flash[:notice] = 'Employee was successfully deactivated.'
+      redirect_to :action => 'list'
+    else
+	    if !@employee.errors.empty?
+	    	flash[:notice] = 'Error - Deactivate error, ' + @employee.errors.full_messages.join("; ")
 	    end
+      redirect_to :action => 'show', :id => @employee
+    end
 	  #end	# request.get?
   end
 

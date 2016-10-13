@@ -1,203 +1,203 @@
 <br/><h2>Employee Benefits Listing for: <%= h display_accounting_month %></h2>
 
 <%=
-	#link_to 'Previous page', { :page => @employee_pages.current.previous } if @employee_pages.current.previous
+  #link_to 'Previous page', { :page => @employee_pages.current.previous } if @employee_pages.current.previous
 %>
 <%=
-	#' | ' if @employee_pages.current.previous and @employee_pages.current.next
+  #' | ' if @employee_pages.current.previous and @employee_pages.current.next
 %>
 <%=
-	#link_to 'Next page', { :page => @employee_pages.current.next } if @employee_pages.current.next
+  #link_to 'Next page', { :page => @employee_pages.current.next } if @employee_pages.current.next
 %>
 
 <%
-	@deposits_selector = [ ['Current Deposit', ''] ]
-	for dep in EmployeeBenefit.get_deposits
-		if dep.deposited_at != nil
-			@time_str = dep.deposited_at.strftime("%Y-%m-%d %H:%M:%S")
-			@deposits_selector.push( [@time_str, @time_str])
-		end
-	end
-	sel_dep = @select_deposit
-	if sel_dep == nil
-		sel_dep = ''
-	end
-	sel_dep_header = sel_dep
-	if sel_dep_header == ''
-		sel_dep_header = 'Current'
-	end
+  @deposits_selector = [ ['Current Deposit', ''] ]
+  for dep in EmployeeBenefit.get_deposits
+    if dep.deposited_at != nil
+      @time_str = dep.deposited_at.strftime("%Y-%m-%d %H:%M:%S")
+      @deposits_selector.push( [@time_str, @time_str])
+    end
+  end
+  sel_dep = @select_deposit
+  if sel_dep == nil
+    sel_dep = ''
+  end
+  sel_dep_header = sel_dep
+  if sel_dep_header == ''
+    sel_dep_header = 'Current'
+  end
 %>
 <form id='dep_select' name='dep_select' action='benefits_list' method='post'>
-	<table>
-		<tr>
-			<td>
-				<select id='select_deposit' name='select_deposit' onchange='document.dep_select.submit()'>
-					<%= options_for_select(@deposits_selector, @select_deposit) %>
-				</select>
-			</td>
-		</tr>
-		<tr><td><%= sel_dep %></td></tr>
-	</table>
+  <table>
+    <tr>
+      <td>
+        <select id='select_deposit' name='select_deposit' onchange='document.dep_select.submit()'>
+          <%= options_for_select(@deposits_selector, @select_deposit) %>
+        </select>
+      </td>
+    </tr>
+    <tr><td><%= sel_dep %></td></tr>
+  </table>
 </form>
 <table border="2">
-	<thead>
-	  <tr>
-			<th>Emp<br/>ID</th>
-			<th>Last<br/>Name</th>
-			<th>First<br/>Name</th>
-			<th>MI</th>
-			<th>Current<br/>Hours</th>
-			<th>Current<br/>Benefit</th>
-			<th>Required<br/>Benefit</th>
-			<th>Current<br>Deposits<br>Made</th>
-			<th><%= sel_dep_header %><br/>Deposit</th>
-			<th>Pending<br/>Deposits<br/>Applied</th>
-			<th>Total<br/>Deposit</th>
-			<th>Actions</th>
-	  </tr>
-	</thead>
+  <thead>
+    <tr>
+      <th>Emp<br/>ID</th>
+      <th>Last<br/>Name</th>
+      <th>First<br/>Name</th>
+      <th>MI</th>
+      <th>Current<br/>Hours</th>
+      <th>Current<br/>Benefit</th>
+      <th>Required<br/>Benefit</th>
+      <th>Current<br>Deposits<br>Made</th>
+      <th><%= sel_dep_header %><br/>Deposit</th>
+      <th>Pending<br/>Deposits<br/>Applied</th>
+      <th>Total<br/>Deposit</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-	<tbody>
+  <tbody>
 
 <%
-	  @sum_prev_deposit = 0.00
-	  @sum_deposit = 0.00
-	  @sum_pend = 0.00
-	  @sum_total = 0.00
-	  @blank_shown = false
-	  @have_current = false
-		@show_oob_footnote = false
-		for emp in @employees
-  		if emp.deactivated.to_s != '0' && ! @blank_shown
-  			@blank_shown = true
-  			%><tr><td colspan="8">Deactivated:</td></tr><%
-    	end
-			emp_bene = emp.cur_benefit
-			if emp_bene == nil			# || emp_bene.deposited_at != nil
-				emp_bene = EmployeeBenefit.new :employee_id => emp.id
-			end
-		  this_deposit = 0.00
-		  this_pending = 0.00
-		  this_total = 0.00
-		  if emp_bene.deposited_at_to_s == sel_dep
-		  	this_deposit = round_money(emp_bene.deposit)
-		  	this_pending = round_money(emp_bene.tot_pending_deposits(sel_dep))
-		  	this_total = round_money(nil_to_0(emp_bene.deposit) + nil_to_0(this_pending))
-		  end
-		  @sum_prev_deposit += round_money(emp_bene.tot_deposits_made)
-		  # @sum_deposit += round_money(emp_bene.deposit)
-		  @sum_deposit += round_money(this_deposit)
-		  @sum_pend += round_money(this_pending)
-		  @sum_total += round_money(this_total)
-		  if round_money(this_deposit) != 0.00 ||
-		  		round_money(this_pending) != 0.00 ||
-		  		round_money(this_total) != 0.00
-		  	@have_current = true
-		  end
+    @sum_prev_deposit = 0.00
+    @sum_deposit = 0.00
+    @sum_pend = 0.00
+    @sum_total = 0.00
+    @blank_shown = false
+    @have_current = false
+    @show_oob_footnote = false
+    for emp in @employees
+      if emp.deactivated.to_s != '0' && ! @blank_shown
+        @blank_shown = true
+        %><tr><td colspan="8">Deactivated:</td></tr><%
+      end
+      emp_bene = emp.cur_benefit
+      if emp_bene == nil      # || emp_bene.deposited_at != nil
+        emp_bene = EmployeeBenefit.new :employee_id => emp.id
+      end
+      this_deposit = 0.00
+      this_pending = 0.00
+      this_total = 0.00
+      if emp_bene.deposited_at_to_s == sel_dep
+        this_deposit = round_money(emp_bene.deposit)
+        this_pending = round_money(emp_bene.tot_pending_deposits(sel_dep))
+        this_total = round_money(nil_to_0(emp_bene.deposit) + nil_to_0(this_pending))
+      end
+      @sum_prev_deposit += round_money(emp_bene.tot_deposits_made)
+      # @sum_deposit += round_money(emp_bene.deposit)
+      @sum_deposit += round_money(this_deposit)
+      @sum_pend += round_money(this_pending)
+      @sum_total += round_money(this_total)
+      if round_money(this_deposit) != 0.00 ||
+          round_money(this_pending) != 0.00 ||
+          round_money(this_total) != 0.00
+        @have_current = true
+      end
 %>
-	  <tr>
-	    <td><%=h emp["emp_id"] %></td>
-	    <td><%=h emp["last_name"] %></td>
-	    <td><%=h emp["first_name"] %></td>
-	    <td><%=h emp["mi"] %>&nbsp;</td>
-	    <td><%=h emp_bene.calc_tot_hours %></td>
-	    <td><%=h round_money_s(emp_bene.tot_current_benefit) %></td>
-	    <td><%=h round_money_s(emp_bene.monthly_benefit) %></td>
-	    <td><%=h round_money_s(emp_bene.tot_deposits_made) %></td>
-	    <td>
-	    	<%=h round_money_s(this_deposit) %>
-	    	<%
-		    	@show_oob = false;
-				  if emp_bene.deposited_at_to_s == ''
-					if emp_bene.is_deposit_out_of_bal
-		    			%><div class='error'>*Deposit OOB*</div><%
-		    			@show_oob = true
-		    			@show_oob_footnote = true
-		    		end
-					if false && emp_bene.is_benefit_out_of_cur_bal
-		    			%><div class='error'>*Benefit OOB*<%=h emp_bene.get_latest_effective_package.id %></div><%
+    <tr>
+      <td><%=h emp["emp_id"] %></td>
+      <td><%=h emp["last_name"] %></td>
+      <td><%=h emp["first_name"] %></td>
+      <td><%=h emp["mi"] %>&nbsp;</td>
+      <td><%=h emp_bene.calc_tot_hours %></td>
+      <td><%=h round_money_s(emp_bene.tot_current_benefit) %></td>
+      <td><%=h round_money_s(emp_bene.monthly_benefit) %></td>
+      <td><%=h round_money_s(emp_bene.tot_deposits_made) %></td>
+      <td>
+        <%=h round_money_s(this_deposit) %>
+        <%
+          @show_oob = false;
+          if emp_bene.deposited_at_to_s == ''
+          if emp_bene.is_deposit_out_of_bal
+              %><div class='error'>*Deposit OOB*</div><%
+              @show_oob = true
+              @show_oob_footnote = true
+            end
+          if false && emp_bene.is_benefit_out_of_cur_bal
+              %><div class='error'>*Benefit OOB*<%=h emp_bene.get_latest_effective_package.id %></div><%
 #breakpoint
-		    			@show_oob = true
-		    			@show_oob_footnote = true
-		    		end
-					if false && emp_bene.is_benefit_changed
-		    			%><div class='error'>*Benefit Changed*</div><%
-		    			@show_oob = true
-		    			@show_oob_footnote = true
-		    		end
-		    	else
-					emp_bene.deposit = 0.00
-					if emp_bene.is_deposit_out_of_bal
-		    			%><div class='error'>*Deposit OOB*</div><%
-		    			@show_oob = true
-		    			@show_oob_footnote = true
-		    		end
-					if emp_bene.is_benefit_out_of_cur_bal
-		    			%><div class='error'>*Benefit OOB*</div><%
-		    			@show_oob = true
-		    			@show_oob_footnote = true
-		    		end
-		    	end
-	    	%>
-	    </td>
-	    <td><%=h round_money_s(this_pending) %></td>
-	    <td><%=h round_money_s(this_total) %></td>
-	    <td>
-	    	<%
-	    		if emp.emp_latest_pkg != nil
-			  %>
-				    <%= link_to 'Edit', :controller => 'employee_benefit', :action => 'edit', :id => emp_bene.id, :employee_id => emp.id %>
-				    |
-				    <%= link_to 'List', :controller => 'employee_benefit', :action => 'list', :employee_id => emp.id %>
-				    |
-				    <%= link_to 'Employee', :controller => 'employee', :action => 'edit', :id => emp %>
-	    	<%
-		    	else
-		    %>
-				    <%= link_to 'Employee', :controller => 'employee', :action => 'edit', :id => emp %>
-				    |
-			    	<%= link_to 'New Package', :controller => 'employee_package', :action => 'new', :employee_id => emp.id %>
-	    	<%
-		    	end	# if emp.emp_latest_pkg != nil
-		    %>
-	    </td>
-	  </tr>
-<% end	# for emp in @employees %>
-	  <tr>
-	    <td colspan='7' align='right'>Totals :</td>
-	    <td><%=h round_money_s(@sum_prev_deposit) %></td>
-	    <td><%=h round_money_s(@sum_deposit) %></td>
-	    <td><%=h round_money_s(@sum_pend) %></td>
-	    <td><%=h round_money_s(@sum_total) %></td>
-	    <td>
-				<% if sel_dep == '' && !@show_oob_footnote && @have_current %>
-		    	<%= link_to 'Make Deposit !',
-		    		{ :controller => 'employee_benefit', :action => 'make_cur_deposit' },
-		    		{ :class => 'error', :confirm => 'Are you sure you want to make this deposit now ?' }
-		    	%>
-				<% end %>
-	    </td>
-	  </tr>
+              @show_oob = true
+              @show_oob_footnote = true
+            end
+          if false && emp_bene.is_benefit_changed
+              %><div class='error'>*Benefit Changed*</div><%
+              @show_oob = true
+              @show_oob_footnote = true
+            end
+          else
+          emp_bene.deposit = 0.00
+          if emp_bene.is_deposit_out_of_bal
+              %><div class='error'>*Deposit OOB*</div><%
+              @show_oob = true
+              @show_oob_footnote = true
+            end
+          if emp_bene.is_benefit_out_of_cur_bal
+              %><div class='error'>*Benefit OOB*</div><%
+              @show_oob = true
+              @show_oob_footnote = true
+            end
+          end
+        %>
+      </td>
+      <td><%=h round_money_s(this_pending) %></td>
+      <td><%=h round_money_s(this_total) %></td>
+      <td>
+        <%
+          if emp.emp_latest_pkg != nil
+        %>
+            <%= link_to 'Edit', :controller => 'employee_benefit', :action => 'edit', :id => emp_bene.id, :employee_id => emp.id %>
+            |
+            <%= link_to 'List', :controller => 'employee_benefit', :action => 'list', :employee_id => emp.id %>
+            |
+            <%= link_to 'Employee', :controller => 'employee', :action => 'edit', :id => emp %>
+        <%
+          else
+        %>
+            <%= link_to 'Employee', :controller => 'employee', :action => 'edit', :id => emp %>
+            |
+            <%= link_to 'New Package', :controller => 'employee_package', :action => 'new', :employee_id => emp.id %>
+        <%
+          end # if emp.emp_latest_pkg != nil
+        %>
+      </td>
+    </tr>
+<% end  # for emp in @employees %>
+    <tr>
+      <td colspan='7' align='right'>Totals :</td>
+      <td><%=h round_money_s(@sum_prev_deposit) %></td>
+      <td><%=h round_money_s(@sum_deposit) %></td>
+      <td><%=h round_money_s(@sum_pend) %></td>
+      <td><%=h round_money_s(@sum_total) %></td>
+      <td>
+        <% if sel_dep == '' && !@show_oob_footnote && @have_current %>
+          <%= link_to 'Make Deposit !',
+            { :controller => 'employee_benefit', :action => 'make_cur_deposit' },
+            { :class => 'error', :confirm => 'Are you sure you want to make this deposit now ?' }
+          %>
+        <% end %>
+      </td>
+    </tr>
 <%
-	if @show_oob_footnote
+  if @show_oob_footnote
 %>
-	  <tr>
-	  	<td colspan='12' align='center'><div class='error'>( * - out of balance - edit to adjust )</div></td>
-	  </tr>
+    <tr>
+      <td colspan='12' align='center'><div class='error'>( * - out of balance - edit to adjust )</div></td>
+    </tr>
 <%
-	end
+  end
 %>
-	</tbody>
+  </tbody>
 </table>
 
 <%=
-	#link_to 'Previous page', { :page => @employee_pages.current.previous } if @employee_pages.current.previous
+  #link_to 'Previous page', { :page => @employee_pages.current.previous } if @employee_pages.current.previous
 %>
 <%=
-	#' | ' if @employee_pages.current.previous and @employee_pages.current.next
+  #' | ' if @employee_pages.current.previous and @employee_pages.current.next
 %>
 <%=
-	#link_to 'Next page', { :page => @employee_pages.current.next } if @employee_pages.current.next
+  #link_to 'Next page', { :page => @employee_pages.current.next } if @employee_pages.current.next
 %>
 
 <br />

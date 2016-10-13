@@ -1,108 +1,108 @@
 <%= error_messages_for 'employee_package' %>
 
 <%=
-	@year_options = get_year_options
-	@month_options = get_month_options
-	if params[:eff_month]
-		@select_month = params[:eff_month]
-	end
-	if params[:eff_year]
-		@select_year = params[:eff_year]
-	end
-	' '
+  @year_options = get_year_options
+  @month_options = get_month_options
+  if params[:eff_month]
+    @select_month = params[:eff_month]
+  end
+  if params[:eff_year]
+    @select_year = params[:eff_year]
+  end
+  ' '
 #breakpoint
 %>
 
 <!--[form:employee_package]-->
 <table>
 
-	<tr>
-		<td><label for="employee_name">Employee Name</label></td>
-		<td>
-			<%= h @employee["id"] %>&nbsp;-&nbsp;<%= h @employee["last_name"] %>,&nbsp;<%= h @employee["first_name"] %>&nbsp;<%= h @employee["mi"] %>&nbsp;(<%= h @employee_package["id"] %>)
-		</td>
-	</tr>
+  <tr>
+    <td><label for="employee_name">Employee Name</label></td>
+    <td>
+      <%= h @employee["id"] %>&nbsp;-&nbsp;<%= h @employee["last_name"] %>,&nbsp;<%= h @employee["first_name"] %>&nbsp;<%= h @employee["mi"] %>&nbsp;(<%= h @employee_package["id"] %>)
+    </td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_eff_year">Current Year</label></td>
-		<td>
-			<select id='employee_package_eff_year' name="employee_package[eff_year]">
-				<%=
-						options_for_select(@year_options, @employee_package.eff_year.to_s)
-				%>
-			</select>
-		</td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_eff_year">Current Year</label></td>
+    <td>
+      <select id='employee_package_eff_year' name="employee_package[eff_year]">
+        <%=
+            options_for_select(@year_options, @employee_package.eff_year.to_s)
+        %>
+      </select>
+    </td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_eff_month">Current Month</label></td>
-		<td>
-			<select id='employee_package_eff_month' name="employee_package[eff_month]">
-				<%=
-						options_for_select(@month_options, @employee_package.eff_month.to_s)
-				%>
-			</select>
-		</td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_eff_month">Current Month</label></td>
+    <td>
+      <select id='employee_package_eff_month' name="employee_package[eff_month]">
+        <%=
+            options_for_select(@month_options, @employee_package.eff_month.to_s)
+        %>
+      </select>
+    </td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_hourly_wage">Hourly Wage</label></td>
-		<td><%= text_field 'employee_package', 'hourly_wage'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_hourly_wage">Hourly Wage</label></td>
+    <td><%= text_field 'employee_package', 'hourly_wage'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_monthly_medical">Monthly Medical</label></td>
-		<td><%= text_field 'employee_package', 'monthly_medical'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_monthly_medical">Monthly Medical</label></td>
+    <td><%= text_field 'employee_package', 'monthly_medical'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_sick">Sick Hours (Annual)</label></td>
-		<td><%= text_field 'employee_package', 'annual_sick'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_sick">Sick Hours (Annual)</label></td>
+    <td><%= text_field 'employee_package', 'annual_sick'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_holiday">Holiday Hours (Annual)</label></td>
-		<td><%= text_field 'employee_package', 'annual_holiday'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_holiday">Holiday Hours (Annual)</label></td>
+    <td><%= text_field 'employee_package', 'annual_holiday'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_vacation">Vacation Hours (Annual)</label></td>
-		<td><%= text_field 'employee_package', 'annual_vacation'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_vacation">Vacation Hours (Annual)</label></td>
+    <td><%= text_field 'employee_package', 'annual_vacation'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_personal">Personal Hours (Annual)</label></td>
-		<td><%= text_field 'employee_package', 'annual_personal'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_personal">Personal Hours (Annual)</label></td>
+    <td><%= text_field 'employee_package', 'annual_personal'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_safe_harbor_pct">Safe Harbor %</label></td>
-		<td><%= text_field 'employee_package', 'safe_harbor_pct'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_safe_harbor_pct">Safe Harbor %</label></td>
+    <td><%= text_field 'employee_package', 'safe_harbor_pct'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_created_at">Created at</label></td>
-		<%
-			if !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
-				@create = @employee["created_at"]
-			else
-				@create = ""
-			end
-		%>
-		<td><%= @create %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_created_at">Created at</label></td>
+    <%
+      if !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+        @create = @employee["created_at"]
+      else
+        @create = ""
+      end
+    %>
+    <td><%= @create %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_updated_at">Updated at</label></td>
-		<%
-			if !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
-				@updated = @employee["updated_at"]
-			else
-				@updated = ""
-			end
-		%>
-		<td><%= @updated %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_updated_at">Updated at</label></td>
+    <%
+      if !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+        @updated = @employee["updated_at"]
+      else
+        @updated = ""
+      end
+    %>
+    <td><%= @updated %></td>
+  </tr>
 
 </table>
 

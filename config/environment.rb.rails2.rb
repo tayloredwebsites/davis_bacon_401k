@@ -78,5 +78,3 @@ Rails::Initializer.run do |config|
   config.gem 'sqlite3', :version => '1.3.11'
 
 end
-
-require "will_paginate"

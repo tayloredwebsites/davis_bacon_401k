@@ -23,6 +23,7 @@ class AccountController < ApplicationController
 		    @message  = "Login unsuccessful"
       end
     else
+      Rails.logger.debug("logger: login get form display")
       render "login", layout: 'application'
     end
   end

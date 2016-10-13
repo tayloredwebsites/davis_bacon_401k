@@ -1,31 +1,47 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
-class EmployeeBenefitTest < Test::Unit::TestCase
+class EmployeeBenefitTest < ActiveSupport::TestCase
 	fixtures :employees, :employee_packages, :employee_benefits, :name_values
 
-  def test_create_0_wrong_acct_mo
+  def test_create_0_bene_without_package
     @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
     assert_equal @rec_count, 1
     @emp_bene = EmployeeBenefit.new :employee_id => 1
+    assert !@emp_bene.save
+    assert !@emp_bene.errors.empty?
+    assert_equal @emp_bene.errors[:id], []
+    assert_equal @emp_bene.errors[:employee_id], []
+    assert_equal @emp_bene.errors[:deposited_at], []
+    assert_equal @emp_bene.errors[:eff_month], []
+    assert_equal @emp_bene.errors[:employee_package_id], ["Error - cannot find effective employee package.", "Error - cannot save without package ."]
+    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
+    assert_equal @rec_count, 1
+  end
+
+  def test_create_0_wrong_acct_mo
+    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 21")
+    assert_equal @rec_count, 2
+    @emp_bene = EmployeeBenefit.new :employee_id => 21
+    # ep1 = EmployeePackage.find 1
+    # ep1.eff_year = 2006
+    # ep1.eff_month = 4
+    # Rails.logger.debug("*** test_create_0_wrong_acct_mo - ep1: #{ep1.inspect}")
+    # ep1.save
+    # Rails.logger.debug("*** test_create_0_wrong_acct_mo - ep1 errors: #{ep1.errors.inspect}")
+    # assert_equal [], ep1.errors
+    # @emp_bene.employee_package_id = ep1.id
     @emp_bene.eff_year = 2001
     @emp_bene.eff_month = 12
     assert !@emp_bene.save
+    Rails.logger.debug("*** test_create_0_wrong_acct_mo - @emp_bene.errors: #{@emp_bene.errors.inspect}")
     assert !@emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-    assert !@emp_bene.errors.invalid?('employee_id')
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-    assert !@emp_bene.errors.invalid?('deposited_at')
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-    assert @emp_bene.errors.invalid?('eff_month')
-  	assert_equal @emp_bene.errors.on(:eff_month), 'Error - current package effective month does not match current record.'
-    assert !@emp_bene.errors.invalid?('employee_package_id')
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
-    assert !@emp_bene.errors.invalid?('employee_id')
-  	#@emp_bene.update
-  	#@emp_bene.reload
-  	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-  	assert_equal @rec_count, 1
+    assert_equal @emp_bene.errors[:id], []
+    assert_equal @emp_bene.errors[:employee_id], []
+    assert_equal @emp_bene.errors[:deposited_at], []
+    assert_equal @emp_bene.errors[:eff_month], ['Error - current package effective month does not match current record.']
+    assert_equal @emp_bene.errors[:employee_package_id], []
+    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
+    assert_equal @rec_count, 1
   end
 
   def test_create_1_single_package_ok
@@ -446,7 +462,6 @@ class EmployeeBenefitTest < Test::Unit::TestCase
     assert_equal @emp_bene.current_package.id, @emp_bene.employee_package_id
     assert_equal @emp_bene.is_benefit_changed, false
 
-    end
-
+  end
 
 end

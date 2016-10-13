@@ -1,66 +1,66 @@
 
 <table>
 
-	<tr>
-		<td><label for="employee_name">Employee Name</label></td>
-		<td>
-			<%= h @employee["last_name"] %>,&nbsp;<%= h @employee["first_name"] %>&nbsp;<%= h @employee["mi"] %>
-		</td>
-	</tr>
+  <tr>
+    <td><label for="employee_name">Employee Name</label></td>
+    <td>
+      <%= h @employee["last_name"] %>,&nbsp;<%= h @employee["first_name"] %>&nbsp;<%= h @employee["mi"] %>
+    </td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_eff_year">Current Year</label></td>
-		<td><%= h @employee_package["eff_year"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_eff_year">Current Year</label></td>
+    <td><%= h @employee_package["eff_year"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_eff_month">Current Month</label></td>
-		<td><%= h @employee_package["eff_month"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_eff_month">Current Month</label></td>
+    <td><%= h @employee_package["eff_month"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_hourly_wage">Hourly Wage</label></td>
-		<td><%= h @employee_package["hourly_wage"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_hourly_wage">Hourly Wage</label></td>
+    <td><%= h @employee_package["hourly_wage"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_monthly_medical">Monthly Medical</label></td>
-		<td><%= h @employee_package["monthly_medical"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_monthly_medical">Monthly Medical</label></td>
+    <td><%= h @employee_package["monthly_medical"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_sick">Sick Hours (Annual)</label></td>
-		<td><%= h @employee_package["annual_sick"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_sick">Sick Hours (Annual)</label></td>
+    <td><%= h @employee_package["annual_sick"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_holiday">Holiday Hours (Annual)</label></td>
-		<td><%= h @employee_package["annual_holiday"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_holiday">Holiday Hours (Annual)</label></td>
+    <td><%= h @employee_package["annual_holiday"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_vacation">Vacation Hours (Annual)</label></td>
-		<td><%= h @employee_package["annual_vacation"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_vacation">Vacation Hours (Annual)</label></td>
+    <td><%= h @employee_package["annual_vacation"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_annual_personal">Personal Hours (Annual)</label></td>
-		<td><%= h @employee_package["annual_personal"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_annual_personal">Personal Hours (Annual)</label></td>
+    <td><%= h @employee_package["annual_personal"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_safe_harbor_pct">Safe Harbor %</label></td>
-		<td><%= h @employee_package["safe_harbor_pct"] %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_safe_harbor_pct">Safe Harbor %</label></td>
+    <td><%= h @employee_package["safe_harbor_pct"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_created_at">Created at</label></td>
-		<td><%= @employee_package["created_at"].strftime("%I:%M %p %d-%b-%Y") %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_created_at">Created at</label></td>
+    <td><%= @employee_package["created_at"].strftime("%I:%M %p %d-%b-%Y") %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_package_updated_at">Updated at</label></td>
-		<td><%= @employee_package["updated_at"].strftime("%I:%M %p %d-%b-%Y") %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_package_updated_at">Updated at</label></td>
+    <td><%= @employee_package["updated_at"].strftime("%I:%M %p %d-%b-%Y") %></td>
+  </tr>
 
 </table>

@@ -1,5 +1,7 @@
 class EmployeeBenefit < ActiveRecord::Base
 
+  attr_accessible :employee_id
+
   protected	## following methods will be protected
 
   before_create :create_timestamp
@@ -25,9 +27,9 @@ class EmployeeBenefit < ActiveRecord::Base
 		#		 	@employee_benefit["deposit"] = round_money(@employee_benefit["monthly_benefit"] - tot_current_benefit)
 		#		end
 	 	self.deposit = # Deposit to make
-      self.monthly_benefit.to_f - # Required Total Benefit
-      self.tot_current_benefit.to_f - # Current Benefit without DBP (Employee Hourly Benefit (rate) * Total Hours (of Benefit record)
-      self.tot_deposits_made.to_f # Previous Deposits (sum of all Employee Benefits for this month that have already been deposited)
+    self.monthly_benefit.to_f - # Required Total Benefit
+    self.tot_current_benefit.to_f - # Current Benefit without DBP (Employee Hourly Benefit (rate) * Total Hours (of Benefit record)
+    self.tot_deposits_made.to_f # Previous Deposits (sum of all Employee Benefits for this month that have already been deposited)
 		if self && !self.reg_hours
 			self.reg_hours = 0.0
 		end
@@ -46,7 +48,7 @@ class EmployeeBenefit < ActiveRecord::Base
   		errors.add(:deposited_at, "Error - cannot delete deposited benefit.")
   		false
   	else
-		super
+		  super
   	end
   end
 
@@ -81,7 +83,7 @@ class EmployeeBenefit < ActiveRecord::Base
   		errors.add(:employee_package_id, "Error - current package is deactivated.")
   		@is_ok = false
   	elsif @this_pkg.eff_year > self.eff_year ||
-  	       ( @this_pkg.eff_year == self.eff_year && @this_pkg.eff_month > self.eff_month )
+  	   ( @this_pkg.eff_year == self.eff_year && @this_pkg.eff_month > self.eff_month )
   		errors.add(:eff_month, "Error - current package effective month does not match current record.")
   		@is_ok = false
   	end
@@ -94,6 +96,8 @@ class EmployeeBenefit < ActiveRecord::Base
 
 
 
+  # note when we call .new, the record is initialized with benefit and package info.
+  # Thus EmployeeBenefit.new requires an employee_id
   def initialize *args
   	super *args
 #  	if self.employee_id == nil
@@ -140,7 +144,7 @@ class EmployeeBenefit < ActiveRecord::Base
 	  			self.employee_package_id = @employee_package.id
 	  			self.hourly_benefit = @employee_package.calc_hourly_benefit
 		  	else
-		  		errors.add(:employee_package_id, "Error - cannot find employee package.")
+		  		errors.add(:employee_package_id, "Error - cannot find effective employee package.")
 		  	end
 	  	else
 	  		errors.add(:employee_id, "Error - cannot find employee for id " + self.employee_id.to_s)
@@ -361,34 +365,33 @@ class EmployeeBenefit < ActiveRecord::Base
   end
 
   def is_deposit_out_of_cur_bal
-     @latest_pkg = self.get_latest_effective_package
-     if @latest_pkg != nil
-		@bene_bal = ( @latest_pkg.calc_hourly_benefit.to_f -
-			self.tot_current_benefit.to_f -
-			self.tot_deposits_made.to_f -
-			self.deposit.to_f
-		)
-		if @bene_bal > 0.005 || @bene_bal < -0.005
-			logger.debug("****** deposit_out_of_cur_bal - @bene_bal = "+@bene_bal.to_s)
-			true
-		else
-			false
-		end
-	else
-	   false
-	end
+    @latest_pkg = self.get_latest_effective_package
+    if @latest_pkg != nil
+  		@bene_bal = ( @latest_pkg.calc_hourly_benefit.to_f -
+  			self.tot_current_benefit.to_f -
+  			self.tot_deposits_made.to_f -
+  			self.deposit.to_f
+  		)
+  		if @bene_bal > 0.005 || @bene_bal < -0.005
+  			logger.debug("****** deposit_out_of_cur_bal - @bene_bal = "+@bene_bal.to_s)
+  			true
+  		else
+  			false
+  		end
+  	else
+  	  false
+  	end
   end
 
   # todo - depricated?
   def is_benefit_out_of_cur_bal
-     @latest_pkg = self.get_latest_effective_package
+    @latest_pkg = self.get_latest_effective_package
 		#@cur_pkg = self.current_package
-     if @latest_pkg != nil
-		#if false && @cur_pkg
-			@bene_bal = ( @latest_pkg.calc_hourly_benefit.to_f -
-				( self.current_package.calc_hourly_benefit.to_f * self.calc_tot_hours.to_f )
-			)
-
+    if @latest_pkg != nil
+  		#if false && @cur_pkg
+  		@bene_bal = ( @latest_pkg.calc_hourly_benefit.to_f -
+  			( self.current_package.calc_hourly_benefit.to_f * self.calc_tot_hours.to_f )
+  		)
 		else
 			@bene_bal = 0.0000
 		end
@@ -402,26 +405,26 @@ class EmployeeBenefit < ActiveRecord::Base
 
 
   def is_deposit_out_of_bal
-     @cur_pkg = self.current_package
-     if @cur_pkg != nil
-		@bene_bal = ( self.monthly_benefit.to_f -
-			self.tot_current_benefit.to_f -
-			self.tot_deposits_made.to_f -
-			self.deposit.to_f
-		)
-		if @bene_bal > 0.005 || @bene_bal < -0.005
-			logger.debug("****** deposit_out_of_bal - monthly_benefit = "+self.monthly_benefit.to_f.to_s)
-			logger.debug("******                    - tot_current_benefit = "+self.tot_current_benefit.to_f.to_s)
-			logger.debug("******                    - tot_deposits_made = "+self.tot_deposits_made.to_f.to_s)
-			logger.debug("******                    - deposit = "+self.deposit.to_f.to_s)
-			logger.debug("******                    - @bene_bal = "+@bene_bal.to_s)
-			true
-		else
-			false
-		end
-	else
-	   false
-	end
+    @cur_pkg = self.current_package
+    if @cur_pkg != nil
+  		@bene_bal = ( self.monthly_benefit.to_f -
+  			self.tot_current_benefit.to_f -
+  			self.tot_deposits_made.to_f -
+  			self.deposit.to_f
+  		)
+  		if @bene_bal > 0.005 || @bene_bal < -0.005
+  			logger.debug("****** deposit_out_of_bal - monthly_benefit = "+self.monthly_benefit.to_f.to_s)
+  			logger.debug("******                    - tot_current_benefit = "+self.tot_current_benefit.to_f.to_s)
+  			logger.debug("******                    - tot_deposits_made = "+self.tot_deposits_made.to_f.to_s)
+  			logger.debug("******                    - deposit = "+self.deposit.to_f.to_s)
+  			logger.debug("******                    - @bene_bal = "+@bene_bal.to_s)
+  			true
+  		else
+  			false
+  		end
+  	else
+  	   false
+  	end
   end
 
   # todo - this is only used in tests.  Should this be for testing after deposits are made?

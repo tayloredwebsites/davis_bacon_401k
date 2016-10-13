@@ -1,68 +1,68 @@
 <br><h2>Employee Master Listing for: <%= h display_accounting_month %></h2>
 
 <table border="2">
-	<thead>
-	  <tr>
-			<th>Emp<br/>ID</th>
-			<th>Last<br/>Name</th>
-			<th>First<br/>Name</th>
-			<!-- <th>MI</th> -->
-			<th>Effective<br/>Date</th>
-			<th>Hourly<br/>Wage</th>
-			<th>Monthly<br/>Medical</th>
-			<th>Sick<br/>Hours</th>
-			<th>Holiday<br/>Hours</th>
-			<th>Vacation<br/>Hours</th>
-			<th>Personal<br/>Hours</th>
-			<th>Hourly<br/>Benefit</th>
-	  </tr>
-	</thead>
+  <thead>
+    <tr>
+      <th>Emp<br/>ID</th>
+      <th>Last<br/>Name</th>
+      <th>First<br/>Name</th>
+      <!-- <th>MI</th> -->
+      <th>Effective<br/>Date</th>
+      <th>Hourly<br/>Wage</th>
+      <th>Monthly<br/>Medical</th>
+      <th>Sick<br/>Hours</th>
+      <th>Holiday<br/>Hours</th>
+      <th>Vacation<br/>Hours</th>
+      <th>Personal<br/>Hours</th>
+      <th>Hourly<br/>Benefit</th>
+    </tr>
+  </thead>
 
-	<tbody>
+  <tbody>
 
 <%
-	for emp in @employees
-  		if emp.deactivated.to_s != '0' && ! @blank_shown
-  			@blank_shown = true
-  			%><tr><td colspan="8">Deactivated:</td></tr><%
-    	end
-    	pkg = emp.emp_latest_pkg
-    	if pkg == nil
-    		pkg = EmployeePackage.new :employee_id => emp.id
-    		@eff = "<font color='red'><center>***</center></font>"
-    	else
-    		@eff = h(pkg.eff_month.to_s) + '/' + h(pkg.eff_year.to_s)
-    	end
+  for emp in @employees
+      if emp.deactivated.to_s != '0' && ! @blank_shown
+        @blank_shown = true
+        %><tr><td colspan="8">Deactivated:</td></tr><%
+      end
+      pkg = emp.emp_latest_pkg
+      if pkg == nil
+        pkg = EmployeePackage.new :employee_id => emp.id
+        @eff = "<font color='red'><center>***</center></font>"
+      else
+        @eff = h(pkg.eff_month.to_s) + '/' + h(pkg.eff_year.to_s)
+      end
 %>
-	  <tr>
-	    <td align='center'><%=h emp["emp_id"] %></td>
-	    <td align='center'><%=h emp["last_name"] %></td>
-	    <td align='center'><%=h emp["first_name"] %></td>
-	    <!-- <td align='center'><%=h emp["mi"] %>&nbsp;</td> -->
-	    <td align='center'><%= @eff %></td>
-	    <td align='center'><%=h round_money_s(pkg["hourly_wage"]) %></td>
-	    <td align='center'><%=h pkg["monthly_medical"] %></td>
-	    <td align='center'><%=h pkg["annual_sick"] %></td>
-	    <td align='center'><%=h pkg["annual_holiday"] %></td>
-	    <td align='center'><%=h pkg["annual_vacation"] %></td>
-	    <td align='center'><%=h pkg["annual_personal"] %></td>
-	    <%
-	    	if pkg == nil
-	    		@ben = "<font color='red'>nil pkg</font>"
-	    	else
-	    		@bene = pkg.calc_hourly_benefit
-	    		if @bene == nil
-	    			@ben = "<font color='red'>nil pkg</font>"
-	    		else
-	    			@ben = h(round_places_s(@bene,2))
-	    		end
-	    	end
-	    	logger.debug("hourly benefit = "+h(round_places_s(pkg.calc_hourly_benefit,2)))
-	    %>
-	    <td align='center'><%= @ben %></td>
-	  </tr>
-<% end	# for emp in @employees %>
-	</tbody>
+    <tr>
+      <td align='center'><%=h emp["emp_id"] %></td>
+      <td align='center'><%=h emp["last_name"] %></td>
+      <td align='center'><%=h emp["first_name"] %></td>
+      <!-- <td align='center'><%=h emp["mi"] %>&nbsp;</td> -->
+      <td align='center'><%= @eff %></td>
+      <td align='center'><%=h round_money_s(pkg["hourly_wage"]) %></td>
+      <td align='center'><%=h pkg["monthly_medical"] %></td>
+      <td align='center'><%=h pkg["annual_sick"] %></td>
+      <td align='center'><%=h pkg["annual_holiday"] %></td>
+      <td align='center'><%=h pkg["annual_vacation"] %></td>
+      <td align='center'><%=h pkg["annual_personal"] %></td>
+      <%
+        if pkg == nil
+          @ben = "<font color='red'>nil pkg</font>"
+        else
+          @bene = pkg.calc_hourly_benefit
+          if @bene == nil
+            @ben = "<font color='red'>nil pkg</font>"
+          else
+            @ben = h(round_places_s(@bene,2))
+          end
+        end
+        logger.debug("hourly benefit = "+h(round_places_s(pkg.calc_hourly_benefit,2)))
+      %>
+      <td align='center'><%= @ben %></td>
+    </tr>
+<% end  # for emp in @employees %>
+  </tbody>
 </table>
 
 <br />

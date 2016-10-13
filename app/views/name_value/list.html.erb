@@ -1,28 +1,28 @@
 <br><h2>Listing Name Value Pairs</h2>
 
 <table border="2">
-	<thead>
-	  <tr>
-			<th>Name</th>
-			<th>Values</th>
-	  </tr>
-	</thead>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Values</th>
+    </tr>
+  </thead>
 
-	<tbody>
+  <tbody>
 
 <% for val in @name_values %>
-	  <tr>
-	    <td><%=h val["val_name"] %></td>
-	    <td><%=h val["val_value"] %></td>
-	    <td><%= link_to 'Display', :action => 'show', :id => val %></td>
-	    <td><%= link_to 'Edit', :action => 'edit', :id => val %></td>
-	  </tr>
+    <tr>
+      <td><%=h val["val_name"] %></td>
+      <td><%=h val["val_value"] %></td>
+      <td><%= link_to 'Display', :action => 'show', :id => val %></td>
+      <td><%= link_to 'Edit', :action => 'edit', :id => val %></td>
+    </tr>
 <% end %>
-	</tbody>
+  </tbody>
 </table>
 
 <%=
-	will_paginate @name_values
+  will_paginate @name_values
 %>
 
 <br />

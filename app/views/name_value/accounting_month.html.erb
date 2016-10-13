@@ -1,53 +1,53 @@
 <br><h2>Current Accounting Month: <%= h display_accounting_month %></h2>
 <% if @errs.length > 0 %>
-	<ul>
-		<%
-		for err in @errs
-			if err && err != ''
-		%>
-			<li class='err'><%= err %></li>
-		<%
-			end
-		end
-		%>
-	</ul>
+  <ul>
+    <%
+    for err in @errs
+      if err && err != ''
+    %>
+      <li class='err'><%= err %></li>
+    <%
+      end
+    end
+    %>
+  </ul>
 <% end %>
 <%=
-	#@time_now = Time.now
-	@year_options = get_year_options
-	@month_options = get_month_options
-	if params[:select_year]
-		@select_month = params[:select_year]
-	end
-	if params[:select_month]
-		@select_month = params[:select_month]
-	end
-	' '
+  #@time_now = Time.now
+  @year_options = get_year_options
+  @month_options = get_month_options
+  if params[:select_year]
+    @select_month = params[:select_year]
+  end
+  if params[:select_month]
+    @select_month = params[:select_month]
+  end
+  ' '
 %>
 
 <% form_tag(:action => 'accounting_month') do %>
 
 <table border="2">
 
-	<tr>
-		<td><label for="select_year">Current Year</label></td>
-		<td>
-			<%= select_tag(:select_year,
-					options_for_select(@year_options, params[:select_year])
-				)
-			%>
-		</td>
-	</tr>
+  <tr>
+    <td><label for="select_year">Current Year</label></td>
+    <td>
+      <%= select_tag(:select_year,
+          options_for_select(@year_options, params[:select_year])
+        )
+      %>
+    </td>
+  </tr>
 
-	<tr>
-		<td><label for="select_month">Current Month</label></td>
-		<td>
-			<%= select_tag(:select_month,
-					options_for_select(@month_options, params[:select_month])
-				)
-			%>
-		</td>
-	</tr>
+  <tr>
+    <td><label for="select_month">Current Month</label></td>
+    <td>
+      <%= select_tag(:select_month,
+          options_for_select(@month_options, params[:select_month])
+        )
+      %>
+    </td>
+  </tr>
 
 </table>
 

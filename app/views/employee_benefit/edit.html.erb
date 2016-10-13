@@ -1,26 +1,26 @@
 <br><h2>Editing Employee Benefits</h2>
 
 <%
-	if @employee_benefit == nil || @employee_benefit.id == nil
-		if params["id"] != nil
-			@emp_id = params["id"]
-		elsif params["employee_id"] != nil
-			@emp_id = params["employee_id"]
-		elsif @employee != nil
-			@emp_id = @employee.id
-		end
+  if @employee_benefit == nil || @employee_benefit.id == nil
+    if params["id"] != nil
+      @emp_id = params["id"]
+    elsif params["employee_id"] != nil
+      @emp_id = params["employee_id"]
+    elsif @employee != nil
+      @emp_id = @employee.id
+    end
 %>
-	<% form_tag(:action => 'create', :employee_id => @emp_id) do %>
+  <% form_tag(:action => 'create', :employee_id => @emp_id) do %>
   <%= render :partial => 'form' %>
-	<% end %>
+  <% end %>
 <%
-	else
+  else
 %>
-	<% form_tag(:action => 'update', :id => @employee_benefit) do %>
+  <% form_tag(:action => 'update', :id => @employee_benefit) do %>
   <%= render :partial => 'form' %>
-	<% end %>
+  <% end %>
 <%
-	end
+  end
 %>
 
 

@@ -40,4 +40,7 @@ gem 'jquery-rails'
 # gem 'log4r', '1.1.10'
 gem 'will_paginate'
 
+group :development, :test do
+
+end
 

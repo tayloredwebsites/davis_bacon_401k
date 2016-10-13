@@ -18,7 +18,7 @@ class EmployeeBenefitController < ApplicationController
 		  	redirect_to :controller => 'employee', :action=> 'benefits_list'
 		  else
 		    for @bene_dep_key in params.keys
-		      process_pending_checks (@bene_dep_key)
+		      process_pending_checks(@bene_dep_key)
 		    end
 		  	@employee = Employee.find(@employee_benefit.employee_id)
 		    if @employee_benefit.save
@@ -44,26 +44,26 @@ class EmployeeBenefitController < ApplicationController
   	#if request.get?
     #	redirect_to :action => 'list'
   	#else
-	    @employee_benefit = EmployeeBenefit.find(params[:id])
-	  	@employee = Employee.find(@employee_benefit.employee_id)
-    	@emp_name = @employee.emp_id.to_s + " " + @employee.last_name + ", " + @employee.first_name + " " + @employee.mi
-	    @is_deposited = false
-	    if EmployeeBenefit.employee_package_id != nil
-	    	if EmployeeBenefit.employee_package_id > 0
-	    		@is_deposited = true
-	    	end
-	    end
-	    if !@is_deposited
-		    @employee_benefit.destroy
-		    if !@employee_benefit.errors.empty?
-		    	flash[:notice] = 'Error - Destroy error, ' + @employee_benefit.errors.full_messages.join("; ")
-		    else
-		    	flash[:notice] = 'Benefits Package (effective ' + @employee_benefit.eff_month.to_s + '/' + @employee_benefit.eff_year.to_s + ') for ' + @emp_name + ' deleted'
-		    end
+    @employee_benefit = EmployeeBenefit.find(params[:id])
+  	@employee = Employee.find(@employee_benefit.employee_id)
+  	@emp_name = @employee.emp_id.to_s + " " + @employee.last_name + ", " + @employee.first_name + " " + @employee.mi
+    @is_deposited = false
+    if EmployeeBenefit.employee_package_id != nil
+    	if EmployeeBenefit.employee_package_id > 0
+    		@is_deposited = true
+    	end
+    end
+    if !@is_deposited
+	    @employee_benefit.destroy
+	    if !@employee_benefit.errors.empty?
+	    	flash[:notice] = 'Error - Destroy error, ' + @employee_benefit.errors.full_messages.join("; ")
 	    else
-	    	flash[:notice] = 'Error - cannot delete deposited benefits record'
-		  end
-		  redirect_to :action => 'list_by_emp', :employee => @employee
+	    	flash[:notice] = 'Benefits Package (effective ' + @employee_benefit.eff_month.to_s + '/' + @employee_benefit.eff_year.to_s + ') for ' + @emp_name + ' deleted'
+	    end
+    else
+    	flash[:notice] = 'Error - cannot delete deposited benefits record'
+	  end
+	  redirect_to :action => 'list_by_emp', :employee => @employee
 	  #end	# request.get?
   end
 
@@ -72,7 +72,6 @@ class EmployeeBenefitController < ApplicationController
 	  	@employee_benefit = EmployeeBenefit.find(params[:id])
 	  	if @employee_benefit
 			  @employee_package = @employee_benefit.current_package
-#breakpoint
 		  	@employee = Employee.find(@employee_benefit.employee_id)
 		  end
 		end
@@ -92,16 +91,13 @@ class EmployeeBenefitController < ApplicationController
 		if @employee_benefit != nil && @employee_benefit.deposited_at == nil
 			# found benefit, and it has not been deposited yet - can edit
 			@employee_package = EmployeePackage.find(@employee_benefit.employee_package_id)
-#breakpoint
 			if @employee_package == nil || @employee_package.deactivated != 0
 				@employee_package = @employee.emp_latest_pkg
-#breakpoint
 	    	#flash[:notice] = 'Debugging - Created package from emp_latest_pkg - ' + @employee_package.id
 			end
 		else
 			@employee_benefit = EmployeeBenefit.new :employee_id => @employee.id
 			@employee_package = @employee.emp_latest_pkg
-#breakpoint
 	    #flash[:notice] = 'Debugging - Created benefit, and package from emp_latest_pkg - ' + @employee_package.id.to_s
 		end
 		if @employee_package == nil && @employee != nil
@@ -125,12 +121,12 @@ class EmployeeBenefitController < ApplicationController
 	  		@employee = Employee.find(params[:employee])
 	  	end
 	  end
-    @employee_benefits = EmployeeBenefit.paginate(:all, 
-    		:page => params[:page], 
-    		:per_page => 10,
-    		:order => 'eff_year, eff_month',
-    		:conditions => ["eff_year >= ? and employee_id = ?", NameValue.get_val('start_year'), params[:employee_id] ]
-    	)
+    @employee_benefits = EmployeeBenefit.paginate(:all,
+  		:page => params[:page],
+  		:per_page => 10,
+  		:order => 'eff_year, eff_month',
+  		:conditions => ["eff_year >= ? and employee_id = ?", NameValue.get_val('start_year'), params[:employee_id] ]
+  	)
   end
 
   def show
@@ -200,7 +196,7 @@ class EmployeeBenefitController < ApplicationController
       end
     end
   end
-  
+
   def make_cur_deposit
   	EmployeeBenefit.make_cur_deposit
   	redirect_to :controller => 'employee', :action => 'benefits_list'

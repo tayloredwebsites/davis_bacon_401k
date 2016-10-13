@@ -1,28 +1,28 @@
 <br><h2>Benefits Reports for: <%= h display_accounting_month %></h2>
 
 <div id="body_menu">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_frame">
-		<tbody>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_frame">
+    <tbody>
 
 <%
   @cur_user = session[:user]
   if !( @cur_user.nil? )
 %>
-			<tr>
-				<td><a href="/report/employee_master_report">Employee Master Listing</a></td>
-			</tr>
-			<tr>
-				<td><a href="/report/entry_recon_options">Data Entry Reconciliation</a></td>
-			</tr>
-			<tr>
-				<td><a href="/report/deposit_recon_options">Deposit Reconciliation</a></td>
-			</tr>
-			<tr>
-				<td><a href="/report/monthly_benefits_options">Monthly Benefits</a></td>
-			</tr>
+      <tr>
+        <td><a href="/report/employee_master_report">Employee Master Listing</a></td>
+      </tr>
+      <tr>
+        <td><a href="/report/entry_recon_options">Data Entry Reconciliation</a></td>
+      </tr>
+      <tr>
+        <td><a href="/report/deposit_recon_options">Deposit Reconciliation</a></td>
+      </tr>
+      <tr>
+        <td><a href="/report/monthly_benefits_options">Monthly Benefits</a></td>
+      </tr>
 <%
     end
 %>
-		</tbody>
-	</table>
+    </tbody>
+  </table>
 </div>

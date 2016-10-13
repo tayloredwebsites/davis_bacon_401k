@@ -3,59 +3,59 @@
 <!--[form:employee]-->
 <table class="datadisplay">
 
-	<tr>
-		<td><label for="employee_emp_id">Employee ID</label></td>
-		<td><%= text_field 'employee', 'emp_id'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_emp_id">Employee ID</label></td>
+    <td><%= text_field 'employee', 'emp_id'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_last_name">Last Name</label></td>
-		<td><%= text_field 'employee', 'last_name'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_last_name">Last Name</label></td>
+    <td><%= text_field 'employee', 'last_name'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_first_name">First Name</label></td>
-		<td><%= text_field 'employee', 'first_name'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_first_name">First Name</label></td>
+    <td><%= text_field 'employee', 'first_name'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_mi">Middle Initial</label></td>
-		<td><%= text_field 'employee', 'mi', :max_length => 1, :size => 1  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_mi">Middle Initial</label></td>
+    <td><%= text_field 'employee', 'mi', :max_length => 1, :size => 1  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_ssn">SSN</label></td>
-		<td><%= text_field 'employee', 'ssn'  %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_ssn">SSN</label></td>
+    <td><%= text_field 'employee', 'ssn'  %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_deactivated">Deactivated</label></td>
-		<td><%= select( :employee, :deactivated, [ ['true', 1], ['false', 0] ] ) %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_deactivated">Deactivated</label></td>
+    <td><%= select( :employee, :deactivated, [ ['true', 1], ['false', 0] ] ) %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_created_at">Created at</label></td>
-		<%
-			if !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
-				@create = @employee["created_at"]
-			else
-				@create = ""
-			end
-		%>
-		<td><%= @create %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_created_at">Created at</label></td>
+    <%
+      if !(@employee["created_at"] == nil) && !(@employee["created_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+        @create = @employee["created_at"]
+      else
+        @create = ""
+      end
+    %>
+    <td><%= @create %></td>
+  </tr>
 
-	<tr>
-		<td><label for="employee_updated_at">Updated at</label></td>
-		<%
-			if !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
-				@updated = @employee["updated_at"]
-			else
-				@updated = ""
-			end
-		%>
-		<td><%= @updated %></td>
-	</tr>
+  <tr>
+    <td><label for="employee_updated_at">Updated at</label></td>
+    <%
+      if !(@employee["updated_at"] == nil) && !(@employee["updated_at"].strftime("%I:%M %p %d-%b-%y") == nil)
+        @updated = @employee["updated_at"]
+      else
+        @updated = ""
+      end
+    %>
+    <td><%= @updated %></td>
+  </tr>
 
 </table>
 

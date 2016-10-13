@@ -1,30 +1,30 @@
 
 <table border="2">
 
-	<tr>
-		<td><label for="user_login">Login</label></td>
-		<td><%= h @user["login"] %></td>
-	</tr>
+  <tr>
+    <td><label for="user_login">Login</label></td>
+    <td><%= h @user["login"] %></td>
+  </tr>
 
-	<tr>
-		<td><label for="user_supervisor">Supervisor?</label></td>
-		<td><%= show_true_false ( @user["supervisor"] ) %></td>
-	</tr>
+  <tr>
+    <td><label for="user_supervisor">Supervisor?</label></td>
+    <td><%= show_true_false ( @user["supervisor"] ) %></td>
+  </tr>
 
-	<tr>
-		<td><label for="user_deactivated">Deactivated?</label></td>
-		<td><%= show_true_false ( @user["deactivated"]) %></td>
-	</tr>
+  <tr>
+    <td><label for="user_deactivated">Deactivated?</label></td>
+    <td><%= show_true_false ( @user["deactivated"]) %></td>
+  </tr>
 
-	<tr>
-		<td><label for="user_created_at">Created at</label></td>
-		<td><%= @user["created_at"].strftime("%I:%M %p %d-%b-%y") %></td>
-	</tr>
+  <tr>
+    <td><label for="user_created_at">Created at</label></td>
+    <td><%= @user["created_at"].strftime("%I:%M %p %d-%b-%y") %></td>
+  </tr>
 
-	<tr>
-		<td><label for="user_updated_at">Updated at</label></td>
-		<td><%= @user["updated_at"].strftime("%I:%M %p %d-%b-%y") %></td>
-	</tr>
+  <tr>
+    <td><label for="user_updated_at">Updated at</label></td>
+    <td><%= @user["updated_at"].strftime("%I:%M %p %d-%b-%y") %></td>
+  </tr>
 </table>
 
 <%= link_to 'Edit', :action => 'edit', :id => @user %> |
