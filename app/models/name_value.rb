@@ -1,6 +1,6 @@
 
-    if ! defined? @@saved_values
-      @@saved_values = Hash.new
+    if ! defined? @@saved_nv_values
+      @@saved_nv_values = Hash.new
     end
     if ! defined? @@default_values
       @@default_values = { "accounting_month" => "1", "accounting_year" => "2001", "start_year" => "2005" }
@@ -14,8 +14,8 @@ class NameValue < ActiveRecord::Base
 # @@start_year = nil
 
   # have cached values for performance
-# if @@saved_values == nil
-#    @@saved_values = Hash.new
+# if @@saved_nv_values == nil
+#    @@saved_nv_values = Hash.new
 # end
 
   # have default values if not defined yet
@@ -32,19 +32,28 @@ class NameValue < ActiveRecord::Base
   def self.get_val(the_name)
     @name_val = self.new
     @name_val.val_name = the_name
-    if @@saved_values.has_key?(@name_val.val_name)
-      @name_val.val_value = @@saved_values[@name_val.val_name]
+    if @@saved_nv_values.has_key?(@name_val.val_name)
+      Rails.logger.debug("*** @@saved_nv_values.has_key? #{the_name}: #{@@saved_nv_values[@name_val.val_name]}")
+      @name_val.val_value = @@saved_nv_values[@name_val.val_name]
     else
-      @lu_name_val = NameValue.find(:first, :conditions => ["val_name = ?", the_name])
-      if @lu_name_val && @lu_name_val.val_value
+      @lu_name_vals = NameValue.where(val_name: the_name)
+      @lu_name_val = @lu_name_vals.present? ? @lu_name_vals.first : nil
+      Rails.logger.debug("*** found @lu_name_val: #{@lu_name_val.inspect}")
+      Rails.logger.debug("*** found @lu_name_val[:val_name]: #{@lu_name_val[:val_name]}")
+      Rails.logger.debug("*** found @lu_name_val[:val_value]: #{@lu_name_val[:val_value]}")
+      Rails.logger.debug("*** found @lu_name_val.val_name: #{@lu_name_val.val_name.inspect}")
+      Rails.logger.debug("*** found @lu_name_val.val_value: #{@lu_name_val.val_value.inspect}")
+      if @lu_name_val.present? && @lu_name_val[:val_value]
         @name_val = @lu_name_val
-        @@saved_values[@name_val.val_name] = @name_val.val_value
+        @@saved_nv_values[@name_val[:val_name]] = @name_val[:val_value]
       else
         # not found in either saved values or in name_value table, see if default exists
         if @@default_values.has_key?(@name_val.val_name)
+          Rails.logger.debug("*** @@default_values.has_key? #{the_name}: #{@@default_values[@name_val.val_name]}")
           @name_val.val_value = @@default_values[@name_val.val_name]
           # value not kept in saved values, so it will be looked up in table for update
         else
+          Rails.logger.debug("*** cannot find value for #{the_name}")
         end
       end
     end
@@ -54,7 +63,7 @@ class NameValue < ActiveRecord::Base
   # when updating name value pairs, used save the values in hash to avoid db calls
   def update
     if super
-      @@saved_values[self.val_name] = self.val_value
+      @@saved_nv_values[self.val_name] = self.val_value
     end
     self
   end
@@ -78,12 +87,14 @@ class NameValue < ActiveRecord::Base
     else
       @name_value = self.new :cur_year => cur_year, :cur_month => cur_month
       # start with current values, then attempt update within transaction
-      val_month_work = self.find(:first, :conditions => ["val_name = 'accounting_month'"])
-      val_year_work = self.find(:first, :conditions => ["val_name = 'accounting_year'"])
+      # val_month_work = self.find(:first, :conditions => ["val_name = 'accounting_month'"])
+      # val_year_work = self.find(:first, :conditions => ["val_name = 'accounting_year'"])
+      val_month_work = NameValue.where(val_name: 'accounting_month').first
+      val_year_work = NameValue.where(val_name: 'accounting_year').first
       if val_month_work && val_year_work
-        @@saved_values['accounting_month']
+        @@saved_nv_values['accounting_month']
         #if cur_month != @@accounting_month || cur_year != @@accounting_year
-        if cur_month != @@saved_values['accounting_month'] || cur_year != @@saved_values['accounting_year']
+        if cur_month != @@saved_nv_values['accounting_month'] || cur_year != @@saved_nv_values['accounting_year']
           # update both records in transaction
           @done = 'start transaction error'
           self.transaction()  do
@@ -100,11 +111,13 @@ class NameValue < ActiveRecord::Base
             @done = ''
           end
           #@done += ", set to " + val_month_work.val_value + "/" + val_year_work.val_value
-          val_month_work = self.find(:first, :conditions => ["val_name = 'accounting_month'"])
-          val_year_work = self.find(:first, :conditions => ["val_name = 'accounting_year'"])
-          @@saved_values[val_month_work.val_name] = val_month_work.val_value
-          @@saved_values[val_year_work.val_name] = val_year_work.val_value
-          #@done += ", set to " + @@saved_values[val_month_work.val_name] + "/" + @@saved_values[val_year_work.val_name]
+          # val_month_work = self.find(:first, :conditions => ["val_name = 'accounting_month'"])
+          # val_year_work = self.find(:first, :conditions => ["val_name = 'accounting_year'"])
+          val_month_work = NameValue.where(val_name: 'accounting_month').first
+          val_year_work = NameValue.where(val_name: 'accounting_year').first
+          @@saved_nv_values[val_month_work.val_name] = val_month_work.val_value
+          @@saved_nv_values[val_year_work.val_name] = val_year_work.val_value
+          #@done += ", set to " + @@saved_nv_values[val_month_work.val_name] + "/" + @@saved_nv_values[val_year_work.val_name]
         else
           # no changes - nothing to do
           @done = ''

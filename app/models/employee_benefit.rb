@@ -26,10 +26,11 @@ class EmployeeBenefit < ActiveRecord::Base
 		#		if @allow_edit
 		#		 	@employee_benefit["deposit"] = round_money(@employee_benefit["monthly_benefit"] - tot_current_benefit)
 		#		end
-	 	self.deposit = # Deposit to make
-    self.monthly_benefit.to_f - # Required Total Benefit
-    self.tot_current_benefit.to_f - # Current Benefit without DBP (Employee Hourly Benefit (rate) * Total Hours (of Benefit record)
-    self.tot_deposits_made.to_f # Previous Deposits (sum of all Employee Benefits for this month that have already been deposited)
+    # Deposit to make calculation
+	 	self.deposit =
+      self.monthly_benefit.to_f - # Required Total Benefit
+      self.tot_current_benefit.to_f - # Current Benefit without DBP (Employee Hourly Benefit (rate) * Total Hours (of Benefit record)
+      self.tot_deposits_made.to_f # Previous Deposits (sum of all Employee Benefits for this month that have already been deposited)
 		if self && !self.reg_hours
 			self.reg_hours = 0.0
 		end
@@ -96,8 +97,6 @@ class EmployeeBenefit < ActiveRecord::Base
 
 
 
-  # note when we call .new, the record is initialized with benefit and package info.
-  # Thus EmployeeBenefit.new requires an employee_id
   def initialize *args
   	super *args
 #  	if self.employee_id == nil
@@ -120,16 +119,17 @@ class EmployeeBenefit < ActiveRecord::Base
   		@emp_bene = EmployeeBenefit.find(self.id)
   	end
   	if @emp_bene == nil
-  		# new employee_benefit record, tread accordingly
+      # note when we call .new, this will initialize the record with benefit and package info.
+      # Thus EmployeeBenefit.new requires an employee_id
 	  	self.eff_month = NameValue.get_val("accounting_month")
 	  	self.eff_year = NameValue.get_val("accounting_year")
 	  	self.dep_eff_month = NameValue.get_val("accounting_month")
 	  	self.dep_eff_year = NameValue.get_val("accounting_year")
+      # note: test for nil employee here
 	  	@emp_latest_bene = @employee.latest_benefit
 	  	if @emp_latest_bene != nil && ! (args[0] && args[0]["ot_hours"])
 	  		# if creating new benefit (not saving) with existing deposited benefit for month
 	  		if @emp_latest_bene.deposited_at != nil
-#breakpoint
 		  		self.reg_hours = @emp_latest_bene.reg_hours
 		  		self.ot_hours = @emp_latest_bene.ot_hours
 		  		self.monthly_benefit = @emp_latest_bene.monthly_benefit
@@ -240,16 +240,16 @@ class EmployeeBenefit < ActiveRecord::Base
 
 
 	def get_latest_effective_package
-		latest_package = EmployeePackage.find(:first,
-			:conditions => ["employee_id = ? and ? IS NOT NULL and (eff_year < ? or (eff_year = ? and eff_month <= ?) ) and deactivated = 0 ",
+		latest_package = EmployeePackage.find_by_sql(
+      ["SELECT * FROM employee_packages where employee_id = ? and ? IS NOT NULL and (eff_year < ? or (eff_year = ? and eff_month <= ?) ) and deactivated = 0 ORDER BY eff_year DESC, eff_month DESC, id DESC",
 				self.employee_id,
 				self.employee_package_id,
 				self.eff_year,
 				self.eff_year,
 				self.eff_month
-			],
-  			:order => 'eff_year DESC, eff_month DESC, id DESC')
-
+			]
+    )
+    return latest_package.present? ? latest_package.first : nil
 	end
 
   def get_deposits_made

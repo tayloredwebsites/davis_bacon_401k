@@ -1,27 +1,18 @@
 require 'test_helper'
 
 class EmployeeBenefitTest < ActiveSupport::TestCase
+  include NumberHandling
+
 	fixtures :employees, :employee_packages, :employee_benefits, :name_values
 
-  def test_create_0_bene_without_package
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-    assert_equal @rec_count, 1
-    @emp_bene = EmployeeBenefit.new :employee_id => 1
-    assert !@emp_bene.save
-    assert !@emp_bene.errors.empty?
-    assert_equal @emp_bene.errors[:id], []
-    assert_equal @emp_bene.errors[:employee_id], []
-    assert_equal @emp_bene.errors[:deposited_at], []
-    assert_equal @emp_bene.errors[:eff_month], []
-    assert_equal @emp_bene.errors[:employee_package_id], ["Error - cannot find effective employee package.", "Error - cannot save without package ."]
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-    assert_equal @rec_count, 1
-  end
-
   def test_create_0_wrong_acct_mo
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 21")
-    assert_equal @rec_count, 2
-    @emp_bene = EmployeeBenefit.new :employee_id => 21
+    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
+    assert_equal @rec_count, 1
+    Rails.logger.debug("*** test_create_0_wrong_acct_mo - accounting_month: #{NameValue.get_val('accounting_month')}")
+    Rails.logger.debug("*** test_create_0_wrong_acct_mo - accounting_year: #{NameValue.get_val('accounting_year')}")
+    @emp_bene = EmployeeBenefit.new :employee_id => 1
+    Rails.logger.debug("*** test_create_0_wrong_acct_mo - @emp_bene: #{@emp_bene.inspect}")
+
     # ep1 = EmployeePackage.find 1
     # ep1.eff_year = 2006
     # ep1.eff_month = 4
@@ -30,6 +21,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
     # Rails.logger.debug("*** test_create_0_wrong_acct_mo - ep1 errors: #{ep1.errors.inspect}")
     # assert_equal [], ep1.errors
     # @emp_bene.employee_package_id = ep1.id
+
     @emp_bene.eff_year = 2001
     @emp_bene.eff_month = 12
     assert !@emp_bene.save
@@ -56,11 +48,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -78,11 +70,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert !@emp_bene.save
     assert !@emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), 'Error - cannot find employee (or is deactivated).'
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_not_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], ['Error - cannot find employee (or is deactivated).']
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_not_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -100,11 +92,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert !@emp_bene.save
     assert !@emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), 'Error - cannot find employee (or is deactivated).'
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], ['Error - cannot find employee (or is deactivated).']
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -122,11 +114,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -144,11 +136,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -166,11 +158,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -188,11 +180,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -210,11 +202,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
@@ -232,16 +224,16 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert !@emp_bene.save
     assert !@emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_not_equal @emp_bene.errors.on(:employee_package_id), nil
-  	#@emp_bene.update
-  	#@emp_bene.reload
-  	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 19")
-  	assert_equal @rec_count, 0
+    assert_equal @emp_bene.errors[:id], []
+    assert_equal @emp_bene.errors[:employee_id], []
+    assert_equal @emp_bene.errors[:deposited_at], []
+    assert_equal @emp_bene.errors[:eff_month], []
+    assert_not_equal @emp_bene.errors[:employee_package_id], []
+    #@emp_bene.update
+    #@emp_bene.reload
+    #assert_equal @emp_bene.eff_month, 12
+    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 19")
+    assert_equal @rec_count, 0
   end
 
   def test_destroy_1_delete_undeposited
@@ -263,7 +255,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	assert_not_equal @emp_bene.deposited_at, nil
   	assert !@emp_bene.destroy
   	assert_equal @emp_bene.errors.count, 1
-  	assert_equal @emp_bene.errors.on(:deposited_at), 'Error - cannot delete deposited benefit.'
+  	assert_equal @emp_bene.errors[:deposited_at], ['Error - cannot delete deposited benefit.']
     assert_equal num_employee_benefits, EmployeeBenefit.count
   end
 
@@ -283,18 +275,18 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
   	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
   	assert_equal @rec_count, 2
 
   	@emp_bene.reload
-  	assert_equal @emp_bene.deposit, 12.34
+    assert_equal @emp_bene.deposit, 12.34
 
      @emp_bene = EmployeeBenefit.new :employee_id => 1
     assert_not_equal @emp_bene, nil
@@ -310,18 +302,20 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
   	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
   	assert_equal @rec_count, 3
 
+    Rails.logger.debug("*** @eno_bene: #{@emp_bene.inspect}")
   	@emp_bene.reload
-  	assert_equal @emp_bene.deposit, -5.76
+    Rails.logger.debug("*** @eno_bene: #{@emp_bene.inspect} - errors - #{@emp_bene.errors.inspect}")
+  	assert_equal round_money(@emp_bene.deposit), -5.76
 
      @emp_bene = EmployeeBenefit.new :employee_id => 1
     assert_not_equal @emp_bene, nil
@@ -338,11 +332,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
   	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
@@ -415,11 +409,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     assert @emp_bene.save
     assert @emp_bene.errors.empty?
-  	assert_equal @emp_bene.errors.on(:id), nil
-  	assert_equal @emp_bene.errors.on(:employee_id), nil
-  	assert_equal @emp_bene.errors.on(:deposited_at), nil
-  	assert_equal @emp_bene.errors.on(:eff_month), nil
-  	assert_equal @emp_bene.errors.on(:employee_package_id), nil
+  	assert_equal @emp_bene.errors[:id], []
+  	assert_equal @emp_bene.errors[:employee_id], []
+  	assert_equal @emp_bene.errors[:deposited_at], []
+  	assert_equal @emp_bene.errors[:eff_month], []
+  	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
   	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")

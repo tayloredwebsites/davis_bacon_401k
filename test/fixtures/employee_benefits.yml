@@ -2,6 +2,7 @@
 1:
   id: 1
   employee_id: 1
+  # employee_package_id: 1
   reg_hours: 12.5
   ot_hours: 12.5
   monthly_benefit: 99.95
@@ -46,4 +47,16 @@
   eff_year: 2006
   deposit: 88.84
   deposited_at: ""
-  
+
+# 5:
+#   id: 5
+#   employee_id: 19
+#   reg_hours: 12.5
+#   ot_hours: 12.5
+#   monthly_benefit: 99.95
+#   deposit: 77.72
+#   eff_month: 1
+#   eff_year: 2006
+#   dep_eff_month: 4
+#   dep_eff_year: 2006
+

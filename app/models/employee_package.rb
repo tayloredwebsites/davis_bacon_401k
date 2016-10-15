@@ -3,7 +3,9 @@ class EmployeePackage < ActiveRecord::Base
   before_create :create_timestamp
   before_destroy :validate_on_destroy
 
-  validates_presence_of :employee_id
+  belongs_to :employee
+  validates_presence_of :employee
+
   validates_inclusion_of :eff_month, :in => 1..12, :message => 'invalid effective month'
   validates_inclusion_of :eff_year, :in => 2001...2999, :message => 'invalid effective year'
 
@@ -28,24 +30,11 @@ class EmployeePackage < ActiveRecord::Base
   	true
   end
 
-# depreciated. use has_deposits.
-  def xxx_packages_trail
-		emp_pkgs = EmployeeBenefit.count( :all, :conditions => ["employee_package_id = ? and deposited_at IS NOT NULL", self.id] )
-#breakpoint
-		if emp_pkgs > 0
-			# there is an existing benefit for this package, deactivate self before creating new
-			errors.add(:employee_id, "Debugging - deposit(s) for package exist 1")
-			false
-		else
-			true
-		end
-  end
-
 
 public	## following methods will be public
 
   def has_deposits
-		emp_pkgs = EmployeeBenefit.count( :all, :conditions => ["employee_package_id = ? and deposited_at IS NOT NULL", self.id] )
+		emp_pkgs = EmployeeBenefit.where("employee_package_id = ? and deposited_at IS NOT NULL", self.id ).count
 		if emp_pkgs > 0
 			# there is an existing benefit for this package, deactivate self before creating new
 			true
@@ -56,7 +45,7 @@ public	## following methods will be public
 
 
   def is_package_duplicate
-		emp_pkgs = EmployeePackage.count( :all, :conditions => ["eff_month = ? and eff_year = ? and employee_id = ? and ? IS NOT NULL and deactivated = 0", self.eff_month, self.eff_year, self.employee_id, self.id] )
+		emp_pkgs = EmployeePackage.where("eff_month = ? and eff_year = ? and employee_id = ? and ? IS NOT NULL and deactivated = 0", self.eff_month, self.eff_year, self.employee_id, self.id ).count
 		if emp_pkgs > 0
 			# there is an existing package with the same effective month and year
 			# that is a different benefits package record.
@@ -69,14 +58,14 @@ public	## following methods will be public
 
   # wrote this, because validate_on_destroy errors did not pass to destroy method
   def destroy
-  	@how_many = EmployeePackage.count( :all, :conditions => ["employee_id = ?", self.employee_id])
+  	@how_many = EmployeePackage.where("employee_id = ?", self.employee_id).count
   	if @how_many < 2
   		errors.add(:employee_id, "Error - cannot delete last package record.")
   		false
   	else
   	@ok_to_save = true
   	@resp = true
-  		@has_deposits = EmployeeBenefit.count( :all, :conditions => ["employee_package_id = ?", self.id])
+  		@has_deposits = EmployeeBenefit.where("employee_package_id = ?", self.id).count
   		if @has_deposits > 0
   			self.deactivated = 1
   			self.save
