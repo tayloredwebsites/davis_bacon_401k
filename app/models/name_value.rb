@@ -25,35 +25,54 @@ class NameValue < ActiveRecord::Base
 
   #attr_accessor :val_name, :val_value
 
-  attr_accessor :cur_year, :cur_month, :val_name, :val_value
+  attr_accessible :cur_year, :cur_month, :val_name, :val_value
+
+
+  validates_uniqueness_of :val_name, :on => :create
+  validates_length_of :val_name, :within => 1..40
+
+  # validates_presence_of :val_value
+  # validates_length_of :val_value, :within => 0..255
+  # validates :val_value, length: {in: 0..255}, allow_nil: false
+  # validate :val_value, allow_nil: false
+  validate :val_value_validation
+
+private
+  def val_value_validation
+    if  self.val_value.nil?
+      self.errors.add :val_value, 'Nil value not allowed.'
+    elsif  self.val_value.length > 255
+      self.errors.add :val_value, 'Length of value too long'
+    end
+  end
+
+public
+
 
   # when getting name value pairs, save the values in hash to avoid db calls
   # if not defined, use value in default values hash (if available)
   def self.get_val(the_name)
+    # vals = NameValue.where(val_name: the_name)
+    # if vals.count > 0
+    #   vals.first.val_value
+    # else
+    #   nil
+    # end
     @name_val = self.new
     @name_val.val_name = the_name
     if @@saved_nv_values.has_key?(@name_val.val_name)
-      Rails.logger.debug("*** @@saved_nv_values.has_key? #{the_name}: #{@@saved_nv_values[@name_val.val_name]}")
       @name_val.val_value = @@saved_nv_values[@name_val.val_name]
     else
       @lu_name_vals = NameValue.where(val_name: the_name)
       @lu_name_val = @lu_name_vals.present? ? @lu_name_vals.first : nil
-      Rails.logger.debug("*** found @lu_name_val: #{@lu_name_val.inspect}")
-      Rails.logger.debug("*** found @lu_name_val[:val_name]: #{@lu_name_val[:val_name]}")
-      Rails.logger.debug("*** found @lu_name_val[:val_value]: #{@lu_name_val[:val_value]}")
-      Rails.logger.debug("*** found @lu_name_val.val_name: #{@lu_name_val.val_name.inspect}")
-      Rails.logger.debug("*** found @lu_name_val.val_value: #{@lu_name_val.val_value.inspect}")
       if @lu_name_val.present? && @lu_name_val[:val_value]
         @name_val = @lu_name_val
         @@saved_nv_values[@name_val[:val_name]] = @name_val[:val_value]
       else
         # not found in either saved values or in name_value table, see if default exists
         if @@default_values.has_key?(@name_val.val_name)
-          Rails.logger.debug("*** @@default_values.has_key? #{the_name}: #{@@default_values[@name_val.val_name]}")
           @name_val.val_value = @@default_values[@name_val.val_name]
           # value not kept in saved values, so it will be looked up in table for update
-        else
-          Rails.logger.debug("*** cannot find value for #{the_name}")
         end
       end
     end
@@ -85,7 +104,7 @@ class NameValue < ActiveRecord::Base
     if cur_month == nil || cur_year == nil
       @done = 'nil month or year'
     else
-      @name_value = self.new :cur_year => cur_year, :cur_month => cur_month
+      # @name_value = self.new :cur_year => cur_year, :cur_month => cur_month
       # start with current values, then attempt update within transaction
       # val_month_work = self.find(:first, :conditions => ["val_name = 'accounting_month'"])
       # val_year_work = self.find(:first, :conditions => ["val_name = 'accounting_year'"])
@@ -128,11 +147,5 @@ class NameValue < ActiveRecord::Base
     end
     @done # completed all code in transaction flag
   end
-
-  validates_uniqueness_of :val_name, :on => :create
-  validates_length_of :val_name, :within => 1..40
-
-  #validates_presence_of :val_value
-  validates_length_of :val_value, :within => 0..255
 
 end

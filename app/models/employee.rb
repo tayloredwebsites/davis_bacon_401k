@@ -1,5 +1,20 @@
 class Employee < ActiveRecord::Base
 
+  before_create :create_timestamp
+  before_destroy :validate_on_destroy
+
+
+  # validations
+
+  validates_uniqueness_of :id
+  validates_uniqueness_of :emp_id
+  validates_uniqueness_of :ssn
+  validates_presence_of :emp_id
+  validates_length_of :last_name, :within => 1..40
+  validates_length_of :first_name, :within => 1..40
+  validates_length_of :mi, :maximum => 1, :allow_blank => true
+  validates_length_of :ssn, :is => 9
+
 	has_many :emp_pkgs,
 		:class_name => 'EmployeePackage',
 		:order => "eff_year DESC, eff_month DESC, id DESC",
@@ -23,14 +38,10 @@ class Employee < ActiveRecord::Base
 
   protected	## following methods will be protected
 
-  before_create :create_timestamp
-
   # Properly set the current date and time in the created_at field on creation
   def create_timestamp
   	self.created_at = Time.now
   end
-
-  before_destroy :validate_on_destroy
 
   # make sure record is deactivated before destroying
   def validate_on_destroy
@@ -48,6 +59,7 @@ class Employee < ActiveRecord::Base
 			end
   	end
   end
+
 
 public	## following methods will be public
 
@@ -151,14 +163,5 @@ public	## following methods will be public
 			:order => 'deposited_at DESC, id DESC'
 		)
   end
-
-  validates_uniqueness_of :id, :on => :save
-  validates_uniqueness_of :emp_id, :on => :save
-  validates_uniqueness_of :ssn, :on => :save
-  validates_presence_of :emp_id
-  validates_length_of :last_name, :within => 1..40
-  validates_length_of :first_name, :within => 1..40
-  validates_length_of :mi, :maximum => 1, :allow_blank => true
-  validates_length_of :ssn, :is => 9
 
 end

@@ -1,31 +1,46 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
-class NameValueTest < Test::Unit::TestCase
+class NameValueTest < ActiveSupport::TestCase
+  include NumberHandling
+
   fixtures :name_values
 
+  def test_allowed_name_values_0_dont_allow_nil_value
+    num_name_values = NameValue.count
+    @val = NameValue.new
 
-  def test_allowed_name_values_1
+    @val.val_name = '2'
+    @val.val_value = nil
+    @val.save
+    #assert @val.errors.empty?
+    assert_equal [], @val.errors['val_name']
+    assert_equal ["Nil value not allowed."], @val.errors['val_value']
+    #assert_equal "can't be blank", @val.errors.on(:val_value)
+    # error came from #validates_presence_of :val_value in name_value.rb
 
+    @two = NameValue.where("val_name = '2'")
+    assert_equal 0, @two.count
+
+    assert_equal num_name_values, NameValue.count
+  end
+
+  def test_allowed_name_values_1_allow_empty_value
+    num_name_values = NameValue.count
     @val = NameValue.new
 
     @val.val_name = '2'
     @val.val_value = ''
-    #assert @val.save
     @val.save
-    #assert @val.errors.empty?
-    assert !@val.errors.invalid?('val_name')
-    assert !@val.errors.invalid?('val_value')
-  	#assert_equal "can't be blank", @val.errors.on(:val_value)
-  	# error came from #validates_presence_of :val_value in name_value.rb
+    assert @val.errors.empty?
 
-    @two = NameValue.find(:first, :conditions => "val_name = '2'")
-    assert_not_nil @two
-    assert_equal @two.val_name, "2"
+    isthere = NameValue.where("val_name = '2'")
+    assert_equal 1, isthere.count
 
+    assert_equal num_name_values+1, NameValue.count
   end
 
   def test_allowed_name_values_2
-
+    num_name_values = NameValue.count
     @val = NameValue.new
 
     @val.val_name = '2'
@@ -33,8 +48,8 @@ class NameValueTest < Test::Unit::TestCase
     assert @val.save
     #@val.save
     #assert @val.errors.empty?
-    assert !@val.errors.invalid?('val_name')
-    assert !@val.errors.invalid?('val_value')
+    assert_equal [], @val.errors['val_name']
+    assert_equal [], @val.errors['val_value']
   	#assert_equal "can't be blank", @val.errors.on(:val_value)
 
     @two = NameValue.find(:first, :conditions => "val_name = '2'")
@@ -42,6 +57,7 @@ class NameValueTest < Test::Unit::TestCase
     assert_equal @two.val_name, "2"
     assert_equal @two.val_value, "two"
 
+    assert_equal num_name_values+1, NameValue.count
   end
 
   def test_disallowed_name_values
@@ -53,22 +69,22 @@ class NameValueTest < Test::Unit::TestCase
 
     @val.val_name = @val.val_value = ''
     assert !@val.save
-    assert @val.errors.invalid?('val_name')
+    assert_equal ["is too short (minimum is 1 characters)"], @val.errors['val_name']
 
     @val.val_name = @too_large_name
     @val.val_value = ''
     assert !@val.save
-    assert @val.errors.invalid?('val_name')
+    assert_equal ["is too long (maximum is 40 characters)"], @val.errors['val_name']
 
     @val.val_name = '1'
     @val.val_value = @too_large_value
     assert !@val.save
-    assert @val.errors.invalid?('val_value')
+    assert_equal ["Length of value too long"], @val.errors['val_value']
 
 	end
 
   def test_get_accounting_month
-  	@val = NameValue.find(:first, :conditions => "val_name = 'accounting_month'")
+  	@val = NameValue.where(val_name: 'accounting_month').first
     assert_equal @val.val_name, 'accounting_month'
     assert_equal @val.val_value, '4'
 
