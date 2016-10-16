@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
-# Set salt to 'tayloredbenefits' because thats what the fixtures assume.
 User.salt = 'tayloredbenefits'
 
-class UserTest < Test::Unit::TestCase
+class UserTest < ActiveSupport::TestCase
+  include NumberHandling
 
   fixtures :users
 
@@ -19,23 +19,22 @@ class UserTest < Test::Unit::TestCase
   end
 
   def test_disallowed_passwords
-
 		num_users = User.count
 
     u = User.new
     u.login = "nonbob"
 
     u.password = u.password_confirmation = "tiny"
-    assert !u.save
-    assert u.errors.invalid?('password')
+    assert_equal false, u.save
+    assert_equal ["is too short (minimum is 5 characters)"], u.errors['password']
 
     u.password = u.password_confirmation = "hugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehuge"
-    assert !u.save
-    assert u.errors.invalid?('password')
+    assert_equal false, u.save
+    assert_equal ["is too long (maximum is 40 characters)"], u.errors['password']
 
     u.password = u.password_confirmation = ""
-    assert !u.save
-    assert u.errors.invalid?('password')
+    assert_equal false, u.save
+    assert_equal ["is too short (minimum is 5 characters)"], u.errors['password']
 
     assert_equal num_users, User.count
 
@@ -44,7 +43,6 @@ class UserTest < Test::Unit::TestCase
     assert u.errors.empty?
 
     assert_equal num_users + 1, User.count
-
   end
 
   def test_bad_logins
@@ -56,15 +54,15 @@ class UserTest < Test::Unit::TestCase
 
     u.login = "x"
     assert !u.save
-    assert u.errors.invalid?('login')
+    assert_equal ["is too short (minimum is 3 characters)"], u.errors['login']
 
     u.login = "hugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhug"
     assert !u.save
-    assert u.errors.invalid?('login')
+    assert_equal ["is too long (maximum is 40 characters)"], u.errors['login']
 
     u.login = ""
     assert !u.save
-    assert u.errors.invalid?('login')
+    assert_equal ["is too short (minimum is 3 characters)", "can't be blank"], u.errors['login']
 
     assert_equal num_users, User.count
 
@@ -152,7 +150,7 @@ class UserTest < Test::Unit::TestCase
   	assert_equal @user.deactivated, 0	# activate
   	@user.destroy
   	assert @user.errors.count > 0
-  	assert_equal 'cannot destroy active record', @user.errors.on(:deactivated)
+  	assert_equal ['cannot destroy active record'], @user.errors[:deactivated]
 
     assert_equal num_users, User.count
 

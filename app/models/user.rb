@@ -1,7 +1,23 @@
 require 'digest/sha1'
 
-# this model expects a certain database layout and its based on the name/login pattern.
 class User < ActiveRecord::Base
+
+  before_create :crypt_unless_empty, :create_timestamp
+  before_update :crypt_unless_empty
+
+
+
+  validates_uniqueness_of :login, :on => :create
+
+  validates_confirmation_of :password, :on => :create
+  #?validates_confirmation_of :password
+  validates_length_of :login, :within => 3..40
+  validates_length_of :password, :within => 5..40
+  validates_presence_of :login
+
+  #?validates_presence_of :login, :password, :password_confirmation
+
+
 
   # Authenticate a user.
   #
@@ -9,7 +25,8 @@ class User < ActiveRecord::Base
   #   @user = User.authenticate('bob', 'bobpass')
   #
   def self.authenticate(login, pass)
-    find(:first,  :conditions => ["login = ? AND password = ?", login, sha1(pass)])
+    matches = User.where(login: login, password: sha1(pass))
+    return matches.count > 0 ? matches.first : nil
   end
 
 
@@ -28,7 +45,6 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest("#{salt}--#{pass}--")
   end
 
-  before_create :crypt_unless_empty, :create_timestamp
 
   # Before saving the record to database we will crypt the password
   # using SHA1.
@@ -55,7 +71,6 @@ class User < ActiveRecord::Base
   	self.created_at = Time.now
   end
 
-  before_update :crypt_unless_empty
 
   # If the record is updated we will check if the password is empty.
   # If its empty we assume that the user didn't want to change his
@@ -127,13 +142,4 @@ public	## following methods will be public
   	end
   end
 
-  validates_uniqueness_of :login, :on => :create
-
-  validates_confirmation_of :password, :on => :create
-  #?validates_confirmation_of :password
-  validates_length_of :login, :within => 3..40
-  #validates_length_of :password, :within => 5..40
-  validates_presence_of :login
-
-  #?validates_presence_of :login, :password, :password_confirmation
 end
