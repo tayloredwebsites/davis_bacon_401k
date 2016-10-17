@@ -1,10 +1,11 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'employee_controller'
+require 'test_helper'
+# require 'employee_controller'
 
 # Re-raise errors caught by the controller.
-class EmployeeController; def rescue_action(e) raise e end; end
+# class EmployeeController; def rescue_action(e) raise e end; end
 
-class EmployeeControllerTest < Test::Unit::TestCase
+class EmployeeControllerTest < ActionController::TestCase
+  include NumberHandling
 	fixtures :employees, :employee_packages, :employee_benefits, :name_values
 
   def setup
@@ -43,7 +44,8 @@ class EmployeeControllerTest < Test::Unit::TestCase
 
     assert_equal flash[:notice], 'Employee was successfully created.'
     assert_response :redirect
-    assert_redirected_to :action => 'view'
+    assert_redirected_to :action => 'view', :id => 3
+    assert_equal 'Employee was successfully created.', flash[:notice]
 
     assert_equal num_employees + 1, Employee.count
   end

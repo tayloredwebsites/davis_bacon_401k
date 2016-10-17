@@ -24,7 +24,7 @@ class AccountController < ApplicationController
       end
     else
       Rails.logger.debug("logger: login get form display")
-      render "login", layout: 'application'
+      # render "login", layout: 'application'
     end
   end
 

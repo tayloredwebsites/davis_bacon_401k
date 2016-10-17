@@ -1,14 +1,15 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'users_controller'
-require 'account_controller'
+require 'test_helper'
+# require 'users_controller'
+# require 'account_controller'
 
 # Set salt to 'tayloredbenefits' because thats what the fixtures and controller assume.
 User.salt = 'tayloredbenefits'
 
 # Re-raise errors caught by the controller.
-class UsersController; def rescue_action(e) raise e end; end
+# class UsersController; def rescue_action(e) raise e end; end
 
-class UsersControllerTest < Test::Unit::TestCase
+class UsersControllerTest < ActionController::TestCase
+  include NumberHandling
   fixtures :users
 
   def setup
@@ -94,7 +95,8 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_template 'edit'
 
     assert_not_nil assigns(:user)
-    assert assigns(:user).valid?
+    assert assigns(:user).present?
+    assert_equal 0, assigns(:user).errors.count
   end
 
   def test_index
@@ -138,7 +140,8 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_template 'edit'
 
     assert_not_nil assigns(:user)
-    assert assigns(:user).valid?
+    assert assigns(:user).present?
+    assert_equal 0, assigns(:user).errors.count
     assert_equal assigns(:user).supervisor,0
 
     post :update, :id => 1000001, :user => {:supervisor => 1}
@@ -147,7 +150,8 @@ class UsersControllerTest < Test::Unit::TestCase
     #assert_template 'show'
 
     assert_not_nil assigns(:user)
-    assert assigns(:user).valid?
+    assert assigns(:user).present?
+    assert_equal 0, assigns(:user).errors.count
     assert_equal assigns(:user).supervisor,1
 
     @test_user = User.find(1000001)

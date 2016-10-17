@@ -1,13 +1,14 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'account_controller'
+require 'test_helper'
+# require 'account_controller'
 
 # Set salt to 'tayloredbenefits' because thats what the fixtures and controller assume.
 User.salt = 'tayloredbenefits'
 
 # Raise errors beyond the default web-based presentation
-class AccountController; def rescue_action(e) raise e end; end
+# class AccountController; def rescue_action(e) raise e end; end
 
-class AccountControllerTest < Test::Unit::TestCase
+class AccountControllerTest < ActionController::TestCase
+  include NumberHandling
 
   fixtures :users
 
@@ -23,14 +24,12 @@ class AccountControllerTest < Test::Unit::TestCase
     post :login, :user_login => "bob", :user_password => "bobs_secure_password"
     assert_not_nil :user
     assert_equal 'bob', @request.session[:user].login
-    assert_equal 'bob', @response.session[:user].login
   end
 
   def test_unauth_bob
     @request.session[:return_to] = "/bogus/location"
     post :login, :user_login => "bob", :user_password => "test"
     assert_equal nil, @request.session[:user]
-    assert_equal nil, @response.session[:user]
     assert_response :success
     assert_equal flash.now['notice'], "Login unsuccessful"
   end
@@ -46,7 +45,6 @@ class AccountControllerTest < Test::Unit::TestCase
     post :signup, :user => { :login => "newbob", :password => "newpassword", :password_confirmation => "newpassword" }
     # assert_session_has :user
     assert_not_equal nil, @request.session[:user]
-    assert_not_equal nil, @response.session[:user]
     assert_redirected_to :action => 'welcome'
     assert_equal User.count, 1
 
@@ -81,7 +79,6 @@ class AccountControllerTest < Test::Unit::TestCase
     # assert_session_has_no :user
     # assert_nil @request.session[:user]
     assert_equal nil, @request.session[:user]
-    assert_equal nil, @response.session[:user]
     assert_response :redirect
     assert_redirected_to :action => 'login'
   end
@@ -90,7 +87,6 @@ class AccountControllerTest < Test::Unit::TestCase
     post :login, :user_login => "bob", :user_password => "not_correct"
     # assert_session_has_no :user
     assert_equal nil, @request.session[:user]
-    assert_equal nil, @response.session[:user]
     assert_response :success
     assert_equal flash.now['notice'], "Login unsuccessful"
   end
@@ -100,7 +96,6 @@ class AccountControllerTest < Test::Unit::TestCase
     post :login, :user_login => "bob", :user_password => "bobs_secure_password"
     # assert_session_has :user
     assert_equal 'bob', @request.session[:user].login
-    assert_equal 'bob', @response.session[:user].login
     assert_response :redirect
     assert_redirected_to :action => 'welcome'
     assert_equal flash.now['notice'], "Login successful"
@@ -108,7 +103,6 @@ class AccountControllerTest < Test::Unit::TestCase
     get :logout
     # assert_session_has_no :user
     assert_equal nil, @request.session[:user]
-    assert_equal nil, @response.session[:user]
     assert_response :success
 
   end

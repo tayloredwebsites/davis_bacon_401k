@@ -1,5 +1,6 @@
 class Employee < ActiveRecord::Base
 
+  attr_accessible :id, :emp_id, :last_name, :first_name, :ssn, :deactivated
   before_create :create_timestamp
   before_destroy :validate_on_destroy
 
@@ -50,7 +51,7 @@ class Employee < ActiveRecord::Base
 			false
 		else
 			# code to prevent records deposited
-	    @num_benefits = EmployeeBenefit.count( :all, :conditions => ["employee_id = ?", self.id])
+	    @num_benefits = EmployeeBenefit.where(employee_id: self.id).count
 	    if @num_benefits > 0
 				errors.add(:id, "Error - cannot delete, employee has benefits recorded")
 				false
@@ -71,7 +72,7 @@ public	## following methods will be public
 			#raise "Error - cannot destroy active record"
 		else
 			# code to prevent records deposited
-	    @num_benefits = EmployeeBenefit.count( :all, :conditions => ["employee_id = ?", self.id])
+	    @num_benefits = EmployeeBenefit.where(employee_id: self.id).count
 	    if @num_benefits > 0
 				errors.add(:id, "Error - cannot delete, employee has benefits recorded 2")
 				false
@@ -102,14 +103,15 @@ public	## following methods will be public
   end
 
   def emp_latest_pkg
-  	@employee_package = EmployeePackage.find(:first,
-  			:conditions => ["employee_id = ? and (eff_year < ? or (eff_year = ? and eff_month <= ?) ) and deactivated = 0 ",
+  	matches = EmployeePackage.where(
+        "employee_id = ? and (eff_year < ? or (eff_year = ? and eff_month <= ?) ) and deactivated = 0 ",
   				self.id,
 					NameValue.get_val('accounting_year').to_i,
 					NameValue.get_val('accounting_year').to_i,
 					NameValue.get_val('accounting_month').to_i
-				],
-  			:order => 'eff_year DESC, eff_month DESC, id DESC')
+        ).
+  			order('eff_year DESC, eff_month DESC, id DESC')
+    @employee_package = matches.count > 0 ? @employee_benfit = matches.first : nil
   end
 
   def cur_benefit
@@ -121,47 +123,47 @@ public	## following methods will be public
   end
 
   def undeposited_benefit
-  	@employee_benfit = EmployeeBenefit.find(:first,
-			:conditions => ["employee_id = ? and eff_month = ? and eff_year = ? and deposited_at IS NULL",
+    matches = EmployeeBenefit.
+      where("employee_id = ? and eff_month = ? and eff_year = ? and deposited_at IS NULL",
 				self.id,
 				NameValue.get_val('accounting_month').to_i,
 				NameValue.get_val('accounting_year').to_i
-			],
-			:order => 'id DESC'
-		)
+			).
+			order('id DESC')
+    @employee_benfit = matches.count > 0 ? @employee_benfit = matches.first : nil
 	end
 
 	def latest_benefit
-		@employee_benfit = EmployeeBenefit.find(:first,
-			:conditions => ["employee_id = ? and eff_month = ? and eff_year = ?",
+		matches = EmployeeBenefit.
+      where("employee_id = ? and eff_month = ? and eff_year = ?",
 				self.id,
 				NameValue.get_val('accounting_month').to_i,
 				NameValue.get_val('accounting_year').to_i
-			],
-			:order => 'deposited_at DESC, id DESC'
-		)
+			).
+			order('deposited_at DESC, id DESC')
+    @employee_benfit = matches.count > 0 ? @employee_benfit = matches.first : nil
   end
 
 	def latest_deposited_benefit
-		@employee_benfit = EmployeeBenefit.find(:first,
-			:conditions => ["employee_id = ? and deposited_at IS NOT NULL and eff_month = ? and eff_year = ?",
+    matches = EmployeeBenefit.
+      where("employee_id = ? and deposited_at IS NOT NULL and eff_month = ? and eff_year = ?",
 				self.id,
 				NameValue.get_val('accounting_month').to_i,
 				NameValue.get_val('accounting_year').to_i
-			],
-			:order => 'deposited_at DESC, id DESC'
-		)
+			).
+			order('deposited_at DESC, id DESC')
+    @employee_benfit = matches.count > 0 ? @employee_benfit = matches.first : nil
   end
 
 	def latest_current_benefit
-		@employee_benfit = EmployeeBenefit.find(:first,
-			:conditions => ["employee_id = ? and deposited_at IS NULL and eff_month = ? and eff_year = ?",
+    matches = EmployeeBenefit.
+      where("employee_id = ? and deposited_at IS NULL and eff_month = ? and eff_year = ?",
 				self.id,
 				NameValue.get_val('accounting_month').to_i,
 				NameValue.get_val('accounting_year').to_i
-			],
-			:order => 'deposited_at DESC, id DESC'
-		)
+			).
+			order('deposited_at DESC, id DESC')
+    @employee_benfit = matches.count > 0 ? @employee_benfit = matches.first : nil
   end
 
 end

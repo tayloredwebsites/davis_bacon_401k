@@ -26,15 +26,15 @@ class UserTest < ActiveSupport::TestCase
 
     u.password = u.password_confirmation = "tiny"
     assert_equal false, u.save
-    assert_equal ["is too short (minimum is 5 characters)"], u.errors['password']
+    assert_equal ["is too short (minimum is 5 characters)", "password length must be between 5 and 40 characters"], u.errors['password']
 
     u.password = u.password_confirmation = "hugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehugehuge"
     assert_equal false, u.save
-    assert_equal ["is too long (maximum is 40 characters)"], u.errors['password']
+    assert_equal ["is too long (maximum is 40 characters)", "password length must be between 5 and 40 characters"], u.errors['password']
 
     u.password = u.password_confirmation = ""
     assert_equal false, u.save
-    assert_equal ["is too short (minimum is 5 characters)"], u.errors['password']
+    assert_equal ["is too short (minimum is 5 characters)", "password length must be between 5 and 40 characters"], u.errors['password']
 
     assert_equal num_users, User.count
 

@@ -1,10 +1,11 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'name_value_controller'
+require 'test_helper'
+# require 'name_value_controller'
 
 # Re-raise errors caught by the controller.
-class NameValueController; def rescue_action(e) raise e end; end
+# class NameValueController; def rescue_action(e) raise e end; end
 
-class NameValueControllerTest < Test::Unit::TestCase
+class NameValueControllerTest < ActionController::TestCase
+  include NumberHandling
   def setup
     @controller = NameValueController.new
     @request    = ActionController::TestRequest.new
@@ -83,7 +84,7 @@ class NameValueControllerTest < Test::Unit::TestCase
     post :create, :name_value => {:val_name => "testvar", :val_value => "something"}
 
     assert_response :redirect
-    assert_redirected_to :action => 'view'
+    assert_redirected_to :action => 'view', :id => 1000004
 
     assert_equal num_name_values + 1, NameValue.count
   end

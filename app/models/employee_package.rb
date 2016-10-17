@@ -1,5 +1,7 @@
 class EmployeePackage < ActiveRecord::Base
 
+  attr_accessible :employee_id, :eff_month, :eff_year, :employee_id, :monthly_medical
+
   before_create :create_timestamp
   before_destroy :validate_on_destroy
 

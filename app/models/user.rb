@@ -2,9 +2,10 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  attr_accessible :login, :password, :password_confirmation, :deactivated, :supervisor
+
   before_create :crypt_unless_empty, :create_timestamp
   before_update :crypt_unless_empty
-
 
 
   validates_uniqueness_of :login, :on => :create
@@ -15,7 +16,9 @@ class User < ActiveRecord::Base
   validates_length_of :password, :within => 5..40
   validates_presence_of :login
 
-  #?validates_presence_of :login, :password, :password_confirmation
+  validate :validate_create, on: :create
+  validate :validate_update, on: :update
+  validate :validate_destroy, on: :destroy
 
 
 
@@ -85,14 +88,14 @@ class User < ActiveRecord::Base
   end
 
   # make sure password length is good for all creates
-  def validate_on_create
+  def validate_create
   	if read_attribute(:password).blank? || read_attribute(:password).length < 5 || read_attribute(:password).length > 40
   		errors.add(:password, "password length must be between 5 and 40 characters")
   	end
   end
 
   # make sure password length is good for updates only when password is changed
-  def validate_on_update
+  def validate_update
   	if read_attribute(:password).present?
 	  	if  read_attribute(:password).length < 5 || read_attribute(:password).length > 40
 	  		errors.add(:password, "password length must be between 5 and 40 characters")
@@ -103,7 +106,7 @@ class User < ActiveRecord::Base
   #before_destroy :validate_on_destroy
 
   # make sure record is deactivated before destroying
-  def validate_on_destroy
+  def validate_destroy
   	if self.deactivated == 0
 			errors.add(:deactivated, "cannot destroy active record")
 			#raise "Error - cannot destroy active record"

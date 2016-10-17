@@ -22,7 +22,6 @@ class EmployeePackageController < ApplicationController
 			  flash[:notice] = 'Error - duplicate package for employee and effective month/year'
 			  redirect_to :controller => 'employee', :action=> 'edit', :id => @employee_package.employee_id
 		  else
-#breakpoint
 		  	@employee = Employee.find(@employee_package.employee_id)
 		    if @employee_package.audit_save
 		      flash[:notice] = 'EmployeePackage was successfully created.'
@@ -102,20 +101,10 @@ class EmployeePackageController < ApplicationController
   def list
     # note this is not used, as it is a listing of all packages without selecting or showing employee
     flash[:notice] = ''
-    @employee_package_pages = @employee_packages = EmployeePackage.
-      paginate(
-        :conditions => ["eff_year >= ?", NameValue.get_val('start_year').to_i],
-        :page => params[:page],
-        :per_page => 10,
-        :order => 'eff_year DESC, eff_month DESC'
-      )
-    # # alternate approach
-    # @employee_packages = @employee_package_pages = EmployeePackage.
-    #   find(:all,
-    #     :conditions => ["eff_year >= ?", NameValue.get_val('start_year').to_i],
-    #     :order => 'eff_year DESC, eff_month DESC'
-    #   ).
-    #   paginate(:page => params[:page], :per_page => 10)
+    @employee_packages = @employee_package_pages = EmployeePackage.
+      where("eff_year >= ?", NameValue.get_val('start_year').to_i).
+      order('eff_year DESC, eff_month DESC').
+      paginate(:page => params[:page], :per_page => 10)
   end
 
   def new

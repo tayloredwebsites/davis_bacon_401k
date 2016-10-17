@@ -58,15 +58,15 @@ class EmployeeBenefit < ActiveRecord::Base
   def save
   	@is_ok = true
 
-  	is_deposited = EmployeeBenefit.find(:first, :conditions => ["id = ? and deposited_at IS NOT NULL", self.id] )
-  	if is_deposited != nil
+  	is_deposited = EmployeeBenefit.where("id = ? and deposited_at IS NOT NULL", self.id)
+  	if is_deposited.count > 0
   		errors.add(:deposited_at, "Error - cannot update benefit that has been already deposited.")
   		@is_ok = false
   	end
 
   	@is_there = 0
   	if self.employee_id != nil
-  	   @is_there = Employee.count( :all, :conditions => ["id = ? and deactivated = 0", self.employee_id] )
+  	   @is_there = Employee.where(id: self.employee_id, deactivated: 0).count
   	end
   	if @is_there < 1
   		errors.add(:employee_id, "Error - cannot find employee (or is deactivated).")
@@ -75,7 +75,8 @@ class EmployeeBenefit < ActiveRecord::Base
 
   	@this_pkg = nil
   	if self.employee_package_id != nil
-  	   @this_pkg = EmployeePackage.find( :first, :conditions => ["id = ? and deactivated = 0", self.employee_package_id] )
+       matches = EmployeePackage.where(id: self.employee_package_id, deactivated: 0)
+       @this_pkg = matches.count > 0 ? matches.first : nil
   	end
   	if @this_pkg == nil
   		errors.add(:employee_package_id, "Error - cannot save without package .")

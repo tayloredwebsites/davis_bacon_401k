@@ -35,8 +35,8 @@ DavisBacon401k::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
-  # to display debugging statements during tests
-  config.logger = Logger.new(STDOUT)
-  config.logger.level = Logger::DEBUG
+  # # to display debugging statements during tests
+  # config.logger = Logger.new(STDOUT)
+  # config.logger.level = Logger::DEBUG
 
 end

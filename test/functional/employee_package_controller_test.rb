@@ -1,10 +1,11 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'employee_package_controller'
+require 'test_helper'
+# require 'employee_package_controller'
 
 # Re-raise errors caught by the controller.
-class EmployeePackageController; def rescue_action(e) raise e end; end
+# class EmployeePackageController; def rescue_action(e) raise e end; end
 
-class EmployeePackageControllerTest < Test::Unit::TestCase
+class EmployeePackageControllerTest < ActionController::TestCase
+  include NumberHandling
 	fixtures :employees, :employee_packages, :employee_benefits
 
   def setup
@@ -37,7 +38,7 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
     post :create, :employee_package => {:employee_id => "1", :eff_month => "12", :eff_year => "2005"}
     assert_equal flash[:notice], 'EmployeePackage was successfully created.'
     assert_response :redirect
-    assert_redirected_to :controller => 'employee', :action => 'edit'
+    assert_redirected_to :controller => 'employee', :action => 'edit', :id => 1
     assert_equal num_employee_packages + 1, EmployeePackage.count
   end
 
@@ -135,7 +136,7 @@ class EmployeePackageControllerTest < Test::Unit::TestCase
 
     assert_not_nil assigns(:employee_package)
     assert assigns(:employee_package).valid?
-    assert_equal assigns(:employee_package).monthly_medical,669.69
+    assert_equal assigns(:employee_package).monthly_medical, BigDecimal("669.69")
     assert_equal assigns(:employee_package).hourly_wage,27.6
 
     @emp_package = EmployeePackage.find(:first, :conditions => "id = '2'")

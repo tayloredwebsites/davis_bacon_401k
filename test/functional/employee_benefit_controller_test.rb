@@ -1,10 +1,11 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'employee_benefit_controller'
+require 'test_helper'
+# require 'employee_benefit_controller'
 
 # Re-raise errors caught by the controller.
-class EmployeeBenefitController; def rescue_action(e) raise e end; end
+# class EmployeeBenefitController; def rescue_action(e) raise e end; end
 
-class EmployeeBenefitControllerTest < Test::Unit::TestCase
+class EmployeeBenefitControllerTest < ActionController::TestCase
+  include NumberHandling
   def setup
     @controller = EmployeeBenefitController.new
     @request    = ActionController::TestRequest.new

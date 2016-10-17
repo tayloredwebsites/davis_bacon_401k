@@ -1,9 +1,9 @@
 class EmployeeBenefitController < ApplicationController
 
-	# ensure logged in before using, except in test mode
-	if ENV['RAILS_ENV'] != 'test'
-		before_filter :login_required
-	end
+	# # ensure logged in before using, except in test mode
+	# if ENV['RAILS_ENV'] != 'test'
+	# 	before_filter :login_required
+	# end
 
   def create
   	if request.get?

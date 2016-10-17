@@ -70,17 +70,16 @@ class EmployeeController < ApplicationController
   end
 
   def list
-  	#@posts = Post.paginate :page => params[:page], :per_page => 50
-    @employees = Employee.paginate(:all, :page => params[:page], :per_page => 10, :order => 'deactivated, emp_id')
+    @employees = Employee.
+      order('deactivated, emp_id').
+      paginate(:page => params[:page], :per_page => 10)
+
   end
 
   def benefits_list
   	# this listing is for editing
     #@employee_pages, @employees = paginate(:employees, :per_page => 10, :conditions => 'deactivated = 0', :order_by => 'emp_id')
-    @employees = Employee.find(:all,
-    	:conditions => "deactivated = 0",
-    	:order => 'emp_id'
-    )
+    @employees = Employee.where("deactivated = 0").order('emp_id')
     @select_deposit = params[:select_deposit]
   end
 
@@ -88,9 +87,8 @@ class EmployeeController < ApplicationController
   end
 
   def list_employee_packages
-  	@emp_packages = EmployeePackage.find(:all,
-  		:conditions => ["employee_id = ?", params[:id] ],
-  		:order => 'eff_year DESC, eff_month DESC')
+  	@emp_packages = EmployeePackage.where("employee_id = ?", params[:id]).
+  		order('eff_year DESC, eff_month DESC')
   end
 
   def new

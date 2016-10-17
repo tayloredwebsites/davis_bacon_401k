@@ -25,8 +25,9 @@ class NameValue < ActiveRecord::Base
 
   #attr_accessor :val_name, :val_value
 
-  attr_accessible :cur_year, :cur_month, :val_name, :val_value
+  attr_accessible :val_name, :val_value
 
+  attr_accessor :cur_year, :cur_month
 
   validates_uniqueness_of :val_name, :on => :create
   validates_length_of :val_name, :within => 1..40
