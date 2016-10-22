@@ -42,6 +42,5 @@ public/system/*
 /.DS_Store
 **/*/.DS_Store
 
-# ignore sensitive documentation files
-/doc/api
-/doc/app
+# ignore personalized logo
+/app/assets/images/logo_clear*
