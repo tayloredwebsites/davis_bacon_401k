@@ -1,6 +1,6 @@
 <br><h2>Editing name_value</h2>
 
-<% form_tag(:action => 'update', :id => @name_value) do -%>
+<%= form_tag(:action => 'update', :id => @name_value) do -%>
   <%= render :partial => 'form' %>
   <%= submit_tag 'Save' %>
 <% end -%>

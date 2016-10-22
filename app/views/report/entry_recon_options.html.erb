@@ -1,8 +1,6 @@
 <br><h2>Generate Entry Reconciliation Report</h2>
 
-<% form_tag(:action => 'entry_recon_report') do %>
-
-<%= error_messages_for 'report' %>
+<%= form_tag(:action => 'entry_recon_report') do %>
 
 <%
   @start_year_options = @end_year_options = get_year_options
@@ -34,7 +32,7 @@
 
 <!--[form:report]-->
 <table>
-
+  <%= error_messages_for_tr @report %>
   <tr>
     <td><div align="center">&nbsp;</div></td>
     <td><label for="start_month">Start Month</label></td>

@@ -28,8 +28,8 @@
         <%
           for pkg in @employee.emp_pkgs
             if pkg.deactivated != 0
-              x_start = "<div style='text-decoration: line-through;'>"
-              x_end = "</div>"
+              x_start = "<div style='text-decoration: line-through;'>".html_safe
+              x_end = "</div>".html_safe
             else
               x_start = ''
               x_end = ''
@@ -76,6 +76,4 @@
       </table>
     </td>
   </tr>
-          <%
-          #error_messages_for 'employee_package'
-          %>
+  <% error_messages_for_tr @employee_package %>

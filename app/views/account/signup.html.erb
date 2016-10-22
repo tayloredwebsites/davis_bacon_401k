@@ -1,9 +1,9 @@
-<% form_tag(:action=> "signup") do %>
+<%= form_tag(:action=> "signup") do %>
 
 <div title="Account signup" id="signupform" class="form">
   <h3>Signup</h3>
-  <%= error_messages_for 'user' %><br/>
-  
+  <%= error_messages_for @user %><br/>
+
   <label for="user_login">Desired login:</label><br/>
   <%= text_field "user", "login", :size => 30 %><br/>
   <label for="user_password">Choose password:</label><br/>

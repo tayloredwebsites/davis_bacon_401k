@@ -6,7 +6,7 @@ class NameValueController < ApplicationController
 	end
 
 	def login_as_supervisor
-		@test_user = response.session[:user]
+		@test_user = session[:user]
     if @test_user == nil
     	flash[:notice] = 'Error - must be logged in to maintain name_values'
     else

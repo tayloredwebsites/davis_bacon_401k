@@ -29,7 +29,7 @@
       pkg = emp.emp_latest_pkg
       if pkg == nil
         pkg = EmployeePackage.new :employee_id => emp.id
-        @eff = "<font color='red'><center>***</center></font>"
+        @eff = "<font color='red'><center>***</center></font>".html_safe
       else
         @eff = h(pkg.eff_month.to_s) + '/' + h(pkg.eff_year.to_s)
       end
@@ -41,11 +41,11 @@
       <!-- <td align='center'><%=h emp["mi"] %>&nbsp;</td> -->
       <td align='center'><%= @eff %></td>
       <td align='center'><%=h round_money_s(pkg["hourly_wage"]) %></td>
-      <td align='center'><%=h pkg["monthly_medical"] %></td>
-      <td align='center'><%=h pkg["annual_sick"] %></td>
-      <td align='center'><%=h pkg["annual_holiday"] %></td>
-      <td align='center'><%=h pkg["annual_vacation"] %></td>
-      <td align='center'><%=h pkg["annual_personal"] %></td>
+      <td align='center'><%=h round_money_s(pkg["monthly_medical"]) %></td>
+      <td align='center'><%=h round_places_s(pkg["annual_sick"], 1) %></td>
+      <td align='center'><%=h round_places_s(pkg["annual_holiday"], 1) %></td>
+      <td align='center'><%=h round_places_s(pkg["annual_vacation"], 1) %></td>
+      <td align='center'><%=h round_money_s(pkg["annual_personal"]) %></td>
       <%
         if pkg == nil
           @ben = "<font color='red'>nil pkg</font>"

@@ -72,4 +72,20 @@ module ApplicationHelper
     NameValue.get_val("accounting_month") + "/" + NameValue.get_val("accounting_year")
   end
 
+  # replacement for rails 1/2 error_messages_for in table layouts
+  # should migrate out of this
+  def error_messages_for_tr(clazz)
+    if clazz.present? && clazz.errors.present? && clazz.errors.count > 0
+     return "<tr><td><div class='error'>Errors: #{clazz.errors.full_messages}</div></td></tr>".html_safe
+    end
+  end
+
+  # replacement for rails 1/2 error_messages_for
+  # should migrate out of this
+  def error_messages_for(clazz)
+    if clazz.present? && clazz.errors.present? && clazz.errors.count > 0
+     return "Errors: #{clazz.errors.full_messages}"
+    end
+  end
+
 end

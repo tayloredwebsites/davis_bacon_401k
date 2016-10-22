@@ -10,13 +10,13 @@
       @emp_id = @employee.id
     end
 %>
-  <% form_tag(:action => 'create', :employee_id => @emp_id) do %>
+  <%= form_tag(:action => 'create', :employee_id => @emp_id) do %>
   <%= render :partial => 'form' %>
   <% end %>
 <%
   else
 %>
-  <% form_tag(:action => 'update', :id => @employee_benefit) do %>
+  <%= form_tag(:action => 'update', :id => @employee_benefit) do %>
   <%= render :partial => 'form' %>
   <% end %>
 <%

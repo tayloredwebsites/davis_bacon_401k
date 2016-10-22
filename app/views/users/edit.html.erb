@@ -1,6 +1,6 @@
 <br><h2>Editing user</h2>
 
-<% form_tag(:action => 'update', :id => @user) do -%>
+<%= form_tag(:action => 'update', :id => @user) do -%>
   <%= render :partial => 'form' %>
   <%= submit_tag 'Save' %>
 <% end -%>

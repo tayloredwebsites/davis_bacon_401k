@@ -3,9 +3,11 @@
 class AccountController < ApplicationController
 	before_filter :login_required, :only => [ :welcome ]
 
-  def initialize
-    #@@log = Log4r::Logger.new('App::AccountController')
-  end
+  layout 'application'
+
+  # def initialize
+  #   #@@log = Log4r::Logger.new('App::AccountController')
+  # end
 
   def login
     #flash.now['login test']

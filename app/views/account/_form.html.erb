@@ -1,7 +1,6 @@
-<%= error_messages_for 'user' %>
-
 <!--[form:user]-->
 <table>
+  <%= error_messages_for_tr @user %>
   <tr>
     <td><label for="user_login">Login</label></td>
     <td><%= text_field 'user', 'login'  %></td>

@@ -65,7 +65,7 @@
           @gtot = h(round_money_s(totBene["deposit"]))
         end
       %>
-      <td align='center'><%=@gtot %></td>
+      <td align='center'><%=@gtot.html_safe %></td>
       <td align='center'></td>
     </tr>
 <%

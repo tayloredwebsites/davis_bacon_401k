@@ -1,6 +1,6 @@
 <br><h2>Editing employee package</h2>
 
-<% form_tag(:action => 'update', :id => @employee_package) do %>
+<%= form_tag(:action => 'update', :id => @employee_package) do %>
   <%= render :partial => 'form' %>
   <%= submit_tag 'Save' %>
 <% end %>

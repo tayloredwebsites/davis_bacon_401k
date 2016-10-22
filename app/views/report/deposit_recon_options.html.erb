@@ -1,8 +1,7 @@
 <br><h2>Generate Deposit Reconciliation Report</h2>
 
-<% form_tag(:action => 'deposit_recon_report') do %>
+<%= form_tag(:action => 'deposit_recon_report') do %>
 
-<%= error_messages_for 'report' %>
 
 <%
   @deposits_selector = [ ['Select Deposit', ''] ]
@@ -24,7 +23,7 @@
 
 <!--[form:report]-->
 <table>
-
+  <%= error_messages_for_tr @report %>
   <tr>
     <td><div align="center">&nbsp;</div></td>
     <td><label for="select_start_deposit">Start Deposit</label></td>
