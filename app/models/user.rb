@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   #
   def self.authenticate(login, pass)
     matches = User.where(login: login, password: sha1(pass))
+    Rails.logger.debug("*** matches.count: #{matches.count}")
+    Rails.logger.debug("*** matches: #{matches.all.inspect}")
     return matches.count > 0 ? matches.first : nil
   end
 
@@ -61,88 +63,78 @@ class User < ActiveRecord::Base
   # If its empty we assume that the user didn't want to change his
   # password and just reset it to the old value.
   def crypt_unless_empty
+    Rails.logger.debug("*** crypt_unless_empty password: #{password.inspect}")
     if password.empty?
-      user = self.class.find(self.id)
+      user = User.find(self.id)
+      Rails.logger.debug("*** crypt_unless_empty user: #{user.inspect}")
       self.password = user.password
     else
       write_attribute "password", self.class.sha1(password)
     end
+    Rails.logger.debug("*** crypt_unless_empty password: #{password.inspect}")
   end
 
   # Properly set the current date and time in the created_at field on creation
   def create_timestamp
-  	self.created_at = Time.now
-  end
-
-
-  # If the record is updated we will check if the password is empty.
-  # If its empty we assume that the user didn't want to change his
-  # password and just reset it to the old value.
-  def crypt_unless_empty
-    if password.empty?
-      user = self.class.find(self.id)
-      self.password = user.password
-    else
-      write_attribute "password", self.class.sha1(password)
-    end
+    self.created_at = Time.now
   end
 
   # make sure password length is good for all creates
   def validate_create
-  	if read_attribute(:password).blank? || read_attribute(:password).length < 5 || read_attribute(:password).length > 40
-  		errors.add(:password, "password length must be between 5 and 40 characters")
-  	end
+    if read_attribute(:password).blank? || read_attribute(:password).length < 5 || read_attribute(:password).length > 40
+      errors.add(:password, "password length must be between 5 and 40 characters")
+    end
   end
 
   # make sure password length is good for updates only when password is changed
   def validate_update
-  	if read_attribute(:password).present?
-	  	if  read_attribute(:password).length < 5 || read_attribute(:password).length > 40
-	  		errors.add(:password, "password length must be between 5 and 40 characters")
-	  	end
-	  end
+    if read_attribute(:password).present?
+      if  read_attribute(:password).length < 5 || read_attribute(:password).length > 40
+        errors.add(:password, "password length must be between 5 and 40 characters")
+      end
+    end
   end
 
   #before_destroy :validate_on_destroy
 
   # make sure record is deactivated before destroying
   def validate_destroy
-  	if self.deactivated == 0
-			errors.add(:deactivated, "cannot destroy active record")
-			#raise "Error - cannot destroy active record"
-  	end
+    if self.deactivated == 0
+      errors.add(:deactivated, "cannot destroy active record")
+      #raise "Error - cannot destroy active record"
+    end
   end
 
-public	## following methods will be public
+public  ## following methods will be public
 
   # wrote this, because validate_on_destroy errors did not pass to destroy method
   def destroy
-  	if self.deactivated == 0
-			errors.add(:deactivated, "cannot destroy active record")
-			#raise "Error - cannot destroy active record"
-  	end
-  	if errors.empty?
-			super
-  	#else
-		#	errors.add(:deactivated, "destroy active record - errors")
-  	end
+    if self.deactivated == 0
+      errors.add(:deactivated, "cannot destroy active record")
+      #raise "Error - cannot destroy active record"
+    end
+    if errors.empty?
+      super
+    #else
+    # errors.add(:deactivated, "destroy active record - errors")
+    end
   end
 
   # method to deactivate record
   def deactivate
-  	if self.deactivated == 0
-			self.deactivated = 1;
-  	else
-			errors.add(:deactivated, "record already deactivated")
-  	end
+    if self.deactivated == 0
+      self.deactivated = 1;
+    else
+      errors.add(:deactivated, "record already deactivated")
+    end
   end
 
   def reactivate
-  	if self.deactivated == 1
-			self.deactivated = 0;
-  	else
-			errors.add(:deactivated, "record already reactivated")
-  	end
+    if self.deactivated == 1
+      self.deactivated = 0;
+    else
+      errors.add(:deactivated, "record already reactivated")
+    end
   end
 
 end

@@ -53,12 +53,12 @@ div#body_frame td {
 	color: #000000;
 }
 
-# not working ???
+/* not working ??? */
 div#body_frame td.datadisplay {
 	background-color: #ffffff;
 }
 
-# not working ???
+/* not working ??? */
 div#body_frame .datadisplay {
 	background-color: #ffffff;
 }
@@ -78,7 +78,7 @@ label {
 	color: #000000;
 }
 
-# not working ???
+/* not working ??? */
 .datadisplay {
 	background-color: #ffffff;
 }

@@ -10,18 +10,20 @@ class AccountController < ApplicationController
   # end
 
   def login
-    #flash.now['login test']
+    session[:user_id] = session[:login] = nil
     if !request.get?
-      if session[:user] = User.authenticate(params['user_login'], params['user_password'])
-
+      Rails.logger.debug("*** params")
+      @current_user = User.authenticate(params['user_login'], params['user_password'])
+      if @current_user
+        session[:user_id] = @current_user.id
+        @login = session[:login] = @current_user.login
         flash['notice']  = "Login successful"
 		    logger.debug("logger: Login successful, redirect_to welcome")
 		    #@@log.debug("@@log: Login successful, redirect_to welcome")
         redirect_to :action => "welcome"
       else
         flash.now['notice']  = "Login unsuccessful"
-
-        @login = params[:user_login]
+        # @login = params[:user_login]
 		    @message  = "Login unsuccessful"
       end
     else
@@ -39,7 +41,12 @@ class AccountController < ApplicationController
       #standard code of signup...
       @user = User.new(params[:user])
 	    if request.post? and @user.save
-	      session[:user] = User.authenticate(@user.login, params[:user][:password])
+        Rails.logger.debug("*** signup @user: #{@user.inspect}")
+        # @current_user = User.authenticate(params['user_login'], params['user_password'])
+        @current_user = @user
+        Rails.logger.debug("*** signup @current_user: #{@current_user.inspect}")
+        session[:user_id] = @current_user.id
+        @login = session[:login] = @current_user.login
 	      flash['notice']  = "Signup successful"
 	      # todo note not redirecting to @request.session[:return_to] in tests !!!!
 	      #redirect_back_or :action => "welcome"
@@ -52,11 +59,12 @@ class AccountController < ApplicationController
   end
 
   def logout
-    session[:user] = nil
+    session[:user_id] = nil
   end
 
   def welcome
     logger.debug("logger: in account_controller.welcome")
+    Rails.logger.debug("*** current_user: #{current_user.inspect}")
     #@@log.debug("@@log: in account_controller.welcome")
   end
 

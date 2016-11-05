@@ -114,7 +114,7 @@
               @show_oob = true
               @show_oob_footnote = true
             end
-          if false && emp_bene.is_benefit_out_of_cur_bal
+          if emp_bene.is_benefit_out_of_cur_bal
               %><div class='error'>*Benefit OOB*<%=h emp_bene.get_latest_effective_package.id %></div><%
 #breakpoint
               @show_oob = true

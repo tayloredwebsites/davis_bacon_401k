@@ -52,7 +52,9 @@ class NameValueTest < ActiveSupport::TestCase
     assert_equal [], @val.errors['val_value']
   	#assert_equal "can't be blank", @val.errors.on(:val_value)
 
-    @two = NameValue.find(:first, :conditions => "val_name = '2'")
+    @twos = NameValue.where("val_name = '2'")
+    assert_not_equal 0, @twos.count
+    @two = @twos.first
     assert_not_nil @two
     assert_equal @two.val_name, "2"
     assert_equal @two.val_value, "two"
@@ -69,7 +71,7 @@ class NameValueTest < ActiveSupport::TestCase
 
     @val.val_name = @val.val_value = ''
     assert !@val.save
-    assert_equal ["is too short (minimum is 1 characters)"], @val.errors['val_name']
+    assert_equal ["is too short (minimum is 1 character)"], @val.errors['val_name']
 
     @val.val_name = @too_large_name
     @val.val_value = ''
@@ -88,8 +90,8 @@ class NameValueTest < ActiveSupport::TestCase
     assert_equal @val.val_name, 'accounting_month'
     assert_equal @val.val_value, '4'
 
-    test_var = NameValue.find(:first, :conditions => ["val_name = ?", 'accounting_month'])
-    assert_equal test_var.val_value, '4'
+    # test_var = NameValue.where("val_name = ?", 'accounting_month')
+    # assert_equal test_var.val_value, '4'
 
     assert_equal NameValue.get_accounting_month, '4'
   end

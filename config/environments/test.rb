@@ -7,8 +7,14 @@ DavisBacon401k::Application.configure do
   # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
 
+  # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+
   # Configure static asset server for tests with Cache-Control for performance
-  config.serve_static_assets = true
+  # config.serve_static_assets = true # old rails 3 syntax
+  config.serve_static_files = false
   config.static_cache_control = "public, max-age=3600"
 
   # Log error messages when you accidentally call methods on nil
@@ -37,6 +43,13 @@ DavisBacon401k::Application.configure do
 
   # # to display debugging statements during tests
   # config.logger = Logger.new(STDOUT)
-  # config.logger.level = Logger::DEBUG
+  # # set log level to LOG_LEVEL environment variable (e.g. LOG_LEVEL=error ruby -W0 -I"lib:test" test/...)
+  # config.log_level = ENV.fetch("LOG_LEVEL", :DEBUG)
+
+  # In Rails 5, the default value of this option will change from `:sorted` to `:random`.
+  # To disable this warning and keep the current behavior (set it to :sorted).
+  Rails.application.configure do
+    config.active_support.test_order = :sorted
+  end
 
 end

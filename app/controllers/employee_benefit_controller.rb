@@ -1,9 +1,10 @@
 class EmployeeBenefitController < ApplicationController
 
-	# # ensure logged in before using, except in test mode
-	# if ENV['RAILS_ENV'] != 'test'
-	# 	before_filter :login_required
-	# end
+  # ensure logged in before using, except in test mode
+  if ENV['RAILS_ENV'] != 'test'
+    before_filter :login_required
+  end
+
 
   def create
   	if request.get?
@@ -68,11 +69,15 @@ class EmployeeBenefitController < ApplicationController
   end
 
   def edit
+    @employee_benefit = nil
+    @employee_package = nil
+    @employee = nil
 	  if params[:id]
-	  	@employee_benefit = EmployeeBenefit.find(params[:id])
-	  	if @employee_benefit
+      begin
+	  	  @employee_benefit = EmployeeBenefit.find(params[:id])
 			  @employee_package = @employee_benefit.current_package
 		  	@employee = Employee.find(@employee_benefit.employee_id)
+      rescue
 		  end
 		end
 		if @employee == nil
@@ -121,16 +126,22 @@ class EmployeeBenefitController < ApplicationController
 	  		@employee = Employee.find(params[:employee])
 	  	end
 	  end
-    @employee_benefits = EmployeeBenefit.paginate(:all,
-  		:page => params[:page],
-  		:per_page => 10,
-  		:order => 'eff_year, eff_month',
-  		:conditions => ["eff_year >= ? and employee_id = ?", NameValue.get_val('start_year'), params[:employee_id] ]
-  	)
-  end
+    @employee_benefits = EmployeeBenefit.includes(:employee_package).
+      where("eff_year >= ? and employee_id = ?", NameValue.get_val('start_year'), params[:employee_id]).
+      order('eff_year desc , eff_month desc, id desc'
+    )
+    @employee_benefits_paged = EmployeeBenefit.includes(:employee_package).
+      where("eff_year >= ? and employee_id = ?", NameValue.get_val('start_year'), params[:employee_id]).
+  		order('eff_year desc , eff_month desc, id desc').
+      paginate(:page => params[:page], :per_page => 10
+    )
+end
 
   def show
     @employee_benefit = EmployeeBenefit.find(params[:id])
+    @employee = Employee.find(@employee_benefit.employee_id)
+    Rails.logger.debug("*** @employee_benefit: #{@employee_benefit.inspect}")
+    Rails.logger.debug("*** @employee: #{@employee.inspect}")
   end
 
   def view
@@ -149,7 +160,14 @@ class EmployeeBenefitController < ApplicationController
 		      process_pending_checks (@bene_dep_key)
             end
 		    @employee_benefit = EmployeeBenefit.find(params[:id])
+        Rails.logger.debug("++++ @employee_benefit: #{@employee_benefit.inspect}")
 		  	@employee = Employee.find(@employee_benefit.employee_id)
+        @correct_pkg = @employee_benefit.get_latest_effective_package
+        Rails.logger.debug("++++ update employee_package_id from: #{@employee_benefit.employee_package_id}")
+        Rails.logger.debug("++++ update employee_package_id to: #{@correct_pkg.id}") if @correct_pkg.present?
+        @employee_benefit.employee_package_id = @correct_pkg.id if @correct_pkg.present?
+        Rails.logger.debug("**** @employee_benefit.employee_package_id: #{@employee_benefit.employee_package_id}")
+
 		    if @employee_benefit.update_attributes(params[:employee_benefit])
 		      #redirect_to :action => 'show', :id => @employee_benefit
 			  	#redirect_back_or :controller => 'employee_benefit',
@@ -158,6 +176,7 @@ class EmployeeBenefitController < ApplicationController
 		  		redirect_to :action => 'edit', :employee => @employee.id
 		      #render :action => 'edit'
 		    else
+          Rails.logger.debug("++++ @employee_benefit.errprs: #{@employee_benefit.errors.full_messages.join("; ")}")
 			    if !@employee_benefit.errors.empty?
 			    	flash[:notice] = 'Error - Update error, ' + @employee_benefit.errors.full_messages.join("; ")
 			    #else

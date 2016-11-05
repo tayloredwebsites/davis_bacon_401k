@@ -18,13 +18,15 @@ class ApplicationController < ActionController::Base
 
   protected
     def set_user
-      @user = User.find(session[:id]) if @user.nil? && session[:id]
+      @user = User.find(session[:user_id]) if @user.nil? && session[:user_id]
       debugger
     end
 
     def login_required
       logger.debug("login_required")
-      return true if session[:user]
+      Rails.logger.debug("*** session[:user_id]: #{session[:user_id].inspect}")
+      @current_user ||= User.find(session[:user_id]) if session[:user_id].present?
+      return true if session[:user_id]
       access_denied
       return false
     end
@@ -41,4 +43,11 @@ class ApplicationController < ActionController::Base
     rescue ActionController::RedirectBackError
     redirect_to path
   end
+
+  private
+
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
 end

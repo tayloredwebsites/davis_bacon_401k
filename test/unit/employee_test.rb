@@ -16,12 +16,12 @@ class EmployeeTest < ActiveSupport::TestCase
     @emp.ssn = '123456789'
     assert !@emp.save
     #assert @emp.errors.empty?
-  	assert_equal ["is too short (minimum is 1 characters)"], @emp.errors[:last_name]
+  	assert_equal ["is too short (minimum is 1 character)"], @emp.errors[:last_name]
   	# error came from #validates_presence_of :last_name in employee.rb
     assert_equal [], @emp.errors['id']
 
-    @three = Employee.find(:first, :conditions => "id = '3'")
-    assert_nil @three
+    @three = Employee.where(id: 3)
+    assert_equal 0, @three.count
 
     assert_equal num_employees, Employee.count
   end
@@ -55,7 +55,7 @@ class EmployeeTest < ActiveSupport::TestCase
     @emp.save
     assert @emp.errors.empty?
 
-    @three = Employee.find(:first, :conditions => "id = 3")
+    @three = Employee.find(3)
     assert_not_nil @three
     assert_equal @three.id, 3
     assert_equal @three.last_name, "three"
@@ -76,14 +76,14 @@ class EmployeeTest < ActiveSupport::TestCase
     @emp.first_name = 'Dave'
     @emp.ssn = '123456789'
     assert !@emp.save
-    assert_equal ["is too short (minimum is 1 characters)"], @emp.errors['last_name']
+    assert_equal ["is too short (minimum is 1 character)"], @emp.errors['last_name']
 
     @emp.emp_id = '23'
     @emp.last_name = 'three'
     @emp.first_name = ''
     @emp.ssn = '123456789'
     assert !@emp.save
-    assert_equal ["is too short (minimum is 1 characters)"], @emp.errors['first_name']
+    assert_equal ["is too short (minimum is 1 character)"], @emp.errors['first_name']
 
     @emp.emp_id = '23'
     @emp.last_name = 'three'

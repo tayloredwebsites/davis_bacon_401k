@@ -1,10 +1,4 @@
-
-    if ! defined? @@saved_nv_values
-      @@saved_nv_values = Hash.new
-    end
-    if ! defined? @@default_values
-      @@default_values = { "accounting_month" => "1", "accounting_year" => "2001", "start_year" => "2005" }
-    end
+# app/models/name_value.rb
 
 class NameValue < ActiveRecord::Base
 
@@ -22,6 +16,13 @@ class NameValue < ActiveRecord::Base
 # if @@default_values == nil
 #    @@default_values = { "accounting_month" => "1", "accounting_year" => "2001", "start_year" => "2005" }
 #    end
+
+  if !defined? @@saved_nv_values
+    @@saved_nv_values = Hash.new
+  end
+  if !defined? @@default_values
+    @@default_values = { "accounting_month" => "1", "accounting_year" => "2001", "start_year" => "2005" }
+  end
 
   #attr_accessor :val_name, :val_value
 

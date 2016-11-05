@@ -32,10 +32,12 @@
             <div id="left_frame">
               <table width="200" border="0" cellpadding="0" cellspacing="0" class="left_frame"><!-- left pseudo frame -->
 <%
-  @cur_user = session[:user]
-  if !( @cur_user.nil? )
+  if @current_user.present?
 %>
                 <!-- User Logged in -->
+                <tr>
+                  <td>Logged in as: <%= @current_user.login %></td>
+                </tr>
                 <tr>
                   <td><a href="/name_value/accounting_month">Change Current Month</a></td>
                 </tr>
@@ -49,7 +51,7 @@
                   <td><a href="/employee/report_list">Reports</a></td>
                 </tr>
 <%
-    if (@cur_user.supervisor).to_s != '0'
+    if @current_user.present? && @current_user.supervisor == 1
 %>
                 <!-- Supervisor -->
                 <tr>

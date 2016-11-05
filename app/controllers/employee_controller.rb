@@ -8,6 +8,7 @@ class EmployeeController < ApplicationController
   def create
   	if request.get?
     	redirect_to :action => 'new'
+      flash[:alert] = 'ERROR: not allowed to create with get'
   	else
 	    @employee = Employee.new(params[:employee])
     	if params[:id] && !@employee.id
@@ -15,11 +16,11 @@ class EmployeeController < ApplicationController
     	end
 	    if @employee.save
 	      flash[:notice] = 'Employee was successfully created.'
-	      redirect_to :action => 'view', :id => @employee
+	      redirect_to :action => 'show', :id => @employee
 	    else
 	    	@empl_id = ''
 		    if !@employee.errors.empty?
-		    	flash[:notice] = 'Error - Employee ' + @empl_id + ' was not created, ' + @employee.errors.full_messages.join("; ")
+		    	flash[:alert] = 'Error - Employee ' + @empl_id + ' was not created, ' + @employee.errors.full_messages.join("; ")
 		    end
 	      render :action => 'new'
 	    end

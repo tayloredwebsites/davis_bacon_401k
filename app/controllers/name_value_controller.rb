@@ -1,9 +1,9 @@
 class NameValueController < ApplicationController
 
-	# ensure logged in before using, except in test mode
-	if ENV['RAILS_ENV'] != 'test'
-		before_filter :login_required, :login_as_supervisor
-	end
+  # ensure user logged in before using, except in test mode
+  if ENV['RAILS_ENV'] != 'test'
+    before_filter :login_required
+  end
 
 	def login_as_supervisor
 		@test_user = session[:user]
@@ -103,5 +103,7 @@ class NameValueController < ApplicationController
 	    end
 	  end	# request.get?
   end
+
+  private
 
 end

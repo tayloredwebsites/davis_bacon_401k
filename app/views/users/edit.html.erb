@@ -1,9 +1,9 @@
 <br><h2>Editing user</h2>
 
-<%= form_tag(:action => 'update', :id => @user) do -%>
+<form action='/users/<%= @user.id %>' method='put'>
   <%= render :partial => 'form' %>
   <%= submit_tag 'Save' %>
-<% end -%>
+</form>
 
 <%= link_to 'Display', :action => 'show', :id => @user %> |
 <%= link_to 'List', :action => 'list' %>

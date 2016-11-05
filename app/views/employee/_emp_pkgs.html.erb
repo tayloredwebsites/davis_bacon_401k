@@ -20,6 +20,7 @@
             <th>Annual<br>Holiday</th>
             <th>Annual<br>Vacation</th>
             <th>Annual<br>Personal</th>
+            <th>Safe<br/>Harbor %</th>
             <th>HourlyBenefit<br>(shvp + sh%+ medical)</th>
             <td colspan='2'><%= link_to 'New', :controller => 'employee_package', :action => 'new', :employee_id => @employee.id %></td>
           </tr>
@@ -43,6 +44,7 @@
               <td><%= x_start %><%= h pkg.annual_holiday %><%= x_end %></td>
               <td><%= x_start %><%= h pkg.annual_vacation %><%= x_end %></td>
               <td><%= x_start %><%= h pkg.annual_personal %><%= x_end %></td>
+              <td><%= x_start %><%= h pkg.safe_harbor_pct %><%= x_end %></td>
               <td>
                 <%= x_start %>
                   <%= h round_money_s(pkg.calc_hourly_shvp) %> +
@@ -56,11 +58,11 @@
                 <%
                   if pkg.deactivated == 0
                 %>
-                  <%= link_to 'Delete', :controller => 'employee_package', :action => 'destroy', :id => pkg.id %>
+                  <a href="/employee_package/<%=pkg.id%>/deactivate">Delete</a>
                 <%
                   else
                 %>
-                  <%= link_to 'Reactivate', :controller => 'employee_package', :action => 'reactivate', :id => pkg.id %>
+                  <a href="/employee_package/<%=pkg.id%>/reactivate">Reactivate</a>
                 <%
                   end
                 %>

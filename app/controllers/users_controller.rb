@@ -4,6 +4,7 @@ class UsersController < ApplicationController
 	if ENV['RAILS_ENV'] != 'test'
 		before_filter :login_required
 	end
+  before_filter :only_supervisor
 
   def create
   	if request.get?
@@ -103,5 +104,13 @@ class UsersController < ApplicationController
 	    end
 	  end	# request.get?
   end
+
+  def only_supervisor
+    if @current_user.present? && @current_user.supervisor != 1
+      flash[:notice] = 'Error - cannot maintain users'
+      redirect_to :root
+    end
+  end
+
 
 end

@@ -51,7 +51,7 @@ class EmployeePackageController < ApplicationController
 	    #@all_packages = EmployeePackage.find(:all, :conditions => ["employee_id = ?", params[:employee_package_employee_id]])
 	    #@pkg_count = @all_packages.count
 	    #davet 2010_11_19 removed ? from count string argument
-	    @pkg_count = EmployeePackage.count(["employee_id = ", @employee_package.employee_id])
+	    @pkg_count = EmployeePackage.where("employee_id = ?", @employee_package.employee_id).count
 	    if @pkg_count > 1
 		    @employee_package.destroy
 		    if !@employee_package.errors.empty?
@@ -186,6 +186,27 @@ class EmployeePackageController < ApplicationController
     		  end
         end
 	end	# request.get?
+  end
+
+  def deactivate
+    flash[:notice] = ''
+    if params[:id]
+      @employee_package = EmployeePackage.find(params[:id])
+      @employee = Employee.find(@employee_package.employee_id)
+      if @employee_package.audit_deactivate
+        #redirect_to :action => 'show', :id => @employee_package
+        redirect_back_or :controller => 'employee',
+          :action => "view",
+          :id => @employee_package.employee_id
+      else
+        if !@employee_package.errors.empty?
+          flash[:notice] = 'Error - Update error, ' + @employee_package.errors.full_messages.join("; ")
+          #else
+          # flash[:notice] = 'Error - Update error.'
+        end
+        render :action => 'edit'
+      end
+    end
   end
 
   def reactivate

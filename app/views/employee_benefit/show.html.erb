@@ -15,48 +15,52 @@
 
   <tr>
     <td colspan="3">
-      Effective Month: <%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %>
+      Effective Month: <%= h @employee_benefit.eff_month %> / <%= h @employee_benefit.eff_year %>
     </td>
   </tr>
 
   <tr>
     <td><label for="employee_benefit_reg_hours">&nbsp;&nbsp;&nbsp;Regular Hours</label></td>
-    <td><%= h @employee_benefit["reg_hours"] %></td>
+    <td><%= h @employee_benefit.reg_hours %></td>
     <td>&nbsp;</td>
   </tr>
 
   <tr>
     <td><label for="employee_benefit_ot_hours">&nbsp;+&nbsp;Overtime Hours</label></td>
-    <td><%= h @employee_benefit["ot_hours"] %></td>
+    <td><%= h @employee_benefit.ot_hours %></td>
     <td>&nbsp;</td>
   </tr>
 
   <tr>
     <td><label for="employee_benefit_tot_hours">&nbsp;=&nbsp;Total Hours</label></td>
-    <td><%= h ( @employee_benefit["calc_tot_hours"] ) %></td>
+    <td><%= h ( @employee_benefit.calc_tot_hours ) %></td>
     <td>&nbsp;</td>
   </tr>
 
   <tr>
     <td><label for="employee_benefit_current_package_calc_hourly_benefit">&nbsp;*&nbsp;Hourly Benefit</label></td>
-    <td><%= h @employee_benefit["current_package.calc_hourly_benefit"] %></td>
+    <td><%= round_places_s(@employee_benefit.current_package.calc_hourly_benefit, 4) %></td>
     <td>
-      <% if @employee_benefit["current_package.id"] != @employee_benefit["latest_package.id"] %>
-        <span class="error">Warning - Benefit package has changed</span>
+      <%
+        if @employee_benefit.current_package.present? &&
+          @employee_benefit.get_latest_effective_package.present? &&
+          @employee_benefit.current_package.id != @employee_benefit.get_latest_effective_package.id
+      %>
+        <span class="error">Warning - Benefit package has changed or is missing <%= @employee_benefit.current_package.id %> xxx <%= @employee_benefit.get_latest_effective_package.id %></span>
       <% end %>
     </td>
   </tr>
 
   <tr>
     <td><label for="employee_benefit_monthly_benefit">&nbsp;=&nbsp;Monthly Benefit</label></td>
-    <td><%= h @employee_benefit["monthly_benefit"] %></td>
+    <td><%= h @employee_benefit.monthly_benefit %></td>
     <td>
       <% if
-        ( @employee_benefit["monthly_benefit"] -
-          ( @employee_benefit["current_package.calc_hourly_benefit"] *
-            @employee_benefit["calc_tot_hours"]
-          )
-        ) > .005
+        round_places_s( @employee_benefit.monthly_benefit -
+          ( @employee_benefit.current_package.calc_hourly_benefit *
+            @employee_benefit.calc_tot_hours
+          ), 0
+        ) == '0'
        %>
         <span class="error">Warning - Benefit Calculation Error</span>
       <% end %>
@@ -64,13 +68,13 @@
   </tr>
 
   <tr>
-    <td><label for="employee_benefit_deposit">&nbsp;=&nbsp;<%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %> Deposit Amount</label></td>
-    <td><%= h @employee_benefit["deposit"] %></td>
+    <td><label for="employee_benefit_deposit">&nbsp;=&nbsp;<%= h @employee_benefit.eff_month %> / <%= h @employee_benefit.eff_year %> Deposit Amount</label></td>
+    <td><%= h @employee_benefit.deposit %></td>
     <td>
       <% if
-        ( @employee_benefit["deposit"] -
-          ( @employee_benefit["monthly_benefit"] - @employee_benefit["tot_deposits_made"] )
-        ) > .005
+        round_places_s( @employee_benefit.deposit -
+          @employee_benefit.monthly_benefit - @employee_benefit.tot_deposits_made , 0
+        ) == '0'
        %>
         <span class="error">Warning - Deposit Calculation Problem</span>
       <% end %>
@@ -78,8 +82,8 @@
   </tr>
 
   <tr>
-    <td><label for="employee_benefit_tot_deposits_made">&nbsp;-&nbsp;<%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %> Previous Deposits Made</label></td>
-    <td><%= h @employee_benefit["tot_deposits_made"] %></td>
+    <td><label for="employee_benefit_tot_deposits_made">&nbsp;-&nbsp;<%= h @employee_benefit.eff_month %> / <%= h @employee_benefit.eff_year %> Previous Deposits Made</label></td>
+    <td><%= h @employee_benefit.tot_deposits_made %></td>
     <td>&nbsp;</td>
   </tr>
 
@@ -87,21 +91,21 @@
   # print and sum total pending deposits selected for current month
   tot_pend_to_deposit = 0
   for bene_dep in @employee_benefit.get_pending_deposits
-    if bene_dep["dep_eff_month"] == @employee_benefit["eff_month"] &&
-        bene_dep["dep_eff_year"] == @employee_benefit["eff_year"]
-      tot_pend_to_deposit += bene_dep["deposit"]
+    if bene_dep.dep_eff_month == @employee_benefit.eff_month &&
+        bene_dep.dep_eff_year == @employee_benefit.eff_year
+      tot_pend_to_deposit += bene_dep.deposit
     end
 %>
   <tr>
-    <td><label for="employee_benefit_monthly_benefit">&nbsp;=&nbsp;Pending Deposit for <%= h bene_dep["eff_month"] %> / <%= h bene_dep["eff_month"] %> </label></td>
-    <td><%= h bene_dep["deposit"] %></td>
+    <td><label for="employee_benefit_monthly_benefit">&nbsp;=&nbsp;Pending Deposit for <%= h bene_dep.eff_month %> / <%= h bene_dep.eff_month %> </label></td>
+    <td><%= h bene_dep.deposit %></td>
     <td>
       <% if
-        ( bene_dep["monthly_benefit"] -
-          ( bene_dep["current_package.calc_hourly_benefit"] *
-            bene_dep["calc_tot_hours"]
-          )
-        ) > .005
+        round_places_s( bene_dep.monthly_benefit -
+          ( bene_dep.current_package.calc_hourly_benefit *
+            bene_dep.calc_tot_hours
+          ), 0
+        ) == '0'
        %>
         <span class="error">Warning - Benefit Calculation Error</span>
       <% end %>
@@ -109,7 +113,7 @@
   </tr>
 <%
   end
-  employee_benefit_total_deposit = @employee_benefit["monthly_benefit"] + tot_pend_to_deposit
+  employee_benefit_total_deposit = @employee_benefit.monthly_benefit + tot_pend_to_deposit
 %>
 
   <tr>
@@ -119,7 +123,7 @@
   </tr>
 
   <tr>
-    <td><label for="employee_benefit_total_deposit">&nbsp;=&nbsp;<%= h @employee_benefit["eff_month"] %> / <%= h @employee_benefit["eff_year"] %> Total Deposit Amount</label></td>
+    <td><label for="employee_benefit_total_deposit">&nbsp;=&nbsp;<%= h @employee_benefit.eff_month %> / <%= h @employee_benefit.eff_year %> Total Deposit Amount</label></td>
     <td><%= h employee_benefit_total_deposit %></td>
     <td>&nbsp;</td>
   </tr>
@@ -127,8 +131,8 @@
   <tr>
     <td><label for="employee_benefit_deposited_at">Deposit Date</label></td>
     <td>
-<% if deposited_at %>
-      <%= h @employee_benefit["deposited_at"].strftime("%I:%M:%S %p %d-%b-%Y") %>
+<% if @employee_benefit.deposited_at %>
+      <%= h @employee_benefit.deposited_at.strftime("%I:%M:%S %p %d-%b-%Y") %>
 <% else %>
       Not Deposited
 <% end %>

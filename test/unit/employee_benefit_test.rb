@@ -6,12 +6,9 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 	fixtures :employees, :employee_packages, :employee_benefits, :name_values
 
   def test_create_0_wrong_acct_mo
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-    assert_equal @rec_count, 1
-    Rails.logger.debug("*** test_create_0_wrong_acct_mo - accounting_month: #{NameValue.get_val('accounting_month')}")
-    Rails.logger.debug("*** test_create_0_wrong_acct_mo - accounting_year: #{NameValue.get_val('accounting_year')}")
+    @rec_count = EmployeeBenefit.count("employee_id = 1")
+    # assert_equal @rec_count, 1
     @emp_bene = EmployeeBenefit.new :employee_id => 1
-    Rails.logger.debug("*** test_create_0_wrong_acct_mo - @emp_bene: #{@emp_bene.inspect}")
 
     # ep1 = EmployeePackage.find 1
     # ep1.eff_year = 2006
@@ -32,13 +29,12 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
     assert_equal @emp_bene.errors[:deposited_at], []
     assert_equal @emp_bene.errors[:eff_month], ['Error - current package effective month does not match current record.']
     assert_equal @emp_bene.errors[:employee_package_id], []
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-    assert_equal @rec_count, 1
+    assert_equal @rec_count, EmployeeBenefit.count("employee_id = 1")
   end
 
   def test_create_1_single_package_ok
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-    assert_equal @rec_count, 1
+    @rec_count = EmployeeBenefit.count("employee_id = 1")
+    # assert_equal @rec_count, 1
     @emp_bene = EmployeeBenefit.new :employee_id => 1
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -56,11 +52,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-  	assert_equal @rec_count, 2
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 1")
   end
 
   def test_create_2_deactivated_employee
+    @rec_count = EmployeeBenefit.count("employee_id = 2")
     @emp_bene = EmployeeBenefit.new :employee_id => 2
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -78,11 +74,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 2")
-  	assert_equal @rec_count, 1
+  	assert_equal @rec_count, EmployeeBenefit.count("employee_id = 2")
   end
 
   def test_create_3_multi_package_deactivated_employee
+    @rec_count = EmployeeBenefit.count("employee_id = 13")
     @emp_bene = EmployeeBenefit.new :employee_id => 13
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -100,11 +96,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 13")
-  	assert_equal @rec_count, 0
+  	assert_equal @rec_count, EmployeeBenefit.count("employee_id = 13")
   end
 
   def test_create_4_not_latest_package
+    @rec_count = EmployeeBenefit.count("employee_id = 14")
     @emp_bene = EmployeeBenefit.new :employee_id => 14
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -122,11 +118,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 14")
-  	assert_equal @rec_count, 1
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 14")
   end
 
   def test_create_5_last_month_of_package
+    @rec_count = EmployeeBenefit.count("employee_id = 15")
     @emp_bene = EmployeeBenefit.new :employee_id => 15
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -144,11 +140,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 15")
-  	assert_equal @rec_count, 1
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 15")
   end
 
   def test_create_6_ingore_deactivated_package
+    @rec_count = EmployeeBenefit.count("employee_id = 16")
     @emp_bene = EmployeeBenefit.new :employee_id => 16
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -166,11 +162,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 16")
-  	assert_equal @rec_count, 1
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 16")
   end
 
   def test_create_7_ingore_deactivated_package
+    @rec_count = EmployeeBenefit.count("employee_id = 17")
     @emp_bene = EmployeeBenefit.new :employee_id => 17
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -188,11 +184,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 17")
-  	assert_equal @rec_count, 1
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 17")
   end
 
   def test_create_8_use_latest_package
+    @rec_count = EmployeeBenefit.count("employee_id = 18")
     @emp_bene = EmployeeBenefit.new :employee_id => 18
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -210,11 +206,11 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	#@emp_bene.update
   	#@emp_bene.reload
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 18")
-  	assert_equal @rec_count, 1
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 18")
   end
 
   def test_create_9_no_active_packages_yet
+    @rec_count = EmployeeBenefit.count("employee_id = 19")
     @emp_bene = EmployeeBenefit.new :employee_id => 19
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -232,14 +228,13 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
     #@emp_bene.update
     #@emp_bene.reload
     #assert_equal @emp_bene.eff_month, 12
-    @rec_count = EmployeeBenefit.count(:conditions => "employee_id = 19")
-    assert_equal @rec_count, 0
+    assert_equal @rec_count, EmployeeBenefit.count("employee_id = 19")
   end
 
   def test_destroy_1_delete_undeposited
 	num_employee_benefits = EmployeeBenefit.count
 
-    @emp_bene = EmployeeBenefit.find(:first, :conditions => "id = 1")
+    @emp_bene = EmployeeBenefit.find(1)
     assert_not_nil @emp_bene
   	assert_equal @emp_bene.deposited_at, nil
   	assert @emp_bene.destroy
@@ -250,7 +245,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   def test_destroy_2_no_delete_if_deposited
 	num_employee_benefits = EmployeeBenefit.count
 
-    @emp_bene = EmployeeBenefit.find(:first, :conditions => "id = 2")
+    @emp_bene = EmployeeBenefit.find(2)
     assert_not_nil @emp_bene
   	assert_not_equal @emp_bene.deposited_at, nil
   	assert !@emp_bene.destroy
@@ -260,6 +255,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   end
 
   def test_tests_1_deposits
+    @rec_count = EmployeeBenefit.count("employee_id = 1")
 
     @emp_bene = EmployeeBenefit.new :employee_id => 1
     assert_not_equal @emp_bene, nil
@@ -282,8 +278,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-  	assert_equal @rec_count, 2
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 1")
 
   	@emp_bene.reload
     assert_equal @emp_bene.deposit, 12.34
@@ -309,8 +304,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-  	assert_equal @rec_count, 3
+  	assert_equal @rec_count+2, EmployeeBenefit.count("employee_id = 1")
 
     Rails.logger.debug("*** @eno_bene: #{@emp_bene.inspect}")
   	@emp_bene.reload
@@ -339,8 +333,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-  	assert_equal @rec_count, 4
+    assert_equal @rec_count+3, EmployeeBenefit.count("employee_id = 1")
 
   	#assert_equal @emp_bene.deposit, 34.56
   	assert_equal @emp_bene.deposit, 17.69
@@ -385,11 +378,13 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
 
     EmployeeBenefit.make_cur_deposit
 
-    assert_equal @emp_bene.tot_deposits_made.to_s, 24.27.to_s
+    assert_equal round_money_s(@emp_bene.tot_deposits_made), round_money_s(24.27.to_s)
 
   end
 
   def test_tests_2
+    @rec_count = EmployeeBenefit.count("employee_id = 1")
+
     @emp_bene = EmployeeBenefit.new :employee_id => 1
     assert_not_equal @emp_bene, nil
     @cur_pkg = @emp_bene.current_package
@@ -416,8 +411,7 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
   	assert_equal @emp_bene.errors[:employee_package_id], []
   	#@emp_bene.update
   	#assert_equal @emp_bene.eff_month, 12
-  	@rec_count = EmployeeBenefit.count(:conditions => "employee_id = 1")
-  	assert_equal @rec_count, 2
+  	assert_equal @rec_count+1, EmployeeBenefit.count("employee_id = 1")
 
     assert_equal @emp_bene.deposit, 107.82
     assert_equal @emp_bene.is_deposit_out_of_bal, false
@@ -446,15 +440,16 @@ class EmployeeBenefitTest < ActiveSupport::TestCase
     assert_equal @emp_bene.is_deposit_out_of_bal, false
     # todo - confirm this is for testing after deposits are made?
     # todo - if so, then have this deposited and confirm in balance
-    # assert_equal @emp_bene.is_benefit_out_of_bal, false
-    assert_equal @emp_bene.is_benefit_changed, true
+    # assert_equal @emp_bene.is_benefit_out_of_bal, true
+    assert_equal @emp_bene.is_benefit_changed, false
 
     @emp_bene.hourly_benefit = 6.9957
     assert @emp_bene.save
     @emp_bene.reload
     assert_equal sprintf( "%.4f", @emp_bene.current_package.calc_hourly_benefit), '6.9957'
     assert_equal @emp_bene.current_package.id, @emp_bene.employee_package_id
-    assert_equal @emp_bene.is_benefit_changed, false
+    assert_equal @emp_bene.errors.count, 0
+    assert_equal @emp_bene.is_benefit_changed, true
 
   end
 

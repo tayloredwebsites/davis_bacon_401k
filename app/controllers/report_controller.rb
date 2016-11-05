@@ -1,5 +1,9 @@
 class ReportController < ApplicationController
 
+  # ensure user logged in before using, except in test mode
+  if ENV['RAILS_ENV'] != 'test'
+    before_filter :login_required
+  end
 
   layout  'report'
 
@@ -8,10 +12,7 @@ class ReportController < ApplicationController
     if @show_deactivated == nil || @show_deactivated == ''
       @show_deactivated = '0'
     end
-    @employees = Employee.find(:all,
-      :conditions => "deactivated = "+ @show_deactivated,
-      :order => 'emp_id'
-    )
+    @employees = Employee.where("deactivated = ?", @show_deactivated).order('emp_id')
   end
 
   def entry_recon_options

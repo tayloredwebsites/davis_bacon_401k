@@ -113,7 +113,7 @@ class EmployeePackageControllerTest < ActionController::TestCase
     assert assigns(:employee_package).valid?
     assert_equal assigns(:employee_package).monthly_medical, 811.26
 
-    @emp_package = EmployeePackage.find(:first, :conditions => "id = '2'")
+    @emp_package = EmployeePackage.find(2)
     post :update,
 	    :id => @emp_package.id,
 	    :employee_package =>
@@ -139,12 +139,12 @@ class EmployeePackageControllerTest < ActionController::TestCase
     assert_equal assigns(:employee_package).monthly_medical, BigDecimal("669.69")
     assert_equal assigns(:employee_package).hourly_wage,27.6
 
-    @emp_package = EmployeePackage.find(:first, :conditions => "id = '2'")
-    assert_equal @emp_package.monthly_medical,669.69
+    @emp_package = EmployeePackage.find(2)
+    assert_equal @emp_package.monthly_medical, BigDecimal("669.69")
 
     @test_employee_package = EmployeePackage.find(2)
     assert_not_nil @test_employee_package
-    assert_equal @test_employee_package.monthly_medical,669.69
+    assert_equal @test_employee_package.monthly_medical, BigDecimal("669.69")
 
   end
 

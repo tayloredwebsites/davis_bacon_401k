@@ -158,7 +158,8 @@
           #   @employee_benefit.deposit.to_f
           # )
           #if @bene_bal > 0.005 || @bene_bal < -0.005
-          if @employee_benefit.is_deposit_out_of_bal
+          # if @employee_benefit.is_deposit_out_of_bal
+          if @employee_benefit.is_benefit_out_of_cur_bal
             %><div class='error'>out of balance - update to adjust</div><%
             @show_oob_footnote = true
           end
