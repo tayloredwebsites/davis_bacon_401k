@@ -45,6 +45,10 @@ gem 'jquery-rails'
 gem 'will_paginate'
 
 group :development, :test do
+end
 
+# windows specific gems
+platforms :mswin, :mingw do
+  gem 'tzinfo-data'
 end
 
