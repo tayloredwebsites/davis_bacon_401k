@@ -20,11 +20,11 @@
   <tbody>
 
 <%
-  totBene = nil
+  totBene = 0.0
   for bene in @employee_benefits
-    if bene.emp_id == nil
-      totBene = bene
-    elsif bene.last_name == nil
+    # if bene["emp_id"] == nil
+    #   totBene = bene
+    if bene["last_name"] == nil
 %>
     <tr>
       <td colspan='7' align='right'>Employee (<%=h bene["emp_id"] %>) Total : </td>
@@ -33,10 +33,11 @@
     </tr>
 <%
     else
-      if (bene.deposited_at == nil) then
+      if (bene["deposited_at"] == nil) then
         deposited_at = "&nbsp;"
       else
-        deposited_at = h( bene.deposited_at.strftime("%Y-%m-%d %H:%M:%S") )
+        deposited_at = h( bene["deposited_at"].strftime("%Y-%m-%d %H:%M:%S") )
+        totBene += round_money(bene["deposit"])
       end
 %>
     <tr>
@@ -58,14 +59,7 @@
 %>
     <tr>
       <td colspan='7' align='right'>Grand Total : </td>
-      <%
-        if totBene == nil
-          @gtot = "<font color='red'>nil rollup</font>"
-        else
-          @gtot = h(round_money_s(totBene["deposit"]))
-        end
-      %>
-      <td align='center'><%=@gtot.html_safe %></td>
+      <td align='center'><%= h(round_money_s(totBene)) %></td>
       <td align='center'></td>
     </tr>
 
