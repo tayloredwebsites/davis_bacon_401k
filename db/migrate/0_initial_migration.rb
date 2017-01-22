@@ -42,7 +42,7 @@ class InitialMigration < ActiveRecord::Migration
     t.string   "last_name", :limit => 40
     t.string   "first_name", :limit => 40
     t.string   "mi", :limit => 1
-    t.string   "ssn", :limit => 9, :default =>  :null => false
+    t.string   "ssn", :limit => 9, :default => nil
     t.integer  "deactivated", :limit => 2
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

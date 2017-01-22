@@ -32,32 +32,32 @@ ActiveRecord::Schema.define(version: 20161030200250) do
   end
 
   create_table "employee_packages", force: :cascade do |t|
-    t.integer  "employee_id",                              null: false
-    t.decimal  "hourly_wage"
-    t.decimal  "monthly_medical"
-    t.decimal  "annual_sick"
-    t.decimal  "annual_holiday"
-    t.decimal  "annual_vacation"
-    t.decimal  "annual_personal"
-    t.integer  "eff_month",                 default: 1
-    t.integer  "eff_year",                  default: 2001
-    t.integer  "deactivated",     limit: 2, default: 0
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.integer  "lock_version",              default: 0
-    t.float    "safe_harbor_pct", limit: 5, default: 0.0
+    t.integer  "employee_id",                                                      null: false
+    t.decimal  "hourly_wage",               precision: 8, scale: 2
+    t.decimal  "monthly_medical",           precision: 8, scale: 2
+    t.decimal  "annual_sick",               precision: 8, scale: 2
+    t.decimal  "annual_holiday",            precision: 8, scale: 2
+    t.decimal  "annual_vacation",           precision: 8, scale: 2
+    t.decimal  "annual_personal",           precision: 8, scale: 2
+    t.integer  "eff_month",                                         default: 1
+    t.integer  "eff_year",                                          default: 2001
+    t.integer  "deactivated",     limit: 2,                         default: 0
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
+    t.integer  "lock_version",                                      default: 0
+    t.float    "safe_harbor_pct", limit: 5,                         default: 0.0
   end
 
   create_table "employees", force: :cascade do |t|
-    t.integer  "emp_id",                               null: false
+    t.integer  "emp_id",                              null: false
     t.integer  "user_id"
     t.string   "last_name",    limit: 40
     t.string   "first_name",   limit: 40
     t.string   "mi",           limit: 1
-    t.string   "ssn",          limit: 9,  default: "", null: false
+    t.string   "ssn",          limit: 9
     t.integer  "deactivated",  limit: 2,  default: 0
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "lock_version",            default: 0
   end
 
